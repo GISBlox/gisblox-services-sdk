@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Bartels Online</Authors>
+    <Description>Client library for connecting to the GISBlox Services REST API.</Description>
+    <Copyright>© Bartels Online. All rights reserved.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GISBlox/gisblox-services-sdk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GISBlox/gisblox-services-sdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>GISBlox,Services,API</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+</Project>
