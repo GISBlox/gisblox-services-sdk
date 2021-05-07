@@ -19,11 +19,27 @@ namespace GISBlox.Services.SDK.Projection
       Task<RDPoint> ToRDS(Coordinate coordinate, CancellationToken cancellationToken = default);
 
       /// <summary>
-      /// Reprojects a coordinate to an RDPoint. Includes the source coordinates.
+      /// Reprojects multiple coordinates to RDPoints.
+      /// </summary>
+      /// <param name="coordinates">A List with Coordinate types.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with RDPoint types.</returns>
+      Task<List<RDPoint>> ToRDS(List<Coordinate> coordinates, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Reprojects a coordinate to an RDPoint. Includes the source coordinate.
       /// </summary>
       /// <param name="coordinate">A Coordinate type.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>An RDPoint type.</returns>
       Task<Location> ToRDSComplete(Coordinate coordinate, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Reprojects multiple coordinates to RDPoints. Includes the source coordinates.
+      /// </summary>
+      /// <param name="coordinates">A List with Coordinate types.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with RDPoint types.</returns>
+      Task<List<Location>> ToRDSComplete(List<Coordinate> coordinates, CancellationToken cancellationToken = default);
    }
 }

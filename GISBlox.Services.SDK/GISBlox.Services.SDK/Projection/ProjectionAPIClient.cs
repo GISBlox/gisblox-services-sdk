@@ -18,14 +18,38 @@ namespace GISBlox.Services.SDK.Projection
       public async Task<RDPoint> ToRDS(Coordinate coordinate, CancellationToken cancellationToken = default)
       {
          var requestUri = "reproject/toRDS";
-         return await HttpGet<RDPoint>(this.HttpClient, requestUri, cancellationToken).ConfigureAwait(false);
+         SetRequestHeaderValue("Complete", "0");
+         return await HttpPost<dynamic, RDPoint>(this.HttpClient, requestUri, coordinate, cancellationToken);
+      }
+
+      public async Task<List<RDPoint>> ToRDS(List<Coordinate> coordinates, CancellationToken cancellationToken = default)
+      {
+         var requestUri = "reproject/toRDS/batch";
+         SetRequestHeaderValue("Complete", "0");
+         return await HttpPost<dynamic, List<RDPoint>>(this.HttpClient, requestUri, coordinates, cancellationToken);
       }
 
       public async Task<Location> ToRDSComplete(Coordinate coordinate, CancellationToken cancellationToken = default)
       {
          var requestUri = "reproject/toRDS";
-         HttpClient.DefaultRequestHeaders.Add("Complete", "1");
-         return await HttpGet<Location>(this.HttpClient, requestUri, cancellationToken).ConfigureAwait(false);
+         SetRequestHeaderValue("Complete", "1");
+         return await HttpPost<dynamic, Location>(this.HttpClient, requestUri, coordinate, cancellationToken);
+      }
+
+      public async Task<List<Location>> ToRDSComplete(List<Coordinate> coordinates, CancellationToken cancellationToken = default)
+      {
+         var requestUri = "reproject/toRDS/batch";
+         SetRequestHeaderValue("Complete", "1");
+         return await HttpPost<dynamic, List<Location>>(this.HttpClient, requestUri, coordinates, cancellationToken);
+      }
+
+      internal void SetRequestHeaderValue(string headerName, string headerValue)
+      {
+         if (HttpClient.DefaultRequestHeaders.Contains(headerName))
+         {
+            HttpClient.DefaultRequestHeaders.Remove(headerName);
+         }
+         HttpClient.DefaultRequestHeaders.Add(headerName, headerValue);
       }
    }
 }

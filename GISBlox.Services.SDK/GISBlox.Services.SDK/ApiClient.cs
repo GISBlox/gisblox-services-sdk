@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,12 +37,11 @@ namespace GISBlox.Services.SDK
 
          var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
          return JsonSerializer.Deserialize<T>(responseContent);
-      }
+      }    
 
       protected static async Task HttpPost<TBody>(HttpClient httpClient, string requestUri, TBody body, CancellationToken cancellationToken = default)
       {
-
-         HttpContent content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions));
+         HttpContent content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
          var response = await httpClient.PostAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
 
          if (!response.IsSuccessStatusCode)
@@ -52,7 +52,7 @@ namespace GISBlox.Services.SDK
 
       protected static async Task<TResult> HttpPost<TBody, TResult>(HttpClient httpClient, string requestUri, TBody body, CancellationToken cancellationToken = default)
       {
-         HttpContent content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions));
+         HttpContent content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
          var response = await httpClient.PostAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
 
          if (!response.IsSuccessStatusCode)

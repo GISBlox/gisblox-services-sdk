@@ -30,12 +30,12 @@ namespace GISBlox.Services.SDK
          var httpClient = new HttpClient(handler, false)
          {
             BaseAddress = apiUrl,
-            Timeout = TimeSpan.FromSeconds(timeoutSeconds)
+            Timeout = TimeSpan.FromSeconds(timeoutSeconds)            
          };
-
-         httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);        
-         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+         
+         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));         
          httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+         httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);         
 
          this.Projection = new ProjectionAPIClient(httpClient);
       }
