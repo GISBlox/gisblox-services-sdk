@@ -1,4 +1,8 @@
-﻿namespace GISBlox.Services.SDK.Models
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
    /// This class represents a location on the earth's surface.

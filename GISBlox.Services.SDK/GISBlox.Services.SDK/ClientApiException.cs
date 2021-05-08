@@ -1,4 +1,8 @@
-﻿using System;
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+using System;
 using System.Net;
 
 namespace GISBlox.Services.SDK

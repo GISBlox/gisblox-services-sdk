@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/GISBlox/gisblox-services-sdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GISBlox/gisblox-services-sdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>GISBlox,Services</PackageTags>
+    <PackageTags>GISBlox</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>

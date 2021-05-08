@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/GISBlox/gisblox-services-sdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GISBlox/gisblox-services-sdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>GISBlox,Services,SDK,API,Samples</PackageTags>
+    <PackageTags>GISBlox</PackageTags>
     <Description>Samples for the GISBlox Services SDK client library.</Description>
   </PropertyGroup>
 

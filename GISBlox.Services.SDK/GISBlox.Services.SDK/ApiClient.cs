@@ -1,4 +1,8 @@
-﻿using System;
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -17,6 +21,15 @@ namespace GISBlox.Services.SDK
       protected ApiClient(HttpClient httpClient)
       {
          HttpClient = httpClient;
+      }
+
+      protected static void SetRequestHeaderValue(HttpClient httpClient, string headerName, string headerValue)
+      {
+         if (httpClient.DefaultRequestHeaders.Contains(headerName))
+         {
+            httpClient.DefaultRequestHeaders.Remove(headerName);
+         }
+         httpClient.DefaultRequestHeaders.Add(headerName, headerValue);
       }
 
       protected static ClientApiException CreateApiException(HttpResponseMessage response)

@@ -1,4 +1,8 @@
-﻿namespace GISBlox.Services.SDK.Models
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
    /// This class represents a pair of integer x- and y-coordinates that define a point in the Rijksdriehoeksstelsel coordinate system (EPSG:28992).

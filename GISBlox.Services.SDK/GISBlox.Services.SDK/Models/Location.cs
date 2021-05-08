@@ -1,4 +1,8 @@
-﻿namespace GISBlox.Services.SDK.Models
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
    /// This class represents a location on earth in both RDNew (EPSG:28992) and WGS84 (EPSG:4326) projections.

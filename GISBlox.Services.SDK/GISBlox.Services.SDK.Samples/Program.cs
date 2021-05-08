@@ -1,8 +1,7 @@
-﻿using System;
+﻿using GISBlox.Services.SDK.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using GISBlox.Services.SDK.Models;
 
 namespace GISBlox.Services.SDK.Samples
 {
@@ -121,7 +120,7 @@ namespace GISBlox.Services.SDK.Samples
          WriteLogHeader("Convert LINESTRING");
 
          wkt = new WKT("LINESTRING (30 10, 10 30, 40 40)");
-         await ConvertToGeoJson(wkt, client, true);         // Include in FeatureCollection
+         await ConvertToGeoJson(wkt, client, true);         // Include in a FeatureCollection
 
          WriteLogHeader("Convert MULTILINESTRING");
 
@@ -141,7 +140,7 @@ namespace GISBlox.Services.SDK.Samples
          WriteLogHeader("Convert MULTIPOLYGON");
 
          wkt = new WKT("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
-         await ConvertToGeoJson(wkt, client, true);         // Include in FeatureCollection
+         await ConvertToGeoJson(wkt, client, true);         // Include in a FeatureCollection
 
          WriteLogHeader("Convert MULTIPOLYGON with inner ring");
 

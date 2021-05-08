@@ -1,9 +1,15 @@
-﻿using GISBlox.Services.SDK.Conversion;
+﻿// ------------------------------------------------------------
+// Copyright (c) Bartels Online.  All rights reserved.
+// ------------------------------------------------------------
+
+using GISBlox.Services.SDK.Conversion;
 using GISBlox.Services.SDK.Projection;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace GISBlox.Services.SDK
 {
@@ -33,7 +39,7 @@ namespace GISBlox.Services.SDK
          httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));         
          httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
          httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);
-         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", "v1"));
+         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", GetAssemblyFileVersion()));
 
          this.Projection = new ProjectionAPIClient(httpClient);
          this.Conversion = new ConversionAPIClient(httpClient);
@@ -59,6 +65,12 @@ namespace GISBlox.Services.SDK
       {
          Projection.Dispose();
          Conversion.Dispose();
+      }
+      private static string GetAssemblyFileVersion()
+      {
+         Assembly assembly = Assembly.GetExecutingAssembly();
+         FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+         return fileVersion.FileVersion;
       }
    }
 }
