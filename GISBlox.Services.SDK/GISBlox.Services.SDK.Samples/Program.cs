@@ -25,6 +25,7 @@ namespace GISBlox.Services.SDK.Samples
             using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
             {
                await ProjectionAPI(client);
+               await ConversionAPI(client);
             }
          }
          catch (Exception ex)
@@ -41,76 +42,124 @@ namespace GISBlox.Services.SDK.Samples
       private static async Task ProjectionAPI(GISBloxClient client)
       {
          #region RDS
-
-         Console.WriteLine("==================================");
-         Console.WriteLine("Reprojecting WGS84 to RDS (simple)");
-         Coordinate coord = new Coordinate(51.998929, 4.375587);
          
+         WriteLogHeader("Reprojecting WGS84 to RDS (simple)");
+
+         Coordinate coord = new Coordinate(51.998929, 4.375587);         
          RDPoint rdPoint = await client.Projection.ToRDS(coord);
+
          Console.WriteLine($"RDPoint - X:{ rdPoint.X } Y:{ rdPoint.Y }");
-
-         Console.WriteLine("\r\n=================================================");
-         Console.WriteLine("Reprojecting multiple coordinates to RDS (simple)");
-
+                  
+         WriteLogHeader("Reprojecting multiple coordinates to RDS (simple)");
          List<Coordinate> coords = new List<Coordinate>
          {
             new Coordinate(51.998929, 4.375587),
             new Coordinate(53.1, 4.2),
             new Coordinate(53.11, 4.3)
          };
-
          List<RDPoint> rdPoints = await client.Projection.ToRDS(coords);
+
          rdPoints.ForEach(r => Console.WriteLine($"RDPoint - X:{ r.X } Y:{ r.Y }"));
-
-         Console.WriteLine("\r\n================================");
-         Console.WriteLine("Reprojecting WGS84 to RDS (full)");        
-         
-         Location location = await client.Projection.ToRDSComplete(coord);
-         Console.WriteLine($"Coordinate - Lat: { location.Lat } Lon: { location.Lon } -> RDPoint - X:{ location.X } Y:{ location.Y }");
-
-         Console.WriteLine("\r\n===============================================");
-         Console.WriteLine("Reprojecting multiple coordinates to RDS (full)");
                   
+         WriteLogHeader("Reprojecting WGS84 to RDS (full)");  
+         Location location = await client.Projection.ToRDSComplete(coord);
+
+         Console.WriteLine($"Coordinate - Lat: { location.Lat } Lon: { location.Lon } -> RDPoint - X:{ location.X } Y:{ location.Y }");
+                  
+         WriteLogHeader("Reprojecting multiple coordinates to RDS (full)");                  
          List<Location> locations = await client.Projection.ToRDSComplete(coords);
+
          locations.ForEach(location => Console.WriteLine($"Coordinate - Lat: { location.Lat } Lon: { location.Lon } -> RDPoint - X:{ location.X } Y:{ location.Y }"));
 
          #endregion
          
          #region WGS84
+         
+         WriteLogHeader("Reprojecting RDS to WGS84 (simple)");
 
-         Console.WriteLine("\r\n==================================");
-         Console.WriteLine("Reprojecting RDS to WGS84 (simple)");
          rdPoint = new RDPoint(100000, 555000);         
-
          coord = await client.Projection.ToWGS84(rdPoint);
+
          Console.WriteLine($"Coordinate - Lat: { coord.Lat } Lon: { coord.Lon }");
-
-         Console.WriteLine("\r\n=================================================");
-         Console.WriteLine("Reprojecting multiple RDPoints to WGS84 (simple)");
-
+                  
+         WriteLogHeader("Reprojecting multiple RDPoints to WGS84 (simple)");
          rdPoints = new List<RDPoint>
          {
             new RDPoint(100000, 555000),
             new RDPoint(1, 2),
             new RDPoint(111000, 550000)
          };
-
          coords = await client.Projection.ToWGS84(rdPoints);
+
          coords.ForEach(c => Console.WriteLine($"Coordinate - Lat: { c.Lat } Lon: { c.Lon }"));
-
-         Console.WriteLine("\r\n================================");
-         Console.WriteLine("Reprojecting RDS to WGS84 (full)");
-
+                  
+         WriteLogHeader("Reprojecting RDS to WGS84 (full)");
          location = await client.Projection.ToWGS84Complete(rdPoint);
+
          Console.WriteLine($"RDPoint - X:{ location.X } Y:{ location.Y } -> Coordinate - Lat: { location.Lat } Lon: { location.Lon }");
-
-         Console.WriteLine("\r\n==============================================");
-         Console.WriteLine("Reprojecting multiple RDPoints to WGS84 (full)");
-
+                  
+         WriteLogHeader("Reprojecting multiple RDPoints to WGS84 (full)");
          locations = await client.Projection.ToWGS84Complete(rdPoints);
+
          locations.ForEach(location => Console.WriteLine($"RDPoint - X:{ location.X } Y:{ location.Y } -> Coordinate - Lat: { location.Lat } Lon: { location.Lon }"));
 
          #endregion
+      }
+
+      private static async Task ConversionAPI(GISBloxClient client)
+      {         
+         WriteLogHeader("Convert POINT");
+
+         WKT wkt = new WKT("POINT (30 10 5)");
+         await ConvertToGeoJson(wkt, client);
+
+         WriteLogHeader("Convert MULTIPOINT");
+
+         wkt = new WKT("MULTIPOINT ((10 40), (40 30 2), (20 20), (30 10))");
+         await ConvertToGeoJson(wkt, client);
+
+         WriteLogHeader("Convert LINESTRING");
+
+         wkt = new WKT("LINESTRING (30 10, 10 30, 40 40)");
+         await ConvertToGeoJson(wkt, client, true);         // Include in FeatureCollection
+
+         WriteLogHeader("Convert MULTILINESTRING");
+
+         wkt = new WKT("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))");
+         await ConvertToGeoJson(wkt, client);
+
+         WriteLogHeader("Convert POLYGON");
+
+         wkt = new WKT("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
+         await ConvertToGeoJson(wkt, client);
+
+         WriteLogHeader("Convert POLYGON with inner ring");
+
+         wkt = new WKT("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))");
+         await ConvertToGeoJson(wkt, client);
+
+         WriteLogHeader("Convert MULTIPOLYGON");
+
+         wkt = new WKT("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
+         await ConvertToGeoJson(wkt, client, true);         // Include in FeatureCollection
+
+         WriteLogHeader("Convert MULTIPOLYGON with inner ring");
+
+         wkt = new WKT("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))");
+         await ConvertToGeoJson(wkt, client);         
+      }
+
+      private async static Task ConvertToGeoJson(WKT wkt, GISBloxClient client, bool asFeatureCollection = false)
+      {
+         string geoJson = await client.Conversion.ToGeoJson(wkt, asFeatureCollection);
+         Console.WriteLine(geoJson);
+      }
+
+      private static void WriteLogHeader(string text) 
+      {
+         Console.WriteLine();
+         Console.WriteLine(new string('=', text.Length));
+         Console.WriteLine(text);
       }
    }
 }

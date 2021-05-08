@@ -1,4 +1,5 @@
-﻿using GISBlox.Services.SDK.Projection;
+﻿using GISBlox.Services.SDK.Conversion;
+using GISBlox.Services.SDK.Projection;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -31,9 +32,11 @@ namespace GISBlox.Services.SDK
          
          httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));         
          httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-         httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);         
+         httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);
+         httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", "v1"));
 
          this.Projection = new ProjectionAPIClient(httpClient);
+         this.Conversion = new ConversionAPIClient(httpClient);
       }
 
       /// <summary>
@@ -50,9 +53,12 @@ namespace GISBlox.Services.SDK
 
       public IProjectionAPI Projection { get;  }
 
+      public IConversionAPI Conversion { get; }
+
       public void Dispose()
       {
          Projection.Dispose();
+         Conversion.Dispose();
       }
    }
 }
