@@ -38,7 +38,7 @@ namespace GISBlox.Services.SDK
          
          httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));         
          httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-         httpClient.DefaultRequestHeaders.Add("Service-Key", serviceKey);
+         httpClient.DefaultRequestHeaders.Add("X-Service-Key", serviceKey);
          httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", GetAssemblyFileVersion()));
 
          this.Projection = new ProjectionAPIClient(httpClient);

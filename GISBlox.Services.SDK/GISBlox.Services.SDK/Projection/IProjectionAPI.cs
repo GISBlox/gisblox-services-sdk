@@ -48,32 +48,36 @@ namespace GISBlox.Services.SDK.Projection
       /// Reprojects an RDPoint to a coordinate.
       /// </summary>
       /// <param name="rdPoint">An RDPoint type.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A Coordinate type.</returns>
-      Task<Coordinate> ToWGS84(RDPoint rdPoint, CancellationToken cancellationToken = default);
+      Task<Coordinate> ToWGS84(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
       /// Reprojects multiple RDPoints to coordinates.
       /// </summary>
       /// <param name="rdPoints">A List with RDPoint types.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A List with Coordinate types.</returns>
-      Task<List<Coordinate>> ToWGS84(List<RDPoint> rdPoints, CancellationToken cancellationToken = default);
+      Task<List<Coordinate>> ToWGS84(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
       /// Reprojects an RDPoint to a location. Includes the source RDPoint.
       /// </summary>
       /// <param name="rdPoint">An RDPoint type.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A Location type.</returns>
-      Task<Location> ToWGS84Complete(RDPoint rdPoint, CancellationToken cancellationToken = default);
+      Task<Location> ToWGS84Complete(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
       /// Reprojects multiple RDPoints to locations. Includes the source RDPoints.
       /// </summary>
       /// <param name="rdPoints">A List with RDPoint types.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A List with Location types.</returns>
-      Task<List<Location>> ToWGS84Complete(List<RDPoint> rdPoints, CancellationToken cancellationToken = default);
+      Task<List<Location>> ToWGS84Complete(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default);
    }
 }
