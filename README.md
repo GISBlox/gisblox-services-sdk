@@ -1,14 +1,18 @@
 # GISBlox Services .NET SDK
-This client library enables client applications to connect to the GISBlox Services REST API. The API currently supports reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa, and converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON).
+This client library enables client applications to connect to the GISBlox Services REST API. 
+
+The API currently supports reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa, and converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON).
 
 ## Requirements
 You must have a personal service key to access the GISBlox Services REST API.
 
+To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a free subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel. [More information](http://library.gisblox.com/content/nl-nl/gb1810090).
+
 ## Usage
 
-Check out the Samples project for more detailed usages.
+Check out the **Samples** project for more detailed usages.
 
-In the following examples, the ```baseUrl``` variable should be set to "https://services.gisblox.com", and the ```serviceKey``` variable should be set to your GISBlox Services personal service key.
+In the following examples, the ```baseUrl``` variable should be set to `"https://services.gisblox.com"`, and the ```serviceKey``` variable should be set to your GISBlox Location Services service key.
 
 ### Creating the client
 
@@ -20,30 +24,21 @@ using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
 
 ```
 
-### Conversion API
-The conversion API converts WKT geometry objects into GeoJson.
-
-```cs
-// Convert a POINT geometry into a GeoJson Feature 
-var wkt = new WKT("POINT (30 10)");
-var geoJson = await client.Conversion.ToGeoJson(wkt);
-
-// Convert a MULTIPOLYGON geometry into a GeoJson FeatureCollection
-var wkt = new WKT("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
-var geoJson = await client.Conversion.ToGeoJson(wkt, true);
-```
-
-### Projection API
+## Projection API
 The projection API currently reprojects WGS84 coordinates to Rijksdriehoeksstelsel (RDNew) locations and vice versa.
 
-#### Reproject WGS84 to RDNew
+### Reproject WGS84 coordinate to RDNew point
 
 ```cs
-// Reproject WGS84 coordinate
 var coord = new Coordinate(51.998929, 4.375587);         
 var rdPoint = await client.Projection.ToRDS(coord);
 
-// Reproject multiple coordinates at once
+// Returns X:85530 Y:446100
+```
+
+Use the following code to reproject multiple WGS84 coordinates to RDNew locations at once:
+
+```cs
 var coords = new List<Coordinate>
 {
   new Coordinate(51.998929, 4.375587),
@@ -51,16 +46,37 @@ var coords = new List<Coordinate>
   new Coordinate(53.11, 4.3)
 };
 var rdPoints = await client.Projection.ToRDS(coords);
-```
 
-#### Reproject RDNew to WGS84
+// Returns X:85530 Y:446100, X:75483 Y:568787 and X:82197 Y:569794
+```
+To include the source location in the result, call the ```ToRDSComplete``` method instead of ```ToRDS```:
 
 ```cs
-// Reproject RDNew location
+await client.Projection.ToRDSComplete(coord);
+
+// Returns X:85530 Y:446100 Lat: 51,998929 Lon: 4,375587
+```
+
+### Reproject RDNew point to WGS84 coordinate
+
+```cs
 var rdPoint = new RDPoint(100000, 555000);         
 var coord = await client.Projection.ToWGS84(rdPoint);
 
-// Reproject multiple RDNew locations at once
+// Returns Lat: 52,9791861737104 Lon: 4,56833613045079
+```
+
+You can round the digits of the resulting coordinate to a specific amount by passing a second argument:
+
+```cs
+var coord = await client.Projection.ToWGS84(rdPoint, 6);    // Round the coordinate to 6 digits
+
+// Returns Lat: 52,979186 Lon: 4,568336
+```
+
+Use the following code to reproject multiple RDNew locations to WGS84 coordinates at once:
+
+```cs
 var rdPoints = new List<RDPoint>
 {
   new RDPoint(100000, 555000),
@@ -68,12 +84,106 @@ var rdPoints = new List<RDPoint>
   new RDPoint(111000, 550000)
 };
 var coords = await client.Projection.ToWGS84(rdPoints);
+
+// Returns Lat: 52,9791861737104 Lon: 4,56833613045079, Lat: 0 Lon: 0 and Lat: 52.93526683092437 Lon: 4.7327735938900535
 ```
 
-To include the source coordinates in the result, call the ```ToRDSComplete``` or ```ToWGS84Complete``` methods respectively.
+To include the source coordinates in the result, call the ```ToWGS84Complete``` method instead of ```ToWGS84```:
 
 ```cs
-await client.Projection.ToRDSComplete(coords);
-await client.Projection.ToWGS84Complete(rdPoints);
+await client.Projection.ToWGS84Complete(rdPoint);
+
+// Returns X: 100000 Y: 555000 Lat: 52,9791861737104 Lon: 4,56833613045079
 ```
 
+## Conversion API
+The conversion API converts WKT geometry objects into GeoJson.
+
+### Convert WKT into GeoJson
+
+```cs
+var wkt = new WKT("POINT (30 10)");
+var geoJson = await client.Conversion.ToGeoJson(wkt);
+
+// Returns:
+
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      10,
+      30
+    ]
+  },
+  "properties": {}
+}
+```
+
+The following code converts a multipolygon into a GeoJson FeatureCollection:
+
+```cs
+var wkt = new WKT("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
+var geoJson = await client.Conversion.ToGeoJson(wkt, true);
+
+// Returns:
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                20,
+                30
+              ],
+              [
+                40,
+                45
+              ],
+              [
+                40,
+                10
+              ],
+              [
+                20,
+                30
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                5,
+                15
+              ],
+              [
+                10,
+                40
+              ],
+              [
+                20,
+                10
+              ],
+              [
+                10,
+                5
+              ],
+              [
+                5,
+                15
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {}
+    }
+  ]
+}
+```
