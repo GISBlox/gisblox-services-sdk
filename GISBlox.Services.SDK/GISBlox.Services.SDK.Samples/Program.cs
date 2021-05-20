@@ -76,8 +76,8 @@ namespace GISBlox.Services.SDK.Samples
          
          WriteLogHeader("Reprojecting RDS to WGS84 (simple)");
 
-         rdPoint = new RDPoint(100000, 555000);         
-         coord = await client.Projection.ToWGS84(rdPoint);
+         rdPoint = new RDPoint(85530, 446100);         
+         coord = await client.Projection.ToWGS84(rdPoint, 6);                 // Round the coordinates to 6 digits
 
          Console.WriteLine($"Coordinate - Lat: { coord.Lat } Lon: { coord.Lon }");
                   
@@ -88,7 +88,7 @@ namespace GISBlox.Services.SDK.Samples
             new RDPoint(1, 2),
             new RDPoint(111000, 550000)
          };
-         coords = await client.Projection.ToWGS84(rdPoints);
+         coords = await client.Projection.ToWGS84(rdPoints);                  // No rounding
 
          coords.ForEach(c => Console.WriteLine($"Coordinate - Lat: { c.Lat } Lon: { c.Lon }"));
                   
@@ -98,7 +98,7 @@ namespace GISBlox.Services.SDK.Samples
          Console.WriteLine($"RDPoint - X:{ location.X } Y:{ location.Y } -> Coordinate - Lat: { location.Lat } Lon: { location.Lon }");
                   
          WriteLogHeader("Reprojecting multiple RDPoints to WGS84 (full)");
-         locations = await client.Projection.ToWGS84Complete(rdPoints);
+         locations = await client.Projection.ToWGS84Complete(rdPoints, 5);    // Round the coordinates to 5 digits
 
          locations.ForEach(location => Console.WriteLine($"RDPoint - X:{ location.X } Y:{ location.Y } -> Coordinate - Lat: { location.Lat } Lon: { location.Lon }"));
 

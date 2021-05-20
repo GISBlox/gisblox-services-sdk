@@ -12,6 +12,7 @@
     <PackageTags>GISBlox</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
+    <Version>1.0.1-beta</Version>
   </PropertyGroup>
 
 </Project>
