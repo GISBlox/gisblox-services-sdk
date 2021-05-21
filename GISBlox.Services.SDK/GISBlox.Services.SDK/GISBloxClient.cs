@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Conversion;
+using GISBlox.Services.SDK.Info;
 using GISBlox.Services.SDK.Projection;
 using System;
 using System.Diagnostics;
@@ -43,6 +44,7 @@ namespace GISBlox.Services.SDK
 
          this.Projection = new ProjectionAPIClient(httpClient);
          this.Conversion = new ConversionAPIClient(httpClient);
+         this.Info = new InfoAPIClient(httpClient);
       }
 
       /// <summary>
@@ -61,10 +63,13 @@ namespace GISBlox.Services.SDK
 
       public IConversionAPI Conversion { get; }
 
+      public IInfoAPI Info { get; }
+
       public void Dispose()
       {
          Projection.Dispose();
          Conversion.Dispose();
+         Info.Dispose();
       }
       private static string GetAssemblyFileVersion()
       {

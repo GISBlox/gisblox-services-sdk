@@ -23,8 +23,9 @@ namespace GISBlox.Services.SDK.Samples
             Console.WriteLine("Creating client");
             using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
             {
-               await ProjectionAPI(client);
-               await ConversionAPI(client);
+               //await ProjectionAPI(client);
+               //await ConversionAPI(client);
+               await InfoAPI(client);
             }
          }
          catch (Exception ex)
@@ -152,6 +153,11 @@ namespace GISBlox.Services.SDK.Samples
       {
          string geoJson = await client.Conversion.ToGeoJson(wkt, asFeatureCollection);
          Console.WriteLine(geoJson);
+      }
+
+      private async static Task InfoAPI(GISBloxClient client)
+      {
+         List<Subscription> subscriptions = await client.Info.GetSubscriptions();
       }
 
       private static void WriteLogHeader(string text) 
