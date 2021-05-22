@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace GISBlox.Services.SDK.Conversion
 {
+   /// <summary>
+   /// Interface for ConversionAPI class.
+   /// </summary>
    public interface IConversionAPI : IDisposable 
    {
       /// <summary>

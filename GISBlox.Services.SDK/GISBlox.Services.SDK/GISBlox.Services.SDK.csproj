@@ -12,7 +12,15 @@
     <PackageTags>GISBlox</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
-    <Version>1.0.1-beta</Version>
+    <Version>1.0.2-beta</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

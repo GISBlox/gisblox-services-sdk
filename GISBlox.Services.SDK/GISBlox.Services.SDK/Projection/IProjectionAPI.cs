@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace GISBlox.Services.SDK.Projection
 {
+   /// <summary>
+   /// Interface for ProjectionAPI class.
+   /// </summary>
    public interface IProjectionAPI : IDisposable
    {
       /// <summary>
@@ -33,7 +36,7 @@ namespace GISBlox.Services.SDK.Projection
       /// </summary>
       /// <param name="coordinate">A Coordinate type.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>An Location type.</returns>
+      /// <returns>A Location type.</returns>
       Task<Location> ToRDSComplete(Coordinate coordinate, CancellationToken cancellationToken = default);
 
       /// <summary>

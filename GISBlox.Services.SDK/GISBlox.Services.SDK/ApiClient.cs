@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace GISBlox.Services.SDK
 {
+   #pragma warning disable CS1591
    public abstract class ApiClient : IDisposable
+
    {
       protected readonly HttpClient HttpClient;
 
@@ -40,7 +42,7 @@ namespace GISBlox.Services.SDK
       }
 
       protected static async Task<T> HttpGet<T>(HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
-      {
+      {        
          var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
          if (!response.IsSuccessStatusCode)
@@ -91,4 +93,5 @@ namespace GISBlox.Services.SDK
          GC.SuppressFinalize(this);
       }
    }
+   #pragma warning restore CS1591
 }
