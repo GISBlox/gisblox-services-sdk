@@ -23,8 +23,8 @@ namespace GISBlox.Services.SDK.Samples
             Console.WriteLine("Creating client");
             using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
             {
-               //await ProjectionAPI(client);
-               //await ConversionAPI(client);
+               await ProjectionAPI(client);
+               await ConversionAPI(client);
                await InfoAPI(client);
             }
          }
@@ -78,7 +78,7 @@ namespace GISBlox.Services.SDK.Samples
          WriteLogHeader("Reprojecting RDS to WGS84 (simple)");
 
          rdPoint = new RDPoint(85530, 446100);         
-         coord = await client.Projection.ToWGS84(rdPoint, 6);                 // Round the coordinates to 6 digits
+         coord = await client.Projection.ToWGS84(rdPoint, 6);                 // Round the coordinate to 6 digits
 
          Console.WriteLine($"Coordinate - Lat: { coord.Lat } Lon: { coord.Lon }");
                   
@@ -157,7 +157,10 @@ namespace GISBlox.Services.SDK.Samples
 
       private async static Task InfoAPI(GISBloxClient client)
       {
+         WriteLogHeader("Subscriptions associated with the current service key");
+
          List<Subscription> subscriptions = await client.Info.GetSubscriptions();
+         subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: { sub.Name } \r\nDescription: { sub.Description } \r\nRegistration date: { sub.RegisterDate } Expiration date: { sub.ExpirationDate} Expired: { sub.Expired}"));
       }
 
       private static void WriteLogHeader(string text) 

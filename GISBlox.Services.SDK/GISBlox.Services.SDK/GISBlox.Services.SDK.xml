@@ -4,6 +4,48 @@
         <name>GISBlox.Services.SDK</name>
     </assembly>
     <members>
+        <member name="T:GISBlox.Services.SDK.ClientApiException">
+            <summary>
+            Represents client-side API errors that occur during application execution.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.ClientApiException.StatusCode">
+            <summary>
+            The HTTP status code of the error.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ClientApiException.#ctor(System.String,System.Net.HttpStatusCode)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.ClientApiException class.
+            </summary>
+            <param name="message">The exception message.</param>
+            <param name="statusCode">The HTTP status code.</param>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Conversion.ConversionAPIClient">
+            <summary>
+            This class converts WKT geometry objects into GeoJSON. 
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
+            </summary>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToGeoJson(GISBlox.Services.SDK.Models.WKT,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Converts a WKT geometry string into a GeoJson Feature(Collection) string.
+            </summary>
+            <param name="wkt">A WKT type.</param>
+            <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A GeoJson string with the converted WKT geometry.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Conversion.IConversionAPI">
+            <summary>
+            Interface for ConversionAPI class.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToGeoJson(GISBlox.Services.SDK.Models.WKT,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Converts a WKT geometry string into a GeoJson Feature(Collection) string.
@@ -12,6 +54,11 @@
             <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A GeoJson string with the converted WKT geometry.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.GISBloxClient">
+            <summary>
+            This class is the main entry point for every available GISBlox Location Service method.
+            </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.GISBloxClient.#ctor(System.String,System.String,System.Int64)">
             <summary>
@@ -23,12 +70,62 @@
         </member>
         <member name="M:GISBlox.Services.SDK.GISBloxClient.CreateClient(System.String,System.String,System.Int64)">
             <summary>
-            Create client object with specified base URL, service key and timeout.
+            Create the client object with specified base URL, service key and timeout.
             </summary>
             <param name="baseUrl">Base URL for the GISBlox Services resource, i.e. https://services.gisblox.com</param>
             <param name="serviceKey">The service key.</param>
             <param name="timeoutSeconds">Web request time out in seconds</param>
             <returns></returns>
+        </member>
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.Projection">
+            <summary>
+            Entry point to the Projection API.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.Conversion">
+            <summary>
+            Entry point to the Conversion API.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.Info">
+            <summary>
+            Entry point to the Info API.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.GISBloxClient.Dispose">
+            <summary>
+            Disposes the GISBloxClient class.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Info.IInfoAPI">
+            <summary>
+            Interface for InfoAPI class.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Info.IInfoAPI.GetSubscriptions(System.Threading.CancellationToken)">
+            <summary>
+            Returns the subscriptions of the authorized user.
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with Subscription types.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Info.InfoAPIClient">
+            <summary>
+            This class contains methods to communicate with the Info API.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
+            </summary>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.GetSubscriptions(System.Threading.CancellationToken)">
+            <summary>
+            Returns the subscriptions of the authorized user.
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with Subscription types.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Coordinate">
             <summary>
@@ -179,6 +276,11 @@
             </summary>
             <param name="geometry">A WKT geometry.</param>
         </member>
+        <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
+            <summary>
+            Interface for ProjectionAPI class.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToRDS(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
             <summary>
             Reprojects a coordinate to an RDPoint.
@@ -201,7 +303,7 @@
             </summary>
             <param name="coordinate">A Coordinate type.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>An Location type.</returns>
+            <returns>A Location type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToRDSComplete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
             <summary>
@@ -239,6 +341,85 @@
             <returns>A Location type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToWGS84Complete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects multiple RDPoints to locations. Includes the source RDPoints.
+            </summary>
+            <param name="rdPoints">A List with RDPoint types.</param>
+            <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with Location types.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Projection.ProjectionAPIClient">
+            <summary>
+            This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+            </summary>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDS(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects a coordinate to an RDPoint.
+            </summary>
+            <param name="coordinate">A Coordinate type.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>An RDPoint type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDS(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
+            <summary>
+            Reprojects multiple coordinates to RDPoints.
+            </summary>
+            <param name="coordinates">A List with Coordinate types.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with RDPoint types.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDSComplete(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects a coordinate to a location. Includes the source coordinate.
+            </summary>
+            <param name="coordinate">A Coordinate type.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A Location type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDSComplete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
+            <summary>
+            Reprojects multiple coordinates to locations. Includes the source coordinates.
+            </summary>
+            <param name="coordinates">A List with Coordinate types.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with Location types.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects an RDPoint to a coordinate.
+            </summary>
+            <param name="rdPoint">An RDPoint type.</param>
+            <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A Coordinate type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects multiple RDPoints to coordinates.
+            </summary>
+            <param name="rdPoints">A List with RDPoint types.</param>
+            <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A List with Coordinate types.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84Complete(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Reprojects an RDPoint to a location. Includes the source RDPoint.
+            </summary>
+            <param name="rdPoint">An RDPoint type.</param>
+            <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A Location type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84Complete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
             <summary>
             Reprojects multiple RDPoints to locations. Includes the source RDPoints.
             </summary>

@@ -10,11 +10,24 @@ using System.Threading.Tasks;
 
 namespace GISBlox.Services.SDK.Projection
 {
+   /// <summary>
+   /// This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
+   /// </summary>
    public class ProjectionAPIClient : ApiClient, IProjectionAPI
    {
+      /// <summary>
+      /// Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+      /// </summary>
+      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
       public ProjectionAPIClient(HttpClient httpClient) : base(httpClient)
       { }
 
+      /// <summary>
+      /// Reprojects a coordinate to an RDPoint.
+      /// </summary>
+      /// <param name="coordinate">A Coordinate type.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>An RDPoint type.</returns>
       public async Task<RDPoint> ToRDS(Coordinate coordinate, CancellationToken cancellationToken = default)
       {
          SetCompleteHeader(false);
@@ -22,6 +35,12 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, RDPoint>(this.HttpClient, requestUri, coordinate, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects multiple coordinates to RDPoints.
+      /// </summary>
+      /// <param name="coordinates">A List with Coordinate types.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with RDPoint types.</returns>
       public async Task<List<RDPoint>> ToRDS(List<Coordinate> coordinates, CancellationToken cancellationToken = default)
       {
          SetCompleteHeader(false);
@@ -29,6 +48,12 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, List<RDPoint>>(this.HttpClient, requestUri, coordinates, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects a coordinate to a location. Includes the source coordinate.
+      /// </summary>
+      /// <param name="coordinate">A Coordinate type.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A Location type.</returns>
       public async Task<Location> ToRDSComplete(Coordinate coordinate, CancellationToken cancellationToken = default)
       {         
          SetCompleteHeader(true);
@@ -36,6 +61,12 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, Location>(this.HttpClient, requestUri, coordinate, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects multiple coordinates to locations. Includes the source coordinates.
+      /// </summary>
+      /// <param name="coordinates">A List with Coordinate types.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with Location types.</returns>
       public async Task<List<Location>> ToRDSComplete(List<Coordinate> coordinates, CancellationToken cancellationToken = default)
       {         
          SetCompleteHeader(true);
@@ -43,6 +74,13 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, List<Location>>(this.HttpClient, requestUri, coordinates, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects an RDPoint to a coordinate.
+      /// </summary>
+      /// <param name="rdPoint">An RDPoint type.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A Coordinate type.</returns>
       public async Task<Coordinate> ToWGS84(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default)
       {         
          SetCompleteHeader(false);
@@ -51,6 +89,13 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, Coordinate>(this.HttpClient, requestUri, rdPoint, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects multiple RDPoints to coordinates.
+      /// </summary>
+      /// <param name="rdPoints">A List with RDPoint types.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with Coordinate types.</returns>
       public async Task<List<Coordinate>> ToWGS84(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default)
       {
          SetCompleteHeader(false);
@@ -59,6 +104,13 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, List<Coordinate>>(this.HttpClient, requestUri, rdPoints, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects an RDPoint to a location. Includes the source RDPoint.
+      /// </summary>
+      /// <param name="rdPoint">An RDPoint type.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A Location type.</returns>
       public async Task<Location> ToWGS84Complete(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default)
       {       
          SetCompleteHeader(true);
@@ -67,6 +119,13 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, Location>(this.HttpClient, requestUri, rdPoint, cancellationToken);
       }
 
+      /// <summary>
+      /// Reprojects multiple RDPoints to locations. Includes the source RDPoints.
+      /// </summary>
+      /// <param name="rdPoints">A List with RDPoint types.</param>
+      /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A List with Location types.</returns>
       public async Task<List<Location>> ToWGS84Complete(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default)
       {         
          SetCompleteHeader(true);         

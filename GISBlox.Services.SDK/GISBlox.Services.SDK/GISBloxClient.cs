@@ -14,6 +14,9 @@ using System.Reflection;
 
 namespace GISBlox.Services.SDK
 {
+   /// <summary>
+   /// This class is the main entry point for every available GISBlox Location Service method.
+   /// </summary>
    public class GISBloxClient : IDisposable
    {
       /// <summary>
@@ -48,7 +51,7 @@ namespace GISBlox.Services.SDK
       }
 
       /// <summary>
-      /// Create client object with specified base URL, service key and timeout.
+      /// Create the client object with specified base URL, service key and timeout.
       /// </summary>
       /// <param name="baseUrl">Base URL for the GISBlox Services resource, i.e. https://services.gisblox.com</param>
       /// <param name="serviceKey">The service key.</param>
@@ -59,12 +62,24 @@ namespace GISBlox.Services.SDK
          return new GISBloxClient(baseUrl, serviceKey, timeoutSeconds);
       }
 
+      /// <summary>
+      /// Entry point to the Projection API.
+      /// </summary>
       public IProjectionAPI Projection { get;  }
 
+      /// <summary>
+      /// Entry point to the Conversion API.
+      /// </summary>
       public IConversionAPI Conversion { get; }
 
+      /// <summary>
+      /// Entry point to the Info API.
+      /// </summary>
       public IInfoAPI Info { get; }
 
+      /// <summary>
+      /// Disposes the GISBloxClient class.
+      /// </summary>
       public void Dispose()
       {
          Projection.Dispose();
