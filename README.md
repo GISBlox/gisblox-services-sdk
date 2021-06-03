@@ -3,10 +3,19 @@ This client library enables client applications to connect to the GISBlox Servic
 
 The API currently supports reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa, and converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON).
 
+To get no-code access to the GISBlox Services API from the command-line, you can use the [GISBlox Services CLI](https://github.com/GISBlox/gisblox-services-cli).
+
 ## Requirements
 You must have a personal service key to access the GISBlox Services REST API.
 
 To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a free subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel. [More information](http://library.gisblox.com/content/nl-nl/gb1810090).
+
+## Installation
+Either download this repository, make a (forked) git clone or install via NuGet:
+
+```
+PM> Install-Package GISBlox.Services.SDK -Version 1.0.2-beta
+```
 
 ## Usage
 
