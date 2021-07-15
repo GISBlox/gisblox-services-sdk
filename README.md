@@ -1,5 +1,5 @@
 # GISBlox Services .NET SDK
-This client library enables client applications to connect to the GISBlox Services REST API. 
+This client library enables client applications to connect to the [GISBlox Services REST API](https://services.gisblox.com/). 
 
 The API currently supports reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa, and converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON).
 
