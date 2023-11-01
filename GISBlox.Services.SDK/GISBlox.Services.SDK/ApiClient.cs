@@ -13,12 +13,10 @@ namespace GISBlox.Services.SDK
 {
    #pragma warning disable CS1591
    public abstract class ApiClient : IDisposable
-
    {
       protected readonly HttpClient HttpClient;
 
-      private static readonly JsonSerializerOptions JsonSerializerOptions =
-         new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never };
+      private static readonly JsonSerializerOptions JsonSerializerOptions = new() { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never };
 
       protected ApiClient(HttpClient httpClient)
       {
@@ -36,9 +34,8 @@ namespace GISBlox.Services.SDK
 
       protected static ClientApiException CreateApiException(HttpResponseMessage response)
       {
-         var statusCode = response.StatusCode;
          var errorContent = response.Content.ReadAsStringAsync().Result;
-         return new ClientApiException(errorContent, statusCode);
+         return new ClientApiException(errorContent, response.StatusCode);
       }
 
       protected static async Task<T> HttpGet<T>(HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
@@ -50,7 +47,7 @@ namespace GISBlox.Services.SDK
             throw CreateApiException(response);
          }
 
-         var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
          return JsonSerializer.Deserialize<T>(responseContent);
       }    
 
@@ -75,7 +72,7 @@ namespace GISBlox.Services.SDK
             throw CreateApiException(response);
          }
 
-         var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
          return JsonSerializer.Deserialize<TResult>(responseContent);
       }      
 
