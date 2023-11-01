@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Bartels Online</Authors>
     <Description>Client library for connecting to the GISBlox Services REST API.</Description>
     <Copyright>© Bartels Online. All rights reserved.</Copyright>
@@ -12,7 +12,7 @@
     <PackageTags>GISBlox</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
-    <Version>1.0.2-beta</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
