@@ -15,13 +15,13 @@ namespace GISBlox.Services.SDK.Models
       public string Geometry { get; set; }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+      /// Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
       /// </summary>
       public WKT()
       { }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+      /// Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
       /// </summary>
       /// <param name="geometry">A WKT geometry.</param>
       public WKT(string geometry)
