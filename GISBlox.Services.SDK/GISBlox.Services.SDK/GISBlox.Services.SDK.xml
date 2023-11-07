@@ -222,7 +222,7 @@
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Subscription">
             <summary>
-            This class contains GISBlox subscription info.
+            This class contains GISBlox service subscription information.
             </summary>
         </member>
         <member name="P:GISBlox.Services.SDK.Models.Subscription.Code">
@@ -267,12 +267,12 @@
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String)">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
             </summary>
             <param name="geometry">A WKT geometry.</param>
         </member>

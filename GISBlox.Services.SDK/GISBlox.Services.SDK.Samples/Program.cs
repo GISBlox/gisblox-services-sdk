@@ -28,13 +28,17 @@ namespace GISBlox.Services.SDK.Samples
                await InfoAPI(client);
             }
          }
+         catch (ClientApiException cae)
+         {
+            await Console.Error.WriteLineAsync($"API Exception: {cae.StatusCode} {cae.Message}");
+         }
          catch (Exception ex)
          {
             await Console.Error.WriteLineAsync($"Exception: { ex.Message}");
          }
          finally
          {
-            Console.WriteLine("Press enter to exit");
+            Console.WriteLine("\nPress enter to exit");
             Console.ReadLine();
          }
       }
@@ -45,13 +49,13 @@ namespace GISBlox.Services.SDK.Samples
          
          WriteLogHeader("Reprojecting WGS84 to RDS (simple)");
 
-         Coordinate coord = new Coordinate(51.998929, 4.375587);         
+         Coordinate coord = new(51.998929, 4.375587);         
          RDPoint rdPoint = await client.Projection.ToRDS(coord);
 
          Console.WriteLine($"RDPoint - X:{ rdPoint.X } Y:{ rdPoint.Y }");
                   
          WriteLogHeader("Reprojecting multiple coordinates to RDS (simple)");
-         List<Coordinate> coords = new List<Coordinate>
+         List<Coordinate> coords = new()
          {
             new Coordinate(51.998929, 4.375587),
             new Coordinate(53.1, 4.2),
@@ -110,7 +114,7 @@ namespace GISBlox.Services.SDK.Samples
       {         
          WriteLogHeader("Convert POINT");
 
-         WKT wkt = new WKT("POINT (30 10 5)");
+         WKT wkt = new("POINT (30 10 5)");
          await ConvertToGeoJson(wkt, client);
 
          WriteLogHeader("Convert MULTIPOINT");

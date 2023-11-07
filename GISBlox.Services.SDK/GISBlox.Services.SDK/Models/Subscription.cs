@@ -7,7 +7,7 @@ using System;
 namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
-   /// This class contains GISBlox subscription info.
+   /// This class contains GISBlox service subscription information.
    /// </summary>
    public class Subscription
    {
