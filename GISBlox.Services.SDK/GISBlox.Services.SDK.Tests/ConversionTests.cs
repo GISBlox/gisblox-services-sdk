@@ -5,13 +5,12 @@ namespace GISBlox.Services.SDK.Tests
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
-      const string SERVICE_KEY = "abc";
-
-
+      
       [TestInitialize]
       public void Init()
       {
-         _client = GISBloxClient.CreateClient(BASE_URL, SERVICE_KEY);
+         string? serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
+         _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
       }
 
       [TestCleanup]
