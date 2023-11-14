@@ -85,7 +85,9 @@ namespace GISBlox.Services.SDK
          Projection.Dispose();
          Conversion.Dispose();
          Info.Dispose();
+         GC.SuppressFinalize(this);
       }
+
       private static string GetAssemblyFileVersion()
       {
          Assembly assembly = Assembly.GetExecutingAssembly();

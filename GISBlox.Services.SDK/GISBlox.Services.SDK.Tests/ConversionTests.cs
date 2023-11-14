@@ -9,7 +9,7 @@ namespace GISBlox.Services.SDK.Tests
       [TestInitialize]
       public void Init()
       {
-         string? serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
+         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
          _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
       }
 

@@ -348,3 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/GISBlox.Services.SDK/GISBlox.Services.SDK.Tests/test.runsettings
