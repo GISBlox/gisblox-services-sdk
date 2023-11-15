@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "GISBlox.Services.SDK.Samples": {
-      "commandName": "Project",
-      "commandLineArgs": "\"https://services.gisblox.com\" "
-    }
-  }
-}

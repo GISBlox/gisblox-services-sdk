@@ -6,7 +6,7 @@
       const string BASE_URL = "https://services.gisblox.com";
 
       [TestMethod]
-      public async Task GetInfo()
+      public async Task GetSubscriptionInfo()
       {
          // Get the service key from the test.runsettings file
          string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
