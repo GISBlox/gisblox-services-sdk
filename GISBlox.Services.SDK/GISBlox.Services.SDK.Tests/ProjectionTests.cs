@@ -1,7 +1,4 @@
-﻿using GISBlox.Services.SDK.Models;
-using System.Drawing;
-
-namespace GISBlox.Services.SDK.Tests
+﻿namespace GISBlox.Services.SDK.Tests
 {
    [TestClass]
    public class ProjectionTests
