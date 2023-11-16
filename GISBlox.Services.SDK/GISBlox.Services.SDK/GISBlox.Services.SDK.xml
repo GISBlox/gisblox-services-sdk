@@ -276,6 +276,22 @@
             </summary>
             <param name="geometry">A WKT geometry.</param>
         </member>
+        <member name="T:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPIClient">
+            <summary>
+            Interface for PostalCodesAPI class.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
+            <summary>
+            This class...
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
+            </summary>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+        </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>
             Interface for ProjectionAPI class.
