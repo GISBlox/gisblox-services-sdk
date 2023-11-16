@@ -42,6 +42,34 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
       }
 
+      [TestMethod]
+      public async Task GetPostalCode4Neighbours()
+      {
+         string id = "3811";
+         bool includeSource = false;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4Neighbours(id, includeSource);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 6);
+
+         bool ok = record.PostalCode.Where(pc => pc.Id == "3817").Count() == 1;
+         
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4NeighboursWithSource()
+      {
+         string id = "3811";
+         bool includeSource = true;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4Neighbours(id, includeSource);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 7);
+
+         bool ok = record.PostalCode.Where(pc => pc.Id == "3817").Count() == 1;
+
+      }
+
       #endregion
    }
 }

@@ -112,7 +112,7 @@
             Returns the subscriptions of the authorized user.
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Subscription types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Subscription"/> types.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Info.InfoAPIClient">
             <summary>
@@ -130,7 +130,7 @@
             Returns the subscriptions of the authorized user.
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Subscription types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Subscription"/> types.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Subscription">
             <summary>
@@ -490,6 +490,16 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
             <summary>
             This class...
@@ -506,6 +516,16 @@
             Gets the postal code record for the specified postal code.
             </summary>
             <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
             <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>

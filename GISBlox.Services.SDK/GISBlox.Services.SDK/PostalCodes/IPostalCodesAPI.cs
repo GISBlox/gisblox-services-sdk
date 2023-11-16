@@ -22,5 +22,15 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
       Task<PostalCode4Record> GetPostalCode4Record(string id, int epsg = 28992, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Gets neighbouring postal code records of the specified postal code.
+      /// </summary>
+      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
+      Task<PostalCode4Record> GetPostalCode4Neighbours(string id, bool includeSourcePostalCode = false, int epsg = 28992, CancellationToken cancellationToken = default);
    }
 }
