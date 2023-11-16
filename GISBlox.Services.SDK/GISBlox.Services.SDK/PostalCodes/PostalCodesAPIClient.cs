@@ -51,6 +51,23 @@ namespace GISBlox.Services.SDK.PostalCodes
          return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
       }
 
+      /// <summary>
+      /// Gets postal code records based on a WKT (well-known text) geometry string.
+      /// </summary>
+      /// <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+      /// <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+      /// <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
+      public async Task<PostalCode4Record> GetPostalCode4ByGeometry(string wkt, int buffer = 0, int wktEpsg = 28992, int targetEpsg = 28992, CancellationToken cancellationToken = default)
+      {
+         SetEpsgHeader(targetEpsg);
+         var requestUri = $"postalcodes4/geometry?wktEPSG={wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
+         return await HttpPost<dynamic, PostalCode4Record>(this.HttpClient, requestUri, wkt, cancellationToken);
+      }
+
+
 
       internal void SetEpsgHeader(int epsg)
       {

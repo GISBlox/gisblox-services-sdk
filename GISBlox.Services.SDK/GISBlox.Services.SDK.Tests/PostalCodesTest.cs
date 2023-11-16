@@ -52,8 +52,8 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 6);
 
-         bool ok = record.PostalCode.Where(pc => pc.Id == "3817").Count() == 1;
-         
+         List<string> expectedIDs = new() { "3817", "3814", "3816", "3813", "3812", "3818" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
       }
 
       [TestMethod]
@@ -66,9 +66,51 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 7);
 
-         bool ok = record.PostalCode.Where(pc => pc.Id == "3817").Count() == 1;
-
+         List<string> expectedIDs = new() { "3811", "3817", "3814", "3816", "3813", "3812", "3818" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
       }
+
+      [TestMethod]
+      public async Task GetPostalCode4ByGeometry()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 3);
+
+         List<string> expectedIDs = new() { "1791", "1796", "1797" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4ByGeometryWithBuffer()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         int buffer = 5000;    // meters, since CS of WKT is 28992.
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt, buffer);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 5);
+
+         List<string> expectedIDs = new() { "1791", "1793", "1795", "1796", "1797" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4ByGeometryWithBufferAndDifferentTargetEpsg()
+      {
+         string wkt = "POINT(121843 487293)";
+         int buffer = 200;   // meters, since CS of WKT is 28992.
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt, buffer, 28992, 4326);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 2);
+
+         List<string> expectedIDs = new() { "1011", "102" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT(4.905333126288754 52.371542282338666)");
+      }     
 
       #endregion
    }
