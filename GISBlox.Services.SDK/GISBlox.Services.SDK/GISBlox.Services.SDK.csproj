@@ -23,8 +23,4 @@
     <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\PostalCodes\" />
-  </ItemGroup>
-
 </Project>
