@@ -14,5 +14,6 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </summary>
    public interface IPostalCodesAPIClient : IDisposable
    {
+     // Task<string> Get
    }
 }
