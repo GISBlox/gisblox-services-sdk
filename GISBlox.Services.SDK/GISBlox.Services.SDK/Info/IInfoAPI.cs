@@ -19,7 +19,7 @@ namespace GISBlox.Services.SDK.Info
       /// Returns the subscriptions of the authorized user.
       /// </summary>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A List with Subscription types.</returns>
+      /// <returns>A List with <see cref="Subscription"/> types.</returns>
       Task<List<Subscription>> GetSubscriptions(CancellationToken cancellationToken = default);
    }
 }
