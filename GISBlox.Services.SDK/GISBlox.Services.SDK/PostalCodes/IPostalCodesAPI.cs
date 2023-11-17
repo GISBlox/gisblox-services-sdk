@@ -53,5 +53,13 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
       Task<PostalCode4Record> GetPostalCode4ByGW(int gemeenteId, int wijkId, int epsg = 28992, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Gets the key figures record for the specified postal code area.
+      /// </summary>
+      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
+      Task<KerncijferRecord> GetKeyFigures4Record(string id, CancellationToken cancellationToken = default);
    }
 }

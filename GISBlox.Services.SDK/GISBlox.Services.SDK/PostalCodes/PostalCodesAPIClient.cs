@@ -3,8 +3,6 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,6 +79,18 @@ namespace GISBlox.Services.SDK.PostalCodes
          SetEpsgHeader(epsg);
          var requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
          return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
+      }
+
+      /// <summary>
+      /// Gets the key figures record for the specified postal code area.
+      /// </summary>
+      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
+      public async Task<KerncijferRecord> GetKeyFigures4Record(string id, CancellationToken cancellationToken = default)
+      {
+         var requestUri = $"postalcodes4/keyfigures/{id}";
+         return await HttpGet<KerncijferRecord>(this.HttpClient, requestUri, cancellationToken);
       }
 
 

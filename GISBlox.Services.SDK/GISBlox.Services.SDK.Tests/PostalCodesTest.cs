@@ -125,6 +125,15 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsTrue(pc.Id == "2809" && pc.Location.Gemeente == "Gouda" && pc.Location.Wijken == "Westergouwe");
       }
 
+      [TestMethod]
+      public async Task GetKeyFigures4Record()
+      {
+         string id = "3811";
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures4Record(id);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.MetaData.TotalAttributes == 37);
+      }
 
       #endregion
    }
