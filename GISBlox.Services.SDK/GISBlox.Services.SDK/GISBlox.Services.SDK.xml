@@ -511,6 +511,16 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4ByGW(System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more district IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code (optional).</param>
+            <param name="wijkId">A district ('wijk') code.</param>      
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
             <summary>
             This class...
@@ -549,6 +559,16 @@
             <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
             <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
             <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4ByGW(System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more district IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code (optional).</param>
+            <param name="wijkId">A district ('wijk') code.</param>      
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
         </member>

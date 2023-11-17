@@ -107,10 +107,24 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 2);
 
-         List<string> expectedIDs = new() { "1011", "102" };
+         List<string> expectedIDs = new() { "1011", "1012" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT(4.905333126288754 52.371542282338666)");
-      }     
+         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.905333126288754 52.371542282338666)");
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4ByGW()
+      {
+         int gemeenteId = 513;
+         int wijkId = 51309;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGW(gemeenteId, wijkId);
+
+         Assert.IsNotNull(record, "Response is empty.");
+        
+         PostalCode4 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Id == "2809" && pc.Location.Gemeente == "Gouda" && pc.Location.Wijken == "Westergouwe");
+      }
+
 
       #endregion
    }

@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -67,6 +68,20 @@ namespace GISBlox.Services.SDK.PostalCodes
          return await HttpPost<dynamic, PostalCode4Record>(this.HttpClient, requestUri, wkt, cancellationToken);
       }
 
+      /// <summary>
+      /// Gets postal code records based on one or more district IDs.
+      /// </summary>
+      /// <param name="gemeenteId">A gemeente code (optional).</param>
+      /// <param name="wijkId">A district ('wijk') code.</param>      
+      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
+      public async Task<PostalCode4Record> GetPostalCode4ByGW(int gemeenteId, int wijkId, int epsg = 28992, CancellationToken cancellationToken = default)
+      {
+         SetEpsgHeader(epsg);
+         var requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
+         return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
+      }
 
 
       internal void SetEpsgHeader(int epsg)
