@@ -630,7 +630,7 @@
         </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
             <summary>
-            This class...
+            This class contains methods to communicate with the Dutch Postal Codes API.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient)">
