@@ -19,6 +19,6 @@ namespace GISBlox.Services.SDK.Models
       /// <summary>
       /// A list of postal code areas that match the request.
       /// </summary>
-      public List<PostalCode4> PostalCode { get; set; }
+      public List<PostalCode6> PostalCode { get; set; }
    }
 }

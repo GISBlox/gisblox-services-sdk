@@ -1,6 +1,4 @@
-﻿using GISBlox.Services.SDK.Models;
-
-namespace GISBlox.Services.SDK.Tests
+﻿namespace GISBlox.Services.SDK.Tests
 {
    [TestClass]
    public class PostalCodesTest
@@ -133,6 +131,116 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalAttributes == 37);
+      }
+
+      #endregion
+
+      #region PC6
+
+      [TestMethod]
+      public async Task GetPostalCode6Record()
+      {
+         string id = "3811CJ";
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Record(id);
+
+         Assert.IsNotNull(record, "Response is empty.");
+
+         PostalCode6 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155155.51254284632 463159.828901163)");
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6Neighbours()
+      {
+         string id = "3069BS";
+         bool includeSource = false;
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Neighbours(id, includeSource);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 7);
+
+         List<string> expectedIDs = new() { "3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6NeighboursWithSource()
+      {
+         string id = "3069BS";
+         bool includeSource = true;
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Neighbours(id, includeSource);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 8);
+
+         List<string> expectedIDs = new() { "3069BS", "3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6ByGeometry()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 3);
+
+         List<string> expectedIDs = new() { "1791PB", "1796AZ", "1797RT" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6ByGeometryWithBuffer()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         int buffer = 750;    // meters, since CS of WKT is 28992.
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt, buffer);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 6);
+
+         List<string> expectedIDs = new() { "1791PB", "1796AZ", "1797RT", "1791NT", "1796MV", "1791PE" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6ByGeometryWithBufferAndDifferentTargetEpsg()
+      {
+         string wkt = "POINT(121843 487293)";
+         int buffer = 50;   // meters, since CS of WKT is 28992.
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt, buffer, 28992, 4326);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.PostalCode.Count == 12);
+
+         List<string> expectedIDs = new() { "1011MA", "1011JV", "1011JT", "1011JS", "1011JR", "1011JP", "1011HB", "1011ME", "1011GD", "1012CR", "1012CS", "1012CW" };
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.899542319809452 52.37146607902681)");
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6ByGWB()
+      {
+         int gemeenteId = 513;
+         int wijkId = 51309;
+         int buurtId = 5130904;
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGWB(gemeenteId, wijkId, buurtId);
+
+         Assert.IsNotNull(record, "Response is empty.");
+
+         PostalCode6 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Id == "2809RA" && pc.Location.Gemeente == "Gouda" && pc.Location.Wijk == "Westergouwe" && pc.Location.Buurt == "Tuinenbuurt");
+      }
+
+      [TestMethod]
+      public async Task GetKeyFigures6Record()
+      {
+         string id = "3811BB";
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures6Record(id);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.MetaData.TotalAttributes == 35);
       }
 
       #endregion
