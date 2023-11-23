@@ -5,7 +5,7 @@
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
-      const int PAUSE_TIME = 1000;  // Allows to run all tests together without exceeding API call quota
+      const int API_QUOTA_DELAY = 1000;  // Allows to run all tests together without exceeding API call quota
 
       #region Initialization and cleanup
 
@@ -40,7 +40,7 @@
          PostalCode4 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
          
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -56,7 +56,7 @@
          List<string> expectedIDs = new() { "3817", "3814", "3816", "3813", "3812", "3818" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -72,7 +72,7 @@
          List<string> expectedIDs = new() { "3811", "3817", "3814", "3816", "3813", "3812", "3818" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -87,7 +87,7 @@
          List<string> expectedIDs = new() { "1791", "1796", "1797" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -103,7 +103,7 @@
          List<string> expectedIDs = new() { "1791", "1793", "1795", "1796", "1797" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
          
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -120,7 +120,7 @@
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
          Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.905333126288754 52.371542282338666)");
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -135,7 +135,7 @@
          PostalCode4 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Id == "2809" && pc.Location.Gemeente == "Gouda" && pc.Location.Wijken == "Westergouwe");
 
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -147,7 +147,7 @@
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalAttributes == 37);
 
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       #endregion
@@ -165,7 +165,7 @@
          PostalCode6 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155155.51254284632 463159.828901163)");
 
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -181,7 +181,7 @@
          List<string> expectedIDs = new() { "3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -197,7 +197,7 @@
          List<string> expectedIDs = new() { "3069BS", "3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -212,7 +212,7 @@
          List<string> expectedIDs = new() { "1791PB", "1796AZ", "1797RT" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -228,7 +228,7 @@
          List<string> expectedIDs = new() { "1791PB", "1796AZ", "1797RT", "1791NT", "1796MV", "1791PE" };
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -245,7 +245,7 @@
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
          Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.899542319809452 52.37146607902681)");
 
-         await Task.Delay(PAUSE_TIME * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -261,7 +261,7 @@
          PostalCode6 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Id == "2809RA" && pc.Location.Gemeente == "Gouda" && pc.Location.Wijk == "Westergouwe" && pc.Location.Buurt == "Tuinenbuurt");
 
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -273,7 +273,25 @@
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalAttributes == 35);
 
-         await Task.Delay(PAUSE_TIME);
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      #endregion
+
+      #region GWB
+
+      [TestMethod]
+      public async Task GetGemeenten()
+      {
+         GWBRecord record = await _client.PostalCodes.GetGemeenten();
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.MetaData.TotalRecords == 345);
+
+         int gemeenteIdAmersfoort = record.RecordSet.Where(g => g.Naam == "Amersfoort").SingleOrDefault().ID;
+         Assert.IsTrue(gemeenteIdAmersfoort == 307);
+         
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       #endregion

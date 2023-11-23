@@ -306,6 +306,56 @@
             The minimum Y-coordinate.
             </summary>
         </member>
+        <member name="T:GISBlox.Services.SDK.Models.GWB">
+            <summary>
+            Contains Gemeente, Wijk or Buurt information.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWB.ID">
+            <summary>
+            The unique GWB identifier.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWB.Naam">
+            <summary>
+            The name of the GWB object.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.GWBMetaData">
+            <summary>
+            This class specifies metadata for the returned record set.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.GWBType">
+            <summary>
+            Describes the type of GWB request.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.ParentID">
+            <summary>
+            The ID of the GWB parent.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.TotalRecords">
+            <summary>
+            The amount of returned records.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.GWBRecord">
+            <summary>
+            This class represents the Gemeente, Wijk or Buurt record.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBRecord.MetaData">
+            <summary>
+            Metadata of the result record set. 
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBRecord.RecordSet">
+            <summary>
+            The result record set with a list of GWB objects that match the request.
+            </summary> 
+        </member>
         <member name="T:GISBlox.Services.SDK.Models.KerncijferMetaData">
             <summary>
             This class specifies metadata for the returned record set.
@@ -628,6 +678,13 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetGemeenten(System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's gemeenten. 
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
             <summary>
             This class contains methods to communicate with the Dutch Postal Codes API.
@@ -735,6 +792,13 @@
             <param name="id">A 6-digit Dutch postal code.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetGemeenten(System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's gemeenten. 
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>

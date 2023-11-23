@@ -4,6 +4,7 @@
 
 using GISBlox.Services.SDK.Models;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -116,6 +117,17 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
       Task<KerncijferRecord> GetKeyFigures6Record(string id, CancellationToken cancellationToken = default);
+
+      #endregion
+
+      #region GWB
+
+      /// <summary>
+      /// Query for postal code's gemeenten. 
+      /// </summary>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default);
 
       #endregion
    }

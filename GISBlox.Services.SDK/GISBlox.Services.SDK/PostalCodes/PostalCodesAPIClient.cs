@@ -174,6 +174,21 @@ namespace GISBlox.Services.SDK.PostalCodes
 
       #endregion
 
+      #region GWB
+
+      /// <summary>
+      /// Query for postal code's gemeenten. 
+      /// </summary>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      public async Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default)
+      {
+         var requestUri = $"postalcodes/gwb/gemeenten";
+         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+      }
+
+      #endregion
+
       internal void SetEpsgHeader(int epsg)
       {
          SetRequestHeaderValue(HttpClient, "X-EPSG", epsg.ToString());
