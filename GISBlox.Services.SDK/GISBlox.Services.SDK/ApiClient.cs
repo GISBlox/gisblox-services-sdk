@@ -34,8 +34,8 @@ namespace GISBlox.Services.SDK
 
       protected static ClientApiException CreateApiException(HttpResponseMessage response)
       {
-         var errorContent = response.Content.ReadAsStringAsync().Result;
-         return new ClientApiException(errorContent, response.StatusCode);
+         string errorContent = response.Content.ReadAsStringAsync().Result;         
+         return new ClientApiException(!string.IsNullOrEmpty(errorContent) ? errorContent : response.ReasonPhrase, response.StatusCode);
       }
 
       protected static async Task<T> HttpGet<T>(HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)

@@ -77,6 +77,11 @@
             <param name="timeoutSeconds">Web request time out in seconds</param>
             <returns></returns>
         </member>
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.PostalCodes">
+            <summary>
+            Entry point to the Postal Codes API.
+            </summary>
+        </member>
         <member name="P:GISBlox.Services.SDK.GISBloxClient.Projection">
             <summary>
             Entry point to the Projection API.
@@ -107,7 +112,7 @@
             Returns the subscriptions of the authorized user.
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Subscription types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Subscription"/> types.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Info.InfoAPIClient">
             <summary>
@@ -125,7 +130,63 @@
             Returns the subscriptions of the authorized user.
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Subscription types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Subscription"/> types.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Subscription">
+            <summary>
+            This class contains GISBlox service subscription information.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.Code">
+            <summary>
+            Specifies the subscription code.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.Name">
+            <summary>
+            Represents the name of the subscription.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.Description">
+            <summary>
+            Contains a description of the subscription.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.RegisterDate">
+            <summary>
+            Specifies the subscription registration date.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.ExpirationDate">
+            <summary>
+            Specifies the subscription expiration date.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Subscription.Expired">
+            <summary>
+            Specifies whether the subscription has expired.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.WKT">
+            <summary>
+            This class represents a WKT geometry string representation.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKT.Geometry">
+            <summary>
+            Specifies the WKT geometry.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            </summary>
+            <param name="geometry">A WKT geometry.</param>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Coordinate">
             <summary>
@@ -220,61 +281,556 @@
             <param name="x">The x-coordinate of the point in RDNew projection (EPSG:28992).</param>
             <param name="y">The y-coordinate of the point in RDNew projection (EPSG:28992).</param>
         </member>
-        <member name="T:GISBlox.Services.SDK.Models.Subscription">
+        <member name="T:GISBlox.Services.SDK.Models.BoundingBox">
             <summary>
-            This class contains GISBlox service subscription information.
+            This class defines a rectangular region of the 2D coordinate plane.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.Code">
+        <member name="P:GISBlox.Services.SDK.Models.BoundingBox.MaxX">
             <summary>
-            Specifies the subscription code.
+            The maximum X-coordinate.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.Name">
+        <member name="P:GISBlox.Services.SDK.Models.BoundingBox.MinX">
             <summary>
-            Represents the name of the subscription.
+            The minimum X-coordinate.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.Description">
+        <member name="P:GISBlox.Services.SDK.Models.BoundingBox.MaxY">
             <summary>
-            Contains a description of the subscription.
+            The maximum Y-coordinate.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.RegisterDate">
+        <member name="P:GISBlox.Services.SDK.Models.BoundingBox.MinY">
             <summary>
-            Specifies the subscription registration date.
+            The minimum Y-coordinate.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.ExpirationDate">
+        <member name="T:GISBlox.Services.SDK.Models.GWB">
             <summary>
-            Specifies the subscription expiration date.
+            Contains Gemeente, Wijk or Buurt information.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.Subscription.Expired">
+        <member name="P:GISBlox.Services.SDK.Models.GWB.ID">
             <summary>
-            Specifies whether the subscription has expired.
+            The unique GWB identifier.
             </summary>
         </member>
-        <member name="T:GISBlox.Services.SDK.Models.WKT">
+        <member name="P:GISBlox.Services.SDK.Models.GWB.Naam">
             <summary>
-            This class represents a WKT geometry string representation.
+            The name of the GWB object.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.Models.WKT.Geometry">
+        <member name="T:GISBlox.Services.SDK.Models.GWBMetaData">
+            <summary>
+            This class specifies metadata for the returned record set.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.GWBType">
+            <summary>
+            Describes the type of GWB request.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.ParentID">
+            <summary>
+            The ID of the GWB parent.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBMetaData.TotalRecords">
+            <summary>
+            The amount of returned records.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.GWBRecord">
+            <summary>
+            This class represents the Gemeente, Wijk or Buurt record.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBRecord.MetaData">
+            <summary>
+            Metadata of the result record set. 
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.GWBRecord.RecordSet">
+            <summary>
+            The result record set with a list of GWB objects that match the request.
+            </summary> 
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.KerncijferMetaData">
+            <summary>
+            This class specifies metadata for the returned record set.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.KerncijferMetaData.Id">
+            <summary>
+            The postal code for which results are generated.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.KerncijferMetaData.TotalAttributes">
+            <summary>
+            The amount of returned key figures.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.KerncijferRecord">
+            <summary>
+            This class represents a key figures record.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.KerncijferRecord.MetaData">
+            <summary>
+            Metadata of the result record set. 
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.KerncijferRecord.Recordset">
+            <summary>
+            The result record set with a key figures that match the request.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Kerncijfers">
+            <summary>
+            This class contains key figures of a postal code area.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kerncijfers.Woningen">
+            <summary>
+            Key figures about houses.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kerncijfers.Inwoners">
+            <summary>
+            Key figures about inhabitants.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kerncijfers.Huishoudens">
+            <summary>
+            Key figures about households.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Location4Info">
+            <summary>
+            This class contains location information of a postal code area.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location4Info.Geometry">
+            <summary>
+            The postal code area's Well-Known Text geometry.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location4Info.Wijken">
+            <summary>
+            The district(s) within the postal code.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location4Info.Gemeente">
+            <summary>
+            The postal code's gemeente
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Location6Info">
+            <summary>
+            This class contains location information of a postal code.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location6Info.Geometry">
+            <summary>
+            The postal code's Well-Known Text geometry.
+            </summary>     
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location6Info.Buurt">
+            <summary>
+            The postal code's neighbourhood
+            </summary>     
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location6Info.Wijk">
+            <summary>
+            The postal code's district
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Location6Info.Gemeente">
+            <summary>
+            The postal code's gemeente
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.MetaData">
+            <summary>
+            This class specifies metadata for the returned geometries.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MetaData.EPSG">
+            <summary>
+            The spatial reference identifier code.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MetaData.Query">
+            <summary>
+            The input data of the request (postal code, WKT string, etc).
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MetaData.RecordSet">
+            <summary>
+            Metadata of the result record set. 
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.PostalCode4">
+            <summary>
+            Represents a postal code area.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode4.Id">
+            <summary>
+            The postal code for which results are generated.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode4.Location">
+            <summary>
+            Location data for the postal code area.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.PostalCode4Record">
+            <summary>
+            This class represents a postal code record.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode4Record.MetaData">
+            <summary>
+            Specifies metadata for the returned geometries.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode4Record.PostalCode">
+            <summary>
+            A list of postal code areas that match the request.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.PostalCode6">
+            <summary>
+            Represents a postal code.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode6.Id">
+            <summary>
+            The postal code for which results are generated.
+            </summary>     
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode6.Location">
+            <summary>
+            Location data for the postal code.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.PostalCode6Record">
+            <summary>
+            This class represents a postal code record.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode6Record.MetaData">
+            <summary>
+            Specifies metadata for the returned geometries.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.PostalCode6Record.PostalCode">
+            <summary>
+            A list of postal code areas that match the request.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.RecordSet">
+            <summary>
+            Metadata about the result record set, including bounding box information and record count.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.RecordSet.TotalRecords">
+            <summary>
+            The amount of returned geometries.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.RecordSet.BBox">
+            <summary>
+            Represents the bounding box for the returned geometries.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.WKTGeometry">
+            <summary>
+            This class represents a WKT geometry representation.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKTGeometry.WKT">
             <summary>
             Specifies the WKT geometry.
+            </summary>            
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKTGeometry.Centroid">
+            <summary>
+            The center location of the WKT geometry.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKTGeometry.AreaM2">
+            <summary>
+            The area of the postal code in meters squared.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKTGeometry.PerimeterM">
+            <summary>
+            The perimeter of the postal code area in meters.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKTGeometry.Vertices">
+            <summary>
+            The amount of vertices of the postal code area.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI">
+            <summary>
+            Interface for PostalCodesAPI class.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor">
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4Record(System.String,System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4ByGeometry(System.String,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode4ByGW(System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more district IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>      
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetKeyFigures4Record(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the key figures record for the specified postal code area.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode6Record(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode6Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode6ByGeometry(System.String,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCode6ByGWB(System.Int32,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more area IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>   
+            <param name="buurtId">A neighbourhood ('buurt') code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetKeyFigures6Record(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the key figures record for the specified postal code area.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetGemeenten(System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's gemeenten. 
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetWijken(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'wijken' by 'gemeenten'. 
+            </summary>
+            <param name="gemeenteId">A gemeente ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetBuurten(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'wijken'. 
+            </summary>
+            <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
+            <summary>
+            This class contains methods to communicate with the Dutch Postal Codes API.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String)">
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
             </summary>
-            <param name="geometry">A WKT geometry.</param>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4Record(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4ByGeometry(System.String,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode4ByGW(System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more district IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>      
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetKeyFigures4Record(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the key figures record for the specified postal code area.
+            </summary>
+            <param name="id">A 4-digit Dutch postal code.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode6Record(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode6Neighbours(System.String,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode6ByGeometry(System.String,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCode6ByGWB(System.Int32,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more area IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>   
+            <param name="buurtId">A neighbourhood ('buurt') code.</param>
+            <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.PostalCode4Record"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetKeyFigures6Record(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the key figures record for the specified postal code area.
+            </summary>
+            <param name="id">A 6-digit Dutch postal code.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetGemeenten(System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's gemeenten. 
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetWijken(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'wijken' by 'gemeenten'. 
+            </summary>
+            <param name="gemeenteId">A gemeente ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetBuurten(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'wijken'. 
+            </summary>
+            <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>
@@ -287,7 +843,7 @@
             </summary>
             <param name="coordinate">A Coordinate type.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>An RDPoint type.</returns>
+            <returns>An <see cref="T:GISBlox.Services.SDK.Models.RDPoint"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToRDS(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
             <summary>
@@ -295,7 +851,7 @@
             </summary>
             <param name="coordinates">A List with Coordinate types.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with RDPoint types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.RDPoint"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToRDSComplete(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
             <summary>
@@ -303,7 +859,7 @@
             </summary>
             <param name="coordinate">A Coordinate type.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Location type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Location"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToRDSComplete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
             <summary>
@@ -311,7 +867,7 @@
             </summary>
             <param name="coordinates">A List with Coordinate types.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Location types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToWGS84(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -320,7 +876,7 @@
             <param name="rdPoint">An RDPoint type.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Coordinate type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Coordinate"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToWGS84(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -329,7 +885,7 @@
             <param name="rdPoints">A List with RDPoint types.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Coordinate types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Coordinate"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToWGS84Complete(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -338,7 +894,7 @@
             <param name="rdPoint">An RDPoint type.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Location type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Location"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.IProjectionAPI.ToWGS84Complete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -347,7 +903,7 @@
             <param name="rdPoints">A List with RDPoint types.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Location types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Projection.ProjectionAPIClient">
             <summary>
@@ -366,7 +922,7 @@
             </summary>
             <param name="coordinate">A Coordinate type.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>An RDPoint type.</returns>
+            <returns>An <see cref="T:GISBlox.Services.SDK.Models.RDPoint"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDS(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
             <summary>
@@ -374,7 +930,7 @@
             </summary>
             <param name="coordinates">A List with Coordinate types.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with RDPoint types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.RDPoint"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDSComplete(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
             <summary>
@@ -382,7 +938,7 @@
             </summary>
             <param name="coordinate">A Coordinate type.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Location type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Location"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDSComplete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.Coordinate},System.Threading.CancellationToken)">
             <summary>
@@ -390,7 +946,7 @@
             </summary>
             <param name="coordinates">A List with Coordinate types.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Location types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -399,7 +955,7 @@
             <param name="rdPoint">An RDPoint type.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Coordinate type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Coordinate"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -408,7 +964,7 @@
             <param name="rdPoints">A List with RDPoint types.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Coordinate types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Coordinate"/> types.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84Complete(GISBlox.Services.SDK.Models.RDPoint,System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -417,7 +973,7 @@
             <param name="rdPoint">An RDPoint type.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A Location type.</returns>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.Location"/> type.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToWGS84Complete(System.Collections.Generic.List{GISBlox.Services.SDK.Models.RDPoint},System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -426,7 +982,7 @@
             <param name="rdPoints">A List with RDPoint types.</param>
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A List with Location types.</returns>
+            <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
         </member>
     </members>
 </doc>

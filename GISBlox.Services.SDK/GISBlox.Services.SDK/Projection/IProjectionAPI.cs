@@ -20,7 +20,7 @@ namespace GISBlox.Services.SDK.Projection
       /// </summary>
       /// <param name="coordinate">A Coordinate type.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>An RDPoint type.</returns>
+      /// <returns>An <see cref="RDPoint"/> type.</returns>
       Task<RDPoint> ToRDS(Coordinate coordinate, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -28,7 +28,7 @@ namespace GISBlox.Services.SDK.Projection
       /// </summary>
       /// <param name="coordinates">A List with Coordinate types.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A List with RDPoint types.</returns>
+      /// <returns>A List with <see cref="RDPoint"/> types.</returns>
       Task<List<RDPoint>> ToRDS(List<Coordinate> coordinates, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -36,7 +36,7 @@ namespace GISBlox.Services.SDK.Projection
       /// </summary>
       /// <param name="coordinate">A Coordinate type.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A Location type.</returns>
+      /// <returns>A <see cref="Location"/> type.</returns>
       Task<Location> ToRDSComplete(Coordinate coordinate, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -44,7 +44,7 @@ namespace GISBlox.Services.SDK.Projection
       /// </summary>
       /// <param name="coordinates">A List with Coordinate types.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A List with Location types.</returns>
+      /// <returns>A List with <see cref="Location"/> types.</returns>
       Task<List<Location>> ToRDSComplete(List<Coordinate> coordinates, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -53,7 +53,7 @@ namespace GISBlox.Services.SDK.Projection
       /// <param name="rdPoint">An RDPoint type.</param>
       /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A Coordinate type.</returns>
+      /// <returns>A <see cref="Coordinate"/> type.</returns>
       Task<Coordinate> ToWGS84(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -62,7 +62,7 @@ namespace GISBlox.Services.SDK.Projection
       /// <param name="rdPoints">A List with RDPoint types.</param>
       /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A List with Coordinate types.</returns>
+      /// <returns>A List with <see cref="Coordinate"/> types.</returns>
       Task<List<Coordinate>> ToWGS84(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -71,7 +71,7 @@ namespace GISBlox.Services.SDK.Projection
       /// <param name="rdPoint">An RDPoint type.</param>
       /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A Location type.</returns>
+      /// <returns>A <see cref="Location"/> type.</returns>
       Task<Location> ToWGS84Complete(RDPoint rdPoint, int decimals = -1, CancellationToken cancellationToken = default);
 
       /// <summary>
@@ -80,7 +80,7 @@ namespace GISBlox.Services.SDK.Projection
       /// <param name="rdPoints">A List with RDPoint types.</param>
       /// <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A List with Location types.</returns>
+      /// <returns>A List with <see cref="Location"/> types.</returns>
       Task<List<Location>> ToWGS84Complete(List<RDPoint> rdPoints, int decimals = -1, CancellationToken cancellationToken = default);
    }
 }

@@ -4,6 +4,7 @@
 
 using GISBlox.Services.SDK.Conversion;
 using GISBlox.Services.SDK.Info;
+using GISBlox.Services.SDK.PostalCodes;
 using GISBlox.Services.SDK.Projection;
 using System;
 using System.Diagnostics;
@@ -45,6 +46,7 @@ namespace GISBlox.Services.SDK
          httpClient.DefaultRequestHeaders.Add("X-Service-Key", serviceKey);
          httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", GetAssemblyFileVersion()));
 
+         this.PostalCodes = new PostalCodesAPIClient(httpClient);
          this.Projection = new ProjectionAPIClient(httpClient);
          this.Conversion = new ConversionAPIClient(httpClient);
          this.Info = new InfoAPIClient(httpClient);
@@ -61,6 +63,11 @@ namespace GISBlox.Services.SDK
       {
          return new GISBloxClient(baseUrl, serviceKey, timeoutSeconds);
       }
+
+      /// <summary>
+      /// Entry point to the Postal Codes API.
+      /// </summary>
+      public IPostalCodesAPI PostalCodes { get; }
 
       /// <summary>
       /// Entry point to the Projection API.
@@ -82,10 +89,13 @@ namespace GISBlox.Services.SDK
       /// </summary>
       public void Dispose()
       {
+         PostalCodes.Dispose();
          Projection.Dispose();
          Conversion.Dispose();
          Info.Dispose();
+         GC.SuppressFinalize(this);
       }
+
       private static string GetAssemblyFileVersion()
       {
          Assembly assembly = Assembly.GetExecutingAssembly();
