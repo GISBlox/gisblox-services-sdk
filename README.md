@@ -1,7 +1,10 @@
 # GISBlox Services .NET SDK
 This client library enables client applications to connect to the [GISBlox Services REST API](https://services.gisblox.com/). 
 
-The API currently supports reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa, and converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON).
+The API currently offers the following Location Services:
+* Getting information on Dutch postal codes (source of [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot))
+* Reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa
+* Converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON)
 
 To get no-code access to the GISBlox Services API from the command-line, you can use the [GISBlox Services CLI](https://github.com/GISBlox/gisblox-services-cli).
 
@@ -14,12 +17,12 @@ To generate a service key, create an account in the [GISBlox Account Center](htt
 Either download this repository, make a (forked) git clone or install via NuGet:
 
 ```
-PM> Install-Package GISBlox.Services.SDK -Version 1.0.2-beta
+PM> Install-Package GISBlox.Services.SDK -Version 1.1.0
 ```
 
 ## Usage
 
-Check out the **Samples** project for more detailed usages.
+Check out the **Tests** project for more detailed use cases.
 
 In the following examples, the ```baseUrl``` variable should be set to `"https://services.gisblox.com"`, and the ```serviceKey``` variable should be set to your GISBlox Location Services service key.
 
@@ -32,6 +35,9 @@ using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
 }
 
 ```
+
+## Postal codes API
+The postal codes API supports querying for both 4 digit and 6 digit postcal code records. Every endpoint in the ```Dutch Postal Codes``` sections of the [developer portal](https://services.gisblox.com/) are available in the SDK.
 
 ## Projection API
 The projection API currently reprojects WGS84 coordinates to Rijksdriehoeksstelsel (RDNew) locations and vice versa.
