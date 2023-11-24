@@ -187,6 +187,30 @@ namespace GISBlox.Services.SDK.PostalCodes
          return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
       }
 
+      /// <summary>
+      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// </summary>
+      /// <param name="gemeenteId">A gemeente ID.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      public async Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default)
+      {
+         var requestUri = $"postalcodes/gwb/gemeente/{gemeenteId}/wijken";
+         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+      }
+
+      /// <summary>
+      /// Query for postal code's 'buurten' by 'wijken'. 
+      /// </summary>
+      /// <param name="wijkId">A wijk ID.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      public async Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default)
+      {
+         var requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
+         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+      }
+
       #endregion
 
       internal void SetEpsgHeader(int epsg)

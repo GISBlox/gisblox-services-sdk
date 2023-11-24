@@ -5,6 +5,7 @@ namespace GISBlox.Services.SDK.Tests
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
+      const int API_QUOTA_DELAY = 1000;  // Allows to run all tests together without exceeding API call quota
 
       #region Initialization and cleanup
 
@@ -34,6 +35,8 @@ namespace GISBlox.Services.SDK.Tests
          
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -44,6 +47,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -54,6 +59,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -64,6 +71,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -74,6 +83,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -84,6 +95,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -94,6 +107,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+         
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -104,6 +119,8 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       #region Private methods

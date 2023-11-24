@@ -5,6 +5,7 @@
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
+      const int API_QUOTA_DELAY = 2500;  // Allows to run all tests together without exceeding API call quota
 
       #region Initialization and cleanup
 
@@ -46,6 +47,8 @@
 
          Assert.IsNotNull(location, "Response is empty.");
          Assert.IsTrue(location.X == 85530 && location.Y == 446100 && location.Lat == 51.998929 && location.Lon == 4.375587);
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -63,6 +66,8 @@
          Assert.IsTrue(rdPoints[0].X == 85530 && rdPoints[0].Y == 446100);
          Assert.IsTrue(rdPoints[1].X == 75483 && rdPoints[1].Y == 568787);
          Assert.IsTrue(rdPoints[2].X == 82197 && rdPoints[2].Y == 569794);
+
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
@@ -80,6 +85,8 @@
          Assert.IsTrue(loc[0].X == 85530 && loc[0].Y == 446100 && loc[0].Lat == 51.998929 && loc[0].Lon == 4.375587);
          Assert.IsTrue(loc[1].X == 75483 && loc[1].Y == 568787 && loc[1].Lat == 53.1 && loc[1].Lon == 4.2);
          Assert.IsTrue(loc[2].X == 82197 && loc[2].Y == 569794 && loc[2].Lat == 53.11 && loc[2].Lon == 4.3);
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       #endregion
@@ -104,6 +111,8 @@
 
          Assert.IsNotNull(location, "Response is empty.");
          Assert.IsTrue(location.Lat == 51.998927449317591 && location.Lon == 4.3755841993518345 && location.X == 85530 && location.Y == 446100);
+
+         await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
@@ -121,6 +130,8 @@
          Assert.IsTrue(coords[0].Lat == 52.9791861737104 && coords[0].Lon == 4.56833613045079);
          Assert.IsTrue(coords[1].Lat == 0 && coords[1].Lon == 0);
          Assert.IsTrue(coords[2].Lat == 52.93526683092437 && coords[2].Lon == 4.7327735938900535);
+
+         await Task.Delay(API_QUOTA_DELAY * 2);
       }
 
       [TestMethod]
