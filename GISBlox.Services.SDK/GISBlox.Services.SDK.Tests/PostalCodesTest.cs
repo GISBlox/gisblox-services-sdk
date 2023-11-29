@@ -27,6 +27,21 @@
 
       #endregion
 
+      [TestMethod]
+      public async Task GetPostalCodeRecord()
+      {
+         string id = "3811";
+         var record = await _client.PostalCodes.GetPostalCodeRecordAsync<PostalCode4Record>(id, PostalCodes.CoordinateSystem.WGS84);
+
+         Assert.IsNotNull(record, "Response is empty.");
+
+         PostalCode4 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
+
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+
       #region PC4
 
       [TestMethod]

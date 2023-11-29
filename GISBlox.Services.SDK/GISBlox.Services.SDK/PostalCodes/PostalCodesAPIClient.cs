@@ -21,6 +21,25 @@ namespace GISBlox.Services.SDK.PostalCodes
       public PostalCodesAPIClient(HttpClient httpClient) : base(httpClient)
       { }
 
+      public async Task<T> GetPostalCodeRecordAsync<T>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default) 
+      {
+         SetEpsgHeader((int)epsg);
+         
+         bool streetLevel = id.Length == 6;
+         string requestUri = $"postalcodes{(streetLevel ? "6" : "4")}/{id}";         
+         
+         
+         return await HttpGet<T>(HttpClient, requestUri, cancellationToken);
+         
+
+         
+
+
+         //var requestUri = $"postalcodes4/{id}";
+         //return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
+      }
+
+
       #region PC4
 
       /// <summary>

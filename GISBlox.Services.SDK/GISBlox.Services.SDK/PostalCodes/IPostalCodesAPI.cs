@@ -14,6 +14,8 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </summary>
    public interface IPostalCodesAPI : IDisposable
    {
+      Task<T> GetPostalCodeRecordAsync<T>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default);
+
       #region PC4
 
       /// <summary>

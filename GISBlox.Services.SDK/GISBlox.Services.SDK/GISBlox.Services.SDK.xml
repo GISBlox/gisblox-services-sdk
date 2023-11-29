@@ -576,6 +576,21 @@
             The amount of vertices of the postal code area.
             </summary>      
         </member>
+        <member name="T:GISBlox.Services.SDK.PostalCodes.CoordinateSystem">
+            <summary>
+            Represents a coordinate system.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.PostalCodes.CoordinateSystem.RDNew">
+            <summary>
+            Rijksdriehoeksstelsel (EPSG:28992)
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.PostalCodes.CoordinateSystem.WGS84">
+            <summary>
+            Latitude/longitude (EPSG:4326)
+            </summary>
+        </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI">
             <summary>
             Interface for PostalCodesAPI class.
