@@ -48,46 +48,10 @@ namespace GISBlox.Services.SDK.PostalCodes
       {
          string requestUri = $"postalcodes/gwb/gemeenten";
          return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
+      }      
 
       /// <summary>
-      /// Query for a specific wijk.
-      /// </summary>
-      /// <param name="gemeenteId">A gemeente ID.</param>
-      /// <param name="wijkId">A wijk ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWB"/> type.</returns>
-      public async Task<GWB> GetWijk(int gemeenteId, int wijkId, CancellationToken cancellationToken = default)
-      {
-         GWB wijk = null;
-         GWBRecord records = await GetWijken(gemeenteId, cancellationToken);
-         if (records != null)
-         {
-            wijk = records.RecordSet.Where(w => w.ID == wijkId).SingleOrDefault();
-         }
-         return wijk;
-      }
-
-      /// <summary>
-      /// Query for a specific wijk.
-      /// </summary>
-      /// <param name="gemeente">A gemeente name.</param>
-      /// <param name="wijk">A wijk name.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWB"/> type.</returns>
-      public async Task<GWB> GetWijk(string gemeente, string wijk, CancellationToken cancellationToken = default)
-      {
-         GWB result = null;
-         GWBRecord records = await GetWijken(gemeente, cancellationToken);
-         if (records != null)
-         {
-            result = records.RecordSet.Where(w => w.Naam.ToLower() == wijk.ToLower()).SingleOrDefault();
-         }
-         return result;
-      }
-
-      /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// Query for postal code's 'wijken' by 'gemeente'. 
       /// </summary>
       /// <param name="gemeenteId">A gemeente ID.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -99,7 +63,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       }
 
       /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// Query for postal code's 'wijken' by 'gemeente'. 
       /// </summary>
       /// <param name="gemeente">A gemeente name.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -116,7 +80,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       }
 
       /// <summary>
-      /// Query for postal code's 'buurten' by 'wijken'. 
+      /// Query for postal code's 'buurten' by 'wijk'. 
       /// </summary>
       /// <param name="wijkId">A wijk ID.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -125,6 +89,50 @@ namespace GISBlox.Services.SDK.PostalCodes
       {
          string requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
          return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+      }
+
+      /// <summary>
+      /// Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+      /// </summary>
+      /// <param name="gemeenteId">A gemeente ID.</param>
+      /// <param name="wijkId">A wijk ID.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      public async Task<GWBRecord> GetBuurten(int gemeenteId, int wijkId, CancellationToken cancellationToken = default)
+      {
+         GWBRecord buurten = null;
+         GWBRecord wijken = await GetWijken(gemeenteId, cancellationToken);
+         if (wijken != null)
+         {
+            GWB wijk = wijken.RecordSet.Where(w => w.ID == wijkId).SingleOrDefault();
+            if (wijk != null)
+            {
+               buurten = await GetBuurten(wijk.ID, cancellationToken);
+            }
+         }
+         return buurten;
+      }
+
+      /// <summary>
+      /// Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+      /// </summary>
+      /// <param name="gemeente">A gemeente name.</param>
+      /// <param name="wijk">A wijk name.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      public async Task<GWBRecord> GetBuurten(string gemeente, string wijk, CancellationToken cancellationToken = default)
+      {
+         GWBRecord buurten = null;
+         GWBRecord wijken = await GetWijken(gemeente, cancellationToken);
+         if (wijken != null)
+         {
+            GWB result = wijken.RecordSet.Where(w => w.Naam.ToLower() == wijk.ToLower()).SingleOrDefault();
+            if (result != null)
+            {
+               buurten = await GetBuurten(result.ID, cancellationToken);
+            }
+         }
+         return buurten;
       }
    }
 }

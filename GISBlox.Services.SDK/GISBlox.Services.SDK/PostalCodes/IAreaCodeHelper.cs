@@ -27,27 +27,9 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="GWBRecord"/> type.</returns>
       Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default);
-
+            
       /// <summary>
-      /// Query for a specific wijk.
-      /// </summary>
-      /// <param name="gemeenteId">A gemeente ID.</param>
-      /// <param name="wijkId">A wijk ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWB"/> type.</returns>
-      Task<GWB> GetWijk(int gemeenteId, int wijkId, CancellationToken cancellationToken = default);
-
-      /// <summary>
-      /// Query for a specific wijk.
-      /// </summary>
-      /// <param name="gemeente">A gemeente name.</param>
-      /// <param name="wijk">A wijk name.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWB"/> type.</returns>
-      Task<GWB> GetWijk(string gemeente, string wijk, CancellationToken cancellationToken = default);
-
-      /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// Query for postal code's 'wijken' by 'gemeente'. 
       /// </summary>
       /// <param name="gemeenteId">A gemeente ID.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -55,7 +37,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default);
 
       /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// Query for postal code's 'wijken' by 'gemeente'. 
       /// </summary>
       /// <param name="gemeente">A gemeente name.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -63,11 +45,29 @@ namespace GISBlox.Services.SDK.PostalCodes
       Task<GWBRecord> GetWijken(string gemeente, CancellationToken cancellationToken = default);
 
       /// <summary>
-      /// Query for postal code's 'buurten' by 'wijken'. 
+      /// Query for postal code's 'buurten' by 'wijk'. 
       /// </summary>
       /// <param name="wijkId">A wijk ID.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="GWBRecord"/> type.</returns>
       Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+      /// </summary>
+      /// <param name="gemeenteId">A gemeente ID.</param>
+      /// <param name="wijkId">A wijk ID.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      Task<GWBRecord> GetBuurten(int gemeenteId, int wijkId, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+      /// </summary>
+      /// <param name="gemeente">A gemeente name.</param>
+      /// <param name="wijk">A wijk name.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A <see cref="GWBRecord"/> type.</returns>
+      Task<GWBRecord> GetBuurten(string gemeente, string wijk, CancellationToken cancellationToken = default);
    }
 }

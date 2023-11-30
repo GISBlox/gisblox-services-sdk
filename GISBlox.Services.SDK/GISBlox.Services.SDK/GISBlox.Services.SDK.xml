@@ -677,27 +677,9 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetWijk(System.Int32,System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Query for a specific wijk.
-            </summary>
-            <param name="gemeenteId">A gemeente ID.</param>
-            <param name="wijkId">A wijk ID.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWB"/> type.</returns>
-        </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetWijk(System.String,System.String,System.Threading.CancellationToken)">
-            <summary>
-            Query for a specific wijk.
-            </summary>
-            <param name="gemeente">A gemeente name.</param>
-            <param name="wijk">A wijk name.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWB"/> type.</returns>
-        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetWijken(System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'wijken' by 'gemeenten'. 
+            Query for postal code's 'wijken' by 'gemeente'. 
             </summary>
             <param name="gemeenteId">A gemeente ID.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -705,7 +687,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetWijken(System.String,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'wijken' by 'gemeenten'. 
+            Query for postal code's 'wijken' by 'gemeente'. 
             </summary>
             <param name="gemeente">A gemeente name.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -713,9 +695,27 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetBuurten(System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'buurten' by 'wijken'. 
+            Query for postal code's 'buurten' by 'wijk'. 
             </summary>
             <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetBuurten(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+            </summary>
+            <param name="gemeenteId">A gemeente ID.</param>
+            <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetBuurten(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+            </summary>
+            <param name="gemeente">A gemeente name.</param>
+            <param name="wijk">A wijk name.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
@@ -739,27 +739,9 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetWijk(System.Int32,System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Query for a specific wijk.
-            </summary>
-            <param name="gemeenteId">A gemeente ID.</param>
-            <param name="wijkId">A wijk ID.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWB"/> type.</returns>
-        </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetWijk(System.String,System.String,System.Threading.CancellationToken)">
-            <summary>
-            Query for a specific wijk.
-            </summary>
-            <param name="gemeente">A gemeente name.</param>
-            <param name="wijk">A wijk name.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWB"/> type.</returns>
-        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetWijken(System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'wijken' by 'gemeenten'. 
+            Query for postal code's 'wijken' by 'gemeente'. 
             </summary>
             <param name="gemeenteId">A gemeente ID.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -767,7 +749,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetWijken(System.String,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'wijken' by 'gemeenten'. 
+            Query for postal code's 'wijken' by 'gemeente'. 
             </summary>
             <param name="gemeente">A gemeente name.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -775,9 +757,27 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetBuurten(System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's 'buurten' by 'wijken'. 
+            Query for postal code's 'buurten' by 'wijk'. 
             </summary>
             <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetBuurten(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+            </summary>
+            <param name="gemeenteId">A gemeente ID.</param>
+            <param name="wijkId">A wijk ID.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetBuurten(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Query for postal code's 'buurten' by 'gemeente' and 'wijk'. 
+            </summary>
+            <param name="gemeente">A gemeente name.</param>
+            <param name="wijk">A wijk name.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
         </member>
