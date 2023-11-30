@@ -3,7 +3,6 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
-using GISBlox.Services.SDK.Models.PostalCodes;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +14,11 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </summary>
    public interface IPostalCodesAPI : IDisposable
    {
+      /// <summary>
+      /// 
+      /// </summary>
+      AreaCodeHelper AreaHelper { get; }
+
       /// <summary>
       /// Gets the postal code record for the specified postal code.
       /// </summary>
@@ -59,47 +63,9 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <summary>
       /// Gets the key figures record for the specified postal code area.
       /// </summary>
-      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="id">A Dutch postal code.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      Task<KerncijferRecord> GetKeyFigures4Record(string id, CancellationToken cancellationToken = default);
-
-      
-      /// <summary>
-      /// Gets the key figures record for the specified postal code area.
-      /// </summary>
-      /// <param name="id">A 6-digit Dutch postal code.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      Task<KerncijferRecord> GetKeyFigures6Record(string id, CancellationToken cancellationToken = default);
-
-
-
-      #region GWB
-
-      /// <summary>
-      /// Query for postal code's gemeenten. 
-      /// </summary>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default);
-
-      /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
-      /// </summary>
-      /// <param name="gemeenteId">A gemeente ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default);
-
-      /// <summary>
-      /// Query for postal code's 'buurten' by 'wijken'. 
-      /// </summary>
-      /// <param name="wijkId">A wijk ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default);
-
-      #endregion
+      /// <returns><see cref="KerncijferRecord"/></returns>
+      Task<KerncijferRecord> GetKeyFigures(string id, CancellationToken cancellationToken = default);
    }
 }

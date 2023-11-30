@@ -3,7 +3,6 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
-using GISBlox.Services.SDK.Models.PostalCodes;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,12 +14,21 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </summary>
    public class PostalCodesAPIClient : ApiClient, IPostalCodesAPI
    {
+      readonly AreaCodeHelper _areaHelper;
+
       /// <summary>
       /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
       public PostalCodesAPIClient(HttpClient httpClient) : base(httpClient)
-      { }
+      {
+         _areaHelper = new AreaCodeHelper(httpClient);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public AreaCodeHelper AreaHelper { get { return _areaHelper; } }
 
       /// <summary>
       /// Gets the postal code record for the specified postal code.
@@ -94,65 +102,14 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <summary>
       /// Gets the key figures record for the specified postal code area.
       /// </summary>
-      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="id">A Dutch postal code.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      public async Task<KerncijferRecord> GetKeyFigures4Record(string id, CancellationToken cancellationToken = default)
-      {
-         string requestUri = $"postalcodes4/keyfigures/{id}";
-         return await HttpGet<KerncijferRecord>(this.HttpClient, requestUri, cancellationToken);
+      /// <returns><see cref="KerncijferRecord"/></returns>
+      public async Task<KerncijferRecord> GetKeyFigures(string id, CancellationToken cancellationToken = default)
+      {         
+         string requestUri = $"postalcodes{(id.Length == 4 ? "4" : "6")}/keyfigures/{id}";
+         return await HttpGet<KerncijferRecord>(HttpClient, requestUri, cancellationToken);
       }      
-     
-      /// <summary>
-      /// Gets the key figures record for the specified postal code area.
-      /// </summary>
-      /// <param name="id">A 6-digit Dutch postal code.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      public async Task<KerncijferRecord> GetKeyFigures6Record(string id, CancellationToken cancellationToken = default)
-      {
-         string requestUri = $"postalcodes6/keyfigures/{id}";
-         return await HttpGet<KerncijferRecord>(this.HttpClient, requestUri, cancellationToken);
-      }      
-
-      #region GWB
-
-      /// <summary>
-      /// Query for postal code's gemeenten. 
-      /// </summary>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default)
-      {
-         string requestUri = $"postalcodes/gwb/gemeenten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
-      /// </summary>
-      /// <param name="gemeenteId">A gemeente ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default)
-      {
-         string requestUri = $"postalcodes/gwb/gemeente/{gemeenteId}/wijken";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Query for postal code's 'buurten' by 'wijken'. 
-      /// </summary>
-      /// <param name="wijkId">A wijk ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default)
-      {
-         string requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      #endregion
 
       internal void SetEpsgHeader(int epsg)
       {
