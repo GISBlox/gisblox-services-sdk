@@ -2,7 +2,6 @@
 // Copyright (c) Bartels Online.  All rights reserved.
 // ------------------------------------------------------------
 
-using GISBlox.Services.SDK.Models.PostalCodes;
 using System.Collections.Generic;
 
 namespace GISBlox.Services.SDK.Models

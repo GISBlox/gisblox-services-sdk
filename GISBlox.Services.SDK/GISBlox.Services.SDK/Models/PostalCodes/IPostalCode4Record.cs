@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace GISBlox.Services.SDK.Models.PostalCodes
+namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
    /// Interface for a PostalCode4Record.
