@@ -13,7 +13,7 @@
       public void Init()
       {
          // Get the service key from the test.runsettings file
-         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
+         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey",EnvironmentVariableTarget.User);
 
          // Create the service client object
          _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
@@ -300,34 +300,77 @@
       #region GWB
 
       [TestMethod]
-      public async Task GetGemeenteId()
+      public async Task GetGemeente()
+      {
+         int gemeenteId = 307;
+         string gemeenteNaam = "Amersfoort";
+         GWB gemeente = await _client.PostalCodes.AreaHelper.GetGemeente(gemeenteNaam);
+
+         Assert.IsNotNull(gemeente, "Response is empty.");
+         Assert.IsTrue(gemeente.ID == gemeenteId);
+         
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      [TestMethod]
+      public async Task GetGemeenten()
       {
          GWBRecord record = await _client.PostalCodes.AreaHelper.GetGemeenten();
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalRecords == 345);
 
-         string gemeenteNaam = "Amersfoort";
-         int gemeenteIdAmersfoort = record.RecordSet.Where(g => g.Naam == gemeenteNaam).SingleOrDefault().ID;
-         Assert.IsTrue(gemeenteIdAmersfoort == 307);
-         
+         await Task.Delay(API_QUOTA_DELAY);
+      }      
+
+      [TestMethod]
+      public async Task GetWijkenByGemeenteId()
+      {
+         int gemeenteIdAmersfoort = 307;
+         GWBRecord record = await _client.PostalCodes.AreaHelper.GetWijken(gemeenteIdAmersfoort);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.MetaData.TotalRecords == 33);         
+
          await Task.Delay(API_QUOTA_DELAY);
       }
 
       [TestMethod]
-      public async Task GetWijkId()
+      public async Task GetWijkenByGemeenteName()
       {
-         int gemeenteId = 307;
-         GWBRecord record = await _client.PostalCodes.AreaHelper.GetWijken(gemeenteId);
+         string gemeente = "Amersfoort";
+         GWBRecord record = await _client.PostalCodes.AreaHelper.GetWijken(gemeente);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalRecords == 33);
 
-         string wijknaam = "Stadskern";
-         int expectedWijkIdStadskern = 30701;
+         await Task.Delay(API_QUOTA_DELAY);
+      }
 
-         int wijkIdStadskern = record.RecordSet.Where(wijk => wijk.Naam == wijknaam).SingleOrDefault().ID;
-         Assert.IsTrue(wijkIdStadskern == expectedWijkIdStadskern);
+      [TestMethod]
+      public async Task GetWijkByIDs()
+      {
+         int gemeenteIdAmersfoort = 307;
+         int wijkIdStadskern = 30701;
+
+         GWB wijk = await _client.PostalCodes.AreaHelper.GetWijk(gemeenteIdAmersfoort, wijkIdStadskern);
+
+         Assert.IsNotNull(wijk, "Response is empty.");
+         Assert.IsTrue(wijk.ID == wijkIdStadskern);
+
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      [TestMethod]
+      public async Task GetWijkByNames()
+      {
+         string gemeente = "Amersfoort";
+         string wijknaam = "Stadskern";
+
+         GWB wijk = await _client.PostalCodes.AreaHelper.GetWijk(gemeente, wijknaam);
+
+         Assert.IsNotNull(wijk, "Response is empty.");
+         Assert.IsTrue(wijk.Naam == wijknaam);
 
          await Task.Delay(API_QUOTA_DELAY);
       }
