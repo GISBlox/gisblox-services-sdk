@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GISBlox.Services.SDK.PostalCodes
 {
    /// <summary>
-   /// 
+   /// Interface for AreaCodeHelper class.
    /// </summary>
    public interface IAreaCodeHelper
    {

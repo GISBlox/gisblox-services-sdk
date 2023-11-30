@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace GISBlox.Services.SDK.PostalCodes
 {
    /// <summary>
-   /// 
+   /// This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
    /// </summary>
    public class AreaCodeHelper : ApiClient
    {

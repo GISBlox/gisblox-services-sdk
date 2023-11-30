@@ -653,7 +653,7 @@
         </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper">
             <summary>
-            
+            This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.#ctor(System.Net.Http.HttpClient)">
@@ -721,7 +721,7 @@
         </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper">
             <summary>
-            
+            Interface for AreaCodeHelper class.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IAreaCodeHelper.GetGemeente(System.String,System.Threading.CancellationToken)">
@@ -853,7 +853,7 @@
         </member>
         <member name="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper">
             <summary>
-            
+            Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeRecord``1(System.String,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -888,7 +888,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
-            Gets postal code records based on one or more area IDs.
+            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper"/> class to get these.
             </summary>
             <param name="gemeenteId">A gemeente code.</param>
             <param name="wijkId">A district ('wijk') code.</param>   

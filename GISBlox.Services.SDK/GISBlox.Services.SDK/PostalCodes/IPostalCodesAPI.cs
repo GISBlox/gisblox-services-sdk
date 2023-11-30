@@ -15,8 +15,8 @@ namespace GISBlox.Services.SDK.PostalCodes
    public interface IPostalCodesAPI : IDisposable
    {
       /// <summary>
-      /// 
-      /// </summary>
+      /// Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
+      /// </summary>s
       AreaCodeHelper AreaHelper { get; }
 
       /// <summary>
@@ -50,7 +50,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       Task<IPostalCodeRecord> GetPostalCodeByGeometry<IPostalCodeRecord>(string wkt, int buffer = 0, CoordinateSystem wktEpsg = CoordinateSystem.RDNew, CoordinateSystem targetEpsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default);
 
       /// <summary>
-      /// Gets postal code records based on one or more area IDs.
+      /// Gets postal code records based on one or more area IDs. Use the methods in the <see cref="AreaHelper" /> class to retrieve the IDs.
       /// </summary>
       /// <param name="gemeenteId">A gemeente code.</param>
       /// <param name="wijkId">A district ('wijk') code.</param>   

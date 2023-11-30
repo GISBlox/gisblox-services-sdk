@@ -13,7 +13,7 @@
       public void Init()
       {
          // Get the service key from the test.runsettings file
-         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey",EnvironmentVariableTarget.User);
+         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
 
          // Create the service client object
          _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);

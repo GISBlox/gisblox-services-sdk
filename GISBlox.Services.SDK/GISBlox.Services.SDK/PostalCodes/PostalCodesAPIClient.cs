@@ -26,7 +26,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       }
 
       /// <summary>
-      /// 
+      /// Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
       /// </summary>
       public AreaCodeHelper AreaHelper { get { return _areaHelper; } }
 
@@ -76,7 +76,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       }
 
       /// <summary>
-      /// Gets postal code records based on one or more area IDs.
+      /// Gets postal code records based on one or more area IDs. Use the methods in the <see cref="AreaHelper"/> class to retrieve the IDs.
       /// </summary>
       /// <param name="gemeenteId">A gemeente code.</param>
       /// <param name="wijkId">A district ('wijk') code.</param>   
