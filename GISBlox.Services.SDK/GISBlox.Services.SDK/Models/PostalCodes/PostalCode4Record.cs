@@ -2,6 +2,7 @@
 // Copyright (c) Bartels Online.  All rights reserved.
 // ------------------------------------------------------------
 
+using GISBlox.Services.SDK.Models.PostalCodes;
 using System.Collections.Generic;
 
 namespace GISBlox.Services.SDK.Models
@@ -9,7 +10,7 @@ namespace GISBlox.Services.SDK.Models
    /// <summary>
    /// This class represents a postal code record.
    /// </summary>
-   public class PostalCode4Record
+   public class PostalCode4Record : IPostalCode4Record
    {
       /// <summary>
       /// Specifies metadata for the returned geometries.
@@ -19,6 +20,6 @@ namespace GISBlox.Services.SDK.Models
       /// <summary>
       /// A list of postal code areas that match the request.
       /// </summary>
-      public List<PostalCode4> PostalCode { get; set; }
+      public List<PostalCode4> PostalCode { get; set; }      
    }
 }
