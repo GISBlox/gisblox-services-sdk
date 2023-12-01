@@ -41,7 +41,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeRecord<IPostalCodeRecord>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
-         SetEpsgHeader((int)epsg);
+         SetEpsgHeader(epsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/{id}";
          return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
@@ -56,7 +56,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeNeighbours<IPostalCodeRecord>(string id, bool includeSourcePostalCode = false, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
-         SetEpsgHeader((int)epsg);
+         SetEpsgHeader(epsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
          return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
@@ -72,7 +72,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeByGeometry<IPostalCodeRecord>(string wkt, int buffer = 0, CoordinateSystem wktEpsg = CoordinateSystem.RDNew, CoordinateSystem targetEpsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
-         SetEpsgHeader((int)targetEpsg);
+         SetEpsgHeader(targetEpsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/geometry?wktEPSG={(int)wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
          return await HttpPost<dynamic, IPostalCodeRecord>(HttpClient, requestUri, wkt, cancellationToken);
       }
@@ -89,7 +89,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<IPostalCodeRecord> GetPostalCodeByArea<IPostalCodeRecord>(int gemeenteId, int wijkId, int buurtId = -1, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
          string requestUri;
-         SetEpsgHeader((int)epsg);         
+         SetEpsgHeader(epsg);         
          if (typeof(IPostalCodeRecord) == typeof(PostalCode4Record))
          {
             requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
@@ -113,11 +113,20 @@ namespace GISBlox.Services.SDK.PostalCodes
          return await HttpGet<KerncijferRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }      
 
-      internal void SetEpsgHeader(int epsg)
+      /// <summary>
+      /// Sets the X-EPSG request header to the passed value.
+      /// </summary>
+      /// <param name="epsg">A coordinate system supplied by <see cref="CoordinateSystem"/>.</param>
+      internal void SetEpsgHeader(CoordinateSystem epsg)
       {
-         SetRequestHeaderValue(HttpClient, "X-EPSG", epsg.ToString());
+         SetRequestHeaderValue(HttpClient, "X-EPSG", ((int)epsg).ToString());
       }
 
+      /// <summary>
+      /// Returns the postal code service URI based on the passed type.
+      /// </summary>
+      /// <typeparam name="IPostalCodeRecord">A class that inherits from <see cref="IPostalCodeRecord"/>.</typeparam>
+      /// <returns>The proper postal code service URI.</returns>
       internal static string BuildBaseUri<IPostalCodeRecord>()
       {         
          return $"postalcodes{((typeof(IPostalCodeRecord) == typeof(PostalCode4Record)) ? "4" : "6")}";         
