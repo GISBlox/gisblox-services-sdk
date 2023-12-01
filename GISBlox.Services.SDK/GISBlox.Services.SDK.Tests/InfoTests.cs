@@ -20,5 +20,24 @@
             Assert.IsTrue(subscriptions.Any());
          }
       }
+
+      [TestMethod]
+      public async Task GetSubscriptionInfoCached()
+      {
+         // Get the service key from the test.runsettings file
+         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
+
+         // Create the service client object
+         using (var client = GISBloxClient.CreateClient(BASE_URL, serviceKey))
+         {
+            List<Subscription> subscriptions = await client.Info.GetSubscriptions();
+            subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: {sub.Name} \r\nDescription: {sub.Description} \r\nRegistration date: {sub.RegisterDate} Expiration date: {sub.ExpirationDate} Expired: {sub.Expired}"));
+
+            List<Subscription> subscriptionsCached = await client.Info.GetSubscriptions();
+            Assert.IsTrue(subscriptionsCached.Count == subscriptions.Count);
+
+            Assert.IsTrue(subscriptions.Any());
+         }
+      }
    }
 }
