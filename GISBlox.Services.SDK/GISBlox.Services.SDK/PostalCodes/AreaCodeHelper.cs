@@ -42,7 +42,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       }
 
       /// <summary>
-      /// Query for postal code's gemeenten. 
+      /// Query all gemeenten. 
       /// </summary>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
       /// <returns>A <see cref="GWBRecord"/> type.</returns>

@@ -136,11 +136,19 @@ namespace GISBlox.Services.SDK.Projection
          return await HttpPost<dynamic, List<Location>>(HttpClient, requestUri, rdPoints, cancellationToken);
       }   
       
+      /// <summary>
+      /// Sets the X-Complete request header to the passed value.
+      /// </summary>
+      /// <param name="complete">True to mark as complete, False to not.</param>
       internal void SetCompleteHeader(bool complete)
       {
          SetRequestHeaderValue(HttpClient, "X-Complete", complete ? "1" : "0");
       }
 
+      /// <summary>
+      /// Sets the X-Rounding-Decimals request header to the passed value.
+      /// </summary>
+      /// <param name="decimals">The amount of rounding decimals.</param>
       internal void SetDecimalsHeader(int decimals)
       {
          SetRequestHeaderValue(HttpClient, "X-Rounding-Decimals", decimals == -1 ? "-1" : decimals.ToString());

@@ -17,12 +17,12 @@ using System.Reflection;
 namespace GISBlox.Services.SDK
 {
    /// <summary>
-   /// This class is the main entry point for every available GISBlox Location Service method.
+   /// The main entry point for every available GISBlox Location Service method.
    /// </summary>
    public class GISBloxClient : IDisposable
    {
       /// <summary>
-      ///  Initializes a new instance of the <see cref="GISBloxClient"/> class.
+      /// Initializes a new instance of the <see cref="GISBloxClient"/> class.
       /// </summary>
       /// <param name="baseUrl">The base URL of the services API, i.e. https://services.gisblox.com</param>
       /// <param name="serviceKey">The service key.</param>

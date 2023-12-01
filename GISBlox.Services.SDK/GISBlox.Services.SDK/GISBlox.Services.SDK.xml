@@ -58,12 +58,12 @@
         </member>
         <member name="T:GISBlox.Services.SDK.GISBloxClient">
             <summary>
-            This class is the main entry point for every available GISBlox Location Service method.
+            The main entry point for every available GISBlox Location Service method.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.GISBloxClient.#ctor(System.String,System.String,System.Int64)">
             <summary>
-             Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.GISBloxClient"/> class.
+            Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.GISBloxClient"/> class.
             </summary>
             <param name="baseUrl">The base URL of the services API, i.e. https://services.gisblox.com</param>
             <param name="serviceKey">The service key.</param>
@@ -675,7 +675,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetGemeenten(System.Threading.CancellationToken)">
             <summary>
-            Query for postal code's gemeenten. 
+            Query all gemeenten. 
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A <see cref="T:GISBlox.Services.SDK.Models.GWBRecord"/> type.</returns>
@@ -909,6 +909,19 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/></returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.SetEpsgHeader(GISBlox.Services.SDK.Models.CoordinateSystem)">
+            <summary>
+            Sets the X-EPSG request header to the passed value.
+            </summary>
+            <param name="epsg">A coordinate system supplied by <see cref="T:GISBlox.Services.SDK.Models.CoordinateSystem"/>.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.BuildBaseUri``1">
+            <summary>
+            Returns the postal code service URI based on the passed type.
+            </summary>
+            <typeparam name="IPostalCodeRecord">A class that inherits from <see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/>.</typeparam>
+            <returns>The proper postal code service URI.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>
             Interface for ProjectionAPI class.
@@ -1061,6 +1074,18 @@
             <param name="decimals">Rounds the coordinate to the specified amount of fractional digits.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.SetCompleteHeader(System.Boolean)">
+            <summary>
+            Sets the X-Complete request header to the passed value.
+            </summary>
+            <param name="complete">True to mark as complete, False to not.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.SetDecimalsHeader(System.Int32)">
+            <summary>
+            Sets the X-Rounding-Decimals request header to the passed value.
+            </summary>
+            <param name="decimals">The amount of rounding decimals.</param>
         </member>
     </members>
 </doc>
