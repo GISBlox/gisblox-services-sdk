@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,9 +21,10 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public PostalCodesAPIClient(HttpClient httpClient) : base(httpClient)
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public PostalCodesAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
       {
-         _areaHelper = new AreaCodeHelper(httpClient);
+         _areaHelper = new AreaCodeHelper(httpClient, cache);
       }
 
       /// <summary>
@@ -41,7 +43,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       {
          SetEpsgHeader((int)epsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/{id}";
-         return await HttpGet<IPostalCodeRecord>(HttpClient, requestUri, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>
@@ -56,7 +58,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       {
          SetEpsgHeader((int)epsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
-         return await HttpGet<IPostalCodeRecord>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>
@@ -72,7 +74,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       {
          SetEpsgHeader((int)targetEpsg);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/geometry?wktEPSG={(int)wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
-         return await HttpPost<dynamic, IPostalCodeRecord>(this.HttpClient, requestUri, wkt, cancellationToken);
+         return await HttpPost<dynamic, IPostalCodeRecord>(HttpClient, requestUri, wkt, cancellationToken);
       }
 
       /// <summary>
@@ -96,7 +98,7 @@ namespace GISBlox.Services.SDK.PostalCodes
          {
             requestUri = $"postalcodes6/gwb?gemeenteId={gemeenteId}&wijkId={wijkId}&buurtId={buurtId}";
          }
-         return await HttpGet<IPostalCodeRecord>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }          
 
       /// <summary>
@@ -108,7 +110,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<KerncijferRecord> GetKeyFigures(string id, CancellationToken cancellationToken = default)
       {         
          string requestUri = $"postalcodes{(id.Length == 4 ? "4" : "6")}/keyfigures/{id}";
-         return await HttpGet<KerncijferRecord>(HttpClient, requestUri, cancellationToken);
+         return await HttpGet<KerncijferRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }      
 
       internal void SetEpsgHeader(int epsg)

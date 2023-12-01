@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -19,7 +20,8 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public AreaCodeHelper(HttpClient httpClient) : base(httpClient)
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public AreaCodeHelper(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
       { }
 
       /// <summary>
@@ -47,7 +49,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/gemeenten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }      
 
       /// <summary>
@@ -59,7 +61,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/gemeente/{gemeenteId}/wijken";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>
@@ -88,7 +90,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>

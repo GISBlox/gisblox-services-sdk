@@ -26,11 +26,12 @@
             This class converts WKT geometry objects into GeoJSON. 
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.#ctor(System.Net.Http.HttpClient)">
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
             </summary>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToGeoJson(GISBlox.Services.SDK.Models.WKT,System.Boolean,System.Threading.CancellationToken)">
             <summary>
@@ -119,11 +120,12 @@
             This class contains methods to communicate with the Info API.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.#ctor(System.Net.Http.HttpClient)">
+        <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
             </summary>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.GetSubscriptions(System.Threading.CancellationToken)">
             <summary>
@@ -656,11 +658,12 @@
             This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.#ctor(System.Net.Http.HttpClient)">
+        <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
             </summary>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.GetGemeente(System.String,System.Threading.CancellationToken)">
             <summary>
@@ -788,8 +791,8 @@
         </member>
         <member name="P:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.AreaHelper">
             <summary>
-            
-            </summary>
+            Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
+            </summary>s
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeRecord``1(System.String,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
@@ -823,7 +826,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
-            Gets postal code records based on one or more area IDs.
+            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.AreaHelper" /> class to retrieve the IDs.
             </summary>
             <param name="gemeenteId">A gemeente code.</param>
             <param name="wijkId">A district ('wijk') code.</param>   
@@ -845,11 +848,12 @@
             This class contains methods to communicate with the Dutch Postal Codes API.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient)">
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
             </summary>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper">
             <summary>
@@ -888,7 +892,7 @@
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
-            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper"/> class to get these.
+            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper"/> class to retrieve the IDs.
             </summary>
             <param name="gemeenteId">A gemeente code.</param>
             <param name="wijkId">A district ('wijk') code.</param>   
@@ -983,11 +987,12 @@
             This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.#ctor(System.Net.Http.HttpClient)">
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
             </summary>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.ToRDS(GISBlox.Services.SDK.Models.Coordinate,System.Threading.CancellationToken)">
             <summary>

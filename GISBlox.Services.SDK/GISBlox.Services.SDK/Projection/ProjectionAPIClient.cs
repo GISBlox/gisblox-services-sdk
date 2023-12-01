@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -19,7 +20,8 @@ namespace GISBlox.Services.SDK.Projection
       /// Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public ProjectionAPIClient(HttpClient httpClient) : base(httpClient)
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public ProjectionAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
       { }
 
       /// <summary>
@@ -32,7 +34,7 @@ namespace GISBlox.Services.SDK.Projection
       {
          SetCompleteHeader(false);
          var requestUri = "reproject/toRDS";         
-         return await HttpPost<dynamic, RDPoint>(this.HttpClient, requestUri, coordinate, cancellationToken);
+         return await HttpPost<dynamic, RDPoint>(HttpClient, requestUri, coordinate, cancellationToken);
       }
 
       /// <summary>
@@ -45,7 +47,7 @@ namespace GISBlox.Services.SDK.Projection
       {
          SetCompleteHeader(false);
          var requestUri = "reproject/toRDS/batch";         
-         return await HttpPost<dynamic, List<RDPoint>>(this.HttpClient, requestUri, coordinates, cancellationToken);
+         return await HttpPost<dynamic, List<RDPoint>>(HttpClient, requestUri, coordinates, cancellationToken);
       }
 
       /// <summary>
@@ -58,7 +60,7 @@ namespace GISBlox.Services.SDK.Projection
       {         
          SetCompleteHeader(true);
          var requestUri = "reproject/toRDS";
-         return await HttpPost<dynamic, Location>(this.HttpClient, requestUri, coordinate, cancellationToken);
+         return await HttpPost<dynamic, Location>(HttpClient, requestUri, coordinate, cancellationToken);
       }
 
       /// <summary>
@@ -71,7 +73,7 @@ namespace GISBlox.Services.SDK.Projection
       {         
          SetCompleteHeader(true);
          var requestUri = "reproject/toRDS/batch";
-         return await HttpPost<dynamic, List<Location>>(this.HttpClient, requestUri, coordinates, cancellationToken);
+         return await HttpPost<dynamic, List<Location>>(HttpClient, requestUri, coordinates, cancellationToken);
       }
 
       /// <summary>
@@ -86,7 +88,7 @@ namespace GISBlox.Services.SDK.Projection
          SetCompleteHeader(false);
          SetDecimalsHeader(decimals);
          var requestUri = "reproject/toWGS84";
-         return await HttpPost<dynamic, Coordinate>(this.HttpClient, requestUri, rdPoint, cancellationToken);
+         return await HttpPost<dynamic, Coordinate>(HttpClient, requestUri, rdPoint, cancellationToken);
       }
 
       /// <summary>
@@ -101,7 +103,7 @@ namespace GISBlox.Services.SDK.Projection
          SetCompleteHeader(false);
          SetDecimalsHeader(decimals);
          var requestUri = "reproject/toWGS84/batch";         
-         return await HttpPost<dynamic, List<Coordinate>>(this.HttpClient, requestUri, rdPoints, cancellationToken);
+         return await HttpPost<dynamic, List<Coordinate>>(HttpClient, requestUri, rdPoints, cancellationToken);
       }
 
       /// <summary>
@@ -116,7 +118,7 @@ namespace GISBlox.Services.SDK.Projection
          SetCompleteHeader(true);
          SetDecimalsHeader(decimals);
          var requestUri = "reproject/toWGS84";
-         return await HttpPost<dynamic, Location>(this.HttpClient, requestUri, rdPoint, cancellationToken);
+         return await HttpPost<dynamic, Location>(HttpClient, requestUri, rdPoint, cancellationToken);
       }
 
       /// <summary>
@@ -131,7 +133,7 @@ namespace GISBlox.Services.SDK.Projection
          SetCompleteHeader(true);         
          SetDecimalsHeader(decimals);
          var requestUri = "reproject/toWGS84/batch";
-         return await HttpPost<dynamic, List<Location>>(this.HttpClient, requestUri, rdPoints, cancellationToken);
+         return await HttpPost<dynamic, List<Location>>(HttpClient, requestUri, rdPoints, cancellationToken);
       }   
       
       internal void SetCompleteHeader(bool complete)
