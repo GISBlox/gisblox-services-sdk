@@ -53,7 +53,10 @@ namespace GISBlox.Services.SDK
             }
 
             responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            cache.Set(requestUri, responseContent);
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+               cache.Set(requestUri, responseContent);
+            }
          }
          return JsonSerializer.Deserialize<T>(responseContent);
       }    
