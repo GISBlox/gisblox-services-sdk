@@ -13,7 +13,7 @@
       public void Init()
       {
          // Get the service key from the test.runsettings file
-         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
+         string serviceKey = Environment.GetEnvironmentVariable("ServiceKey", EnvironmentVariableTarget.User);
 
          // Create the service client object
          _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
@@ -127,6 +127,29 @@
 
          int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
          Assert.IsTrue(buurtIdHof == expectedBuurtIdStadhuisplein);
+
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      [TestMethod]
+      public async Task GetBuurtenByGemeenteAndWijkNamesCached()
+      {
+         string gemeente = "Amersfoort";
+         string wijk = "Stadskern";
+         GWBRecord record = await _client.PostalCodes.AreaHelper.GetBuurten(gemeente, wijk);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.IsTrue(record.MetaData.TotalRecords == 9);
+
+         string buurtnaam = "Stadhuisplein";
+         int expectedBuurtIdStadhuisplein = 3070107;
+
+         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
+         Assert.IsTrue(buurtIdHof == expectedBuurtIdStadhuisplein);
+
+         GWBRecord recordCached = await _client.PostalCodes.AreaHelper.GetBuurten(gemeente, wijk);
+         Assert.IsNotNull(recordCached, "Response is empty.");
+         Assert.IsTrue(recordCached.MetaData.TotalRecords == 9);
 
          await Task.Delay(API_QUOTA_DELAY);
       }
