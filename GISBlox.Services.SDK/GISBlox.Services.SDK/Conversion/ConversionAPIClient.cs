@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,8 @@ namespace GISBlox.Services.SDK.Conversion
       /// Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public ConversionAPIClient(HttpClient httpClient) : base(httpClient)
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public ConversionAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
       { }
 
       /// <summary>
@@ -31,8 +33,8 @@ namespace GISBlox.Services.SDK.Conversion
       public async Task<string> ToGeoJson(WKT wkt, bool asFeatureCollection = false, CancellationToken cancellationToken = default)
       {
          var requestUri = "convert/toGeoJson";
-         SetRequestHeaderValue(this.HttpClient, "X-AsFeatureCollection", asFeatureCollection ? "1" : "0");
-         return await HttpPost<dynamic, string>(this.HttpClient, requestUri, wkt, cancellationToken);
+         SetRequestHeaderValue(HttpClient, "X-AsFeatureCollection", asFeatureCollection ? "1" : "0");
+         return await HttpPost<dynamic, string>(HttpClient, requestUri, wkt, cancellationToken);
       }     
    }
 }

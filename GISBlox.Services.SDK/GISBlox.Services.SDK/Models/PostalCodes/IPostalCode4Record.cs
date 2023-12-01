@@ -7,18 +7,13 @@ using System.Collections.Generic;
 namespace GISBlox.Services.SDK.Models
 {
    /// <summary>
-   /// This class represents a postal code record.
+   /// Interface for a PostalCode4Record.
    /// </summary>
-   public class PostalCode6Record : IPostalCode6Record
+   public interface IPostalCode4Record : IPostalCodeRecord
    {
-      /// <summary>
-      /// Specifies metadata for the returned geometries.
-      /// </summary>
-      public MetaData MetaData { get; set; }
-
       /// <summary>
       /// A list of postal code areas that match the request.
       /// </summary>
-      public List<PostalCode6> PostalCode { get; set; }
+      List<PostalCode4> PostalCode { get; set; }
    }
 }

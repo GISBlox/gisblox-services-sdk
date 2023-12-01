@@ -17,14 +17,14 @@ To generate a service key, create an account in the [GISBlox Account Center](htt
 Either download this repository, make a (forked) git clone or install via NuGet:
 
 ```
-PM> Install-Package GISBlox.Services.SDK -Version 1.1.0
+PM> Install-Package GISBlox.Services.SDK -Version 2.0.0
 ```
 
 ## Usage
 
 Check out the **Tests** project for more detailed use cases.
 
-In the following examples, the ```baseUrl``` variable should be set to `"https://services.gisblox.com"`, and the ```serviceKey``` variable should be set to your GISBlox Location Services service key.
+In the following examples, the ```baseUrl``` variable should be set to `https://services.gisblox.com`, and the ```serviceKey``` variable should be set to your GISBlox Location Services service key.
 
 ### Creating the client
 

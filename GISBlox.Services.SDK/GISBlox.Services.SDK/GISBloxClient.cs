@@ -6,6 +6,7 @@ using GISBlox.Services.SDK.Conversion;
 using GISBlox.Services.SDK.Info;
 using GISBlox.Services.SDK.PostalCodes;
 using GISBlox.Services.SDK.Projection;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Diagnostics;
 using System.Net;
@@ -16,12 +17,12 @@ using System.Reflection;
 namespace GISBlox.Services.SDK
 {
    /// <summary>
-   /// This class is the main entry point for every available GISBlox Location Service method.
+   /// The main entry point for every available GISBlox Location Service method.
    /// </summary>
    public class GISBloxClient : IDisposable
    {
       /// <summary>
-      ///  Initializes a new instance of the <see cref="GISBloxClient"/> class.
+      /// Initializes a new instance of the <see cref="GISBloxClient"/> class.
       /// </summary>
       /// <param name="baseUrl">The base URL of the services API, i.e. https://services.gisblox.com</param>
       /// <param name="serviceKey">The service key.</param>
@@ -46,10 +47,12 @@ namespace GISBlox.Services.SDK
          httpClient.DefaultRequestHeaders.Add("X-Service-Key", serviceKey);
          httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", GetAssemblyFileVersion()));
 
-         this.PostalCodes = new PostalCodesAPIClient(httpClient);
-         this.Projection = new ProjectionAPIClient(httpClient);
-         this.Conversion = new ConversionAPIClient(httpClient);
-         this.Info = new InfoAPIClient(httpClient);
+         IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
+
+         this.PostalCodes = new PostalCodesAPIClient(httpClient, cache);
+         this.Projection = new ProjectionAPIClient(httpClient, cache);
+         this.Conversion = new ConversionAPIClient(httpClient, cache);
+         this.Info = new InfoAPIClient(httpClient, cache);
       }
 
       /// <summary>

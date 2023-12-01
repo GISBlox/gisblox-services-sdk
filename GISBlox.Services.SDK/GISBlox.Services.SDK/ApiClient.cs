@@ -2,6 +2,7 @@
 // Copyright (c) Bartels Online.  All rights reserved.
 // ------------------------------------------------------------
 
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -15,12 +16,14 @@ namespace GISBlox.Services.SDK
    public abstract class ApiClient : IDisposable
    {
       protected readonly HttpClient HttpClient;
+      protected readonly IMemoryCache Cache;
 
       private static readonly JsonSerializerOptions JsonSerializerOptions = new() { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never };
 
-      protected ApiClient(HttpClient httpClient)
+      protected ApiClient(HttpClient httpClient, IMemoryCache cache)
       {
          HttpClient = httpClient;
+         Cache = cache;
       }
 
       protected static void SetRequestHeaderValue(HttpClient httpClient, string headerName, string headerValue)
@@ -38,16 +41,23 @@ namespace GISBlox.Services.SDK
          return new ClientApiException(!string.IsNullOrEmpty(errorContent) ? errorContent : response.ReasonPhrase, response.StatusCode);
       }
 
-      protected static async Task<T> HttpGet<T>(HttpClient httpClient, string requestUri, CancellationToken cancellationToken = default)
-      {        
-         var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
-
-         if (!response.IsSuccessStatusCode)
+      protected static async Task<T> HttpGet<T>(HttpClient httpClient, IMemoryCache cache, string requestUri, CancellationToken cancellationToken = default)
+      {  
+         if (!cache.TryGetValue(requestUri, out string responseContent))
          {
-            throw CreateApiException(response);
-         }
+            var response = await httpClient.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+            {
+               throw CreateApiException(response);
+            }
+
+            responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+               cache.Set(requestUri, responseContent);
+            }
+         }
          return JsonSerializer.Deserialize<T>(responseContent);
       }    
 

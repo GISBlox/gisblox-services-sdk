@@ -9,7 +9,7 @@ namespace GISBlox.Services.SDK.Models
    /// <summary>
    /// This class represents the Gemeente, Wijk or Buurt record.
    /// </summary>
-   public class GWBRecord
+   public class GWBRecord : IGWBRecord
    {
       /// <summary>
       /// Metadata of the result record set. 

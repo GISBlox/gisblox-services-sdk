@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -19,7 +20,8 @@ namespace GISBlox.Services.SDK.Info
       /// Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public InfoAPIClient(HttpClient httpClient) : base(httpClient)
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public InfoAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
       { }
 
       /// <summary>
@@ -30,7 +32,7 @@ namespace GISBlox.Services.SDK.Info
       public async Task<List<Subscription>> GetSubscriptions(CancellationToken cancellationToken = default)
       {
          var requestUri = "info/subscriptions";         
-         return await HttpGet<List<Subscription>>(this.HttpClient, requestUri, cancellationToken);
+         return await HttpGet<List<Subscription>>(HttpClient, Cache, requestUri, cancellationToken);
       }
    }
 }

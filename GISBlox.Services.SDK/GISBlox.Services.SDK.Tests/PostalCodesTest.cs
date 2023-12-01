@@ -25,7 +25,7 @@
          _client.Dispose();
       }
 
-      #endregion
+      #endregion      
 
       #region PC4
 
@@ -33,7 +33,7 @@
       public async Task GetPostalCode4Record()
       {
          string id = "3811";
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4Record(id);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
 
          Assert.IsNotNull(record, "Response is empty.");
          
@@ -44,11 +44,30 @@
       }
 
       [TestMethod]
+      public async Task GetPostalCode4RecordCached()
+      {
+         string id = "3811";
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
+
+         Assert.IsNotNull(record, "Response is empty.");
+
+         PostalCode4 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
+
+         PostalCode4Record recordCached = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
+         
+         Assert.IsNotNull(recordCached, "Response is empty.");
+         Assert.IsTrue(record.MetaData.Query == recordCached.MetaData.Query);
+
+         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      [TestMethod]
       public async Task GetPostalCode4Neighbours()
       {
          string id = "3811";
          bool includeSource = false;
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4Neighbours(id, includeSource);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 6);
@@ -64,7 +83,7 @@
       {
          string id = "3811";
          bool includeSource = true;
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4Neighbours(id, includeSource);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 7);
@@ -79,7 +98,7 @@
       public async Task GetPostalCode4ByGeometry()
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 3);
@@ -95,7 +114,7 @@
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
          int buffer = 5000;    // meters, since CS of WKT is 28992.
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt, buffer);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 5);
@@ -111,7 +130,7 @@
       {
          string wkt = "POINT(121843 487293)";
          int buffer = 200;   // meters, since CS of WKT is 28992.
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGeometry(wkt, buffer, 28992, 4326);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 2);
@@ -124,7 +143,7 @@
       }
 
       [TestMethod]
-      public async Task GetPostalCode4ByGW()
+      public async Task GetPostalCode4ByArea()
       {
          int gemeenteId = 513;
          string expectedGemeente = "Gouda";
@@ -134,7 +153,7 @@
                  
          string expectedPostalCode = "2809";
 
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCode4ByGW(gemeenteId, wijkId);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode4Record>(gemeenteId, wijkId);
 
          Assert.IsNotNull(record, "Response is empty.");
         
@@ -147,10 +166,10 @@
       }
 
       [TestMethod]
-      public async Task GetKeyFigures4Record()
+      public async Task GetKeyFigures4()
       {
          string id = "3811";
-         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures4Record(id);
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalAttributes == 37);
@@ -166,7 +185,7 @@
       public async Task GetPostalCode6Record()
       {
          string id = "3811CJ";
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Record(id);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode6Record>(id);
 
          Assert.IsNotNull(record, "Response is empty.");
 
@@ -181,7 +200,7 @@
       {
          string id = "3069BS";
          bool includeSource = false;
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Neighbours(id, includeSource);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 7);
@@ -197,7 +216,7 @@
       {
          string id = "3069BS";
          bool includeSource = true;
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6Neighbours(id, includeSource);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 8);
@@ -212,7 +231,7 @@
       public async Task GetPostalCode6ByGeometry()
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 3);
@@ -228,7 +247,7 @@
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
          int buffer = 750;    // meters, since CS of WKT is 28992.
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt, buffer);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 6);
@@ -244,7 +263,7 @@
       {
          string wkt = "POINT(121843 487293)";
          int buffer = 50;   // meters, since CS of WKT is 28992.
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGeometry(wkt, buffer, 28992, 4326);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.PostalCode.Count == 12);
@@ -257,7 +276,7 @@
       }
 
       [TestMethod]
-      public async Task GetPostalCode6ByGWB()
+      public async Task GetPostalCode6ByArea()
       {
          int gemeenteId = 513;
          string expectedGemeente = "Gouda";
@@ -270,7 +289,7 @@
 
          string expectedPostalCode = "2809RA";
 
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCode6ByGWB(gemeenteId, wijkId, buurtId);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode6Record>(gemeenteId, wijkId, buurtId, CoordinateSystem.WGS84);
 
          Assert.IsNotNull(record, "Response is empty.");
 
@@ -284,10 +303,10 @@
       }
 
       [TestMethod]
-      public async Task GetKeyFigures6Record()
+      public async Task GetKeyFigures6()
       {
          string id = "3811BB";
-         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures6Record(id);
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.IsTrue(record.MetaData.TotalAttributes == 35);
@@ -295,61 +314,6 @@
          await Task.Delay(API_QUOTA_DELAY);
       }
 
-      #endregion
-
-      #region GWB
-
-      [TestMethod]
-      public async Task GetGemeenteId()
-      {
-         GWBRecord record = await _client.PostalCodes.GetGemeenten();
-
-         Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.MetaData.TotalRecords == 345);
-
-         string gemeenteNaam = "Amersfoort";
-         int gemeenteIdAmersfoort = record.RecordSet.Where(g => g.Naam == gemeenteNaam).SingleOrDefault().ID;
-         Assert.IsTrue(gemeenteIdAmersfoort == 307);
-         
-         await Task.Delay(API_QUOTA_DELAY);
-      }
-
-      [TestMethod]
-      public async Task GetWijkId()
-      {
-         int gemeenteId = 307;
-         GWBRecord record = await _client.PostalCodes.GetWijken(gemeenteId);
-
-         Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.MetaData.TotalRecords == 33);
-
-         string wijknaam = "Stadskern";
-         int expectedWijkIdStadskern = 30701;
-
-         int wijkIdStadskern = record.RecordSet.Where(wijk => wijk.Naam == wijknaam).SingleOrDefault().ID;
-         Assert.IsTrue(wijkIdStadskern == expectedWijkIdStadskern);
-
-         await Task.Delay(API_QUOTA_DELAY);
-      }
-
-      [TestMethod]
-      public async Task GetBuurtId()
-      {
-         int wijkId = 30701;
-         GWBRecord record = await _client.PostalCodes.GetBuurten(wijkId);
-
-         Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.MetaData.TotalRecords == 9);
-
-         string buurtnaam = "Hof";
-         int expectedBuurtIdHof = 3070100;
-
-         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
-         Assert.IsTrue(buurtIdHof == expectedBuurtIdHof);
-
-         await Task.Delay(API_QUOTA_DELAY);
-      }
-
-      #endregion
+      #endregion     
    }
 }

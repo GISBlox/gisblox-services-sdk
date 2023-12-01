@@ -3,6 +3,7 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,42 +15,50 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </summary>
    public class PostalCodesAPIClient : ApiClient, IPostalCodesAPI
    {
+      readonly AreaCodeHelper _areaHelper;
+
       /// <summary>
       /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
       /// </summary>
       /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      public PostalCodesAPIClient(HttpClient httpClient) : base(httpClient)
-      { }
+      /// <param name="cache">The current instance of the MemoryCache class.</param>
+      public PostalCodesAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
+      {
+         _areaHelper = new AreaCodeHelper(httpClient, cache);
+      }
 
-      #region PC4
+      /// <summary>
+      /// Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
+      /// </summary>
+      public AreaCodeHelper AreaHelper { get { return _areaHelper; } }
 
       /// <summary>
       /// Gets the postal code record for the specified postal code.
       /// </summary>
-      /// <param name="id">A 4-digit Dutch postal code.</param>
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="id">A Dutch postal code.</param>
+      /// <param name="epsg">The target coordinate system.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode4Record> GetPostalCode4Record(string id, int epsg = 28992, CancellationToken cancellationToken = default)
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeRecord<IPostalCodeRecord>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
          SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes4/{id}";
-         return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
+         string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/{id}";
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>
       /// Gets neighbouring postal code records of the specified postal code.
       /// </summary>
-      /// <param name="id">A 4-digit Dutch postal code.</param>
+      /// <param name="id">A Dutch postal code.</param>
       /// <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="epsg">The target coordinate system.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode4Record> GetPostalCode4Neighbours(string id, bool includeSourcePostalCode = false, int epsg = 28992, CancellationToken cancellationToken = default)
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeNeighbours<IPostalCodeRecord>(string id, bool includeSourcePostalCode = false, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
          SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes4/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
-         return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
+         string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
       }
 
       /// <summary>
@@ -57,165 +66,70 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// </summary>
       /// <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
       /// <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
-      /// <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="wktEpsg">The coordinate system of the specified geometry.</param>
+      /// <param name="targetEpsg">The target coordinate system.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode4Record> GetPostalCode4ByGeometry(string wkt, int buffer = 0, int wktEpsg = 28992, int targetEpsg = 28992, CancellationToken cancellationToken = default)
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeByGeometry<IPostalCodeRecord>(string wkt, int buffer = 0, CoordinateSystem wktEpsg = CoordinateSystem.RDNew, CoordinateSystem targetEpsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
          SetEpsgHeader(targetEpsg);
-         var requestUri = $"postalcodes4/geometry?wktEPSG={wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
-         return await HttpPost<dynamic, PostalCode4Record>(this.HttpClient, requestUri, wkt, cancellationToken);
+         string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/geometry?wktEPSG={(int)wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
+         return await HttpPost<dynamic, IPostalCodeRecord>(HttpClient, requestUri, wkt, cancellationToken);
       }
 
       /// <summary>
-      /// Gets postal code records based on one or more district IDs.
-      /// </summary>
-      /// <param name="gemeenteId">A gemeente code.</param>
-      /// <param name="wijkId">A district ('wijk') code.</param>      
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode4Record> GetPostalCode4ByGW(int gemeenteId, int wijkId, int epsg = 28992, CancellationToken cancellationToken = default)
-      {
-         SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
-         return await HttpGet<PostalCode4Record>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Gets the key figures record for the specified postal code area.
-      /// </summary>
-      /// <param name="id">A 4-digit Dutch postal code.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      public async Task<KerncijferRecord> GetKeyFigures4Record(string id, CancellationToken cancellationToken = default)
-      {
-         var requestUri = $"postalcodes4/keyfigures/{id}";
-         return await HttpGet<KerncijferRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      #endregion
-
-      #region PC6
-
-      /// <summary>
-      /// Gets the postal code record for the specified postal code.
-      /// </summary>
-      /// <param name="id">A 6-digit Dutch postal code.</param>
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode6Record"/> type.</returns>
-      public async Task<PostalCode6Record> GetPostalCode6Record(string id, int epsg = 28992, CancellationToken cancellationToken = default)
-      {
-         SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes6/{id}";
-         return await HttpGet<PostalCode6Record>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Gets neighbouring postal code records of the specified postal code.
-      /// </summary>
-      /// <param name="id">A 6-digit Dutch postal code.</param>
-      /// <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode6Record> GetPostalCode6Neighbours(string id, bool includeSourcePostalCode = false, int epsg = 28992, CancellationToken cancellationToken = default)
-      {
-         SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes6/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
-         return await HttpGet<PostalCode6Record>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Gets postal code records based on a WKT (well-known text) geometry string.
-      /// </summary>
-      /// <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
-      /// <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
-      /// <param name="wktEpsg">The EPSG code of the coordinate system of the specified geometry. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="targetEpsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode6Record"/> type.</returns>
-      public async Task<PostalCode6Record> GetPostalCode6ByGeometry(string wkt, int buffer = 0, int wktEpsg = 28992, int targetEpsg = 28992, CancellationToken cancellationToken = default)
-      {
-         SetEpsgHeader(targetEpsg);
-         var requestUri = $"postalcodes6/geometry?wktEPSG={wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
-         return await HttpPost<dynamic, PostalCode6Record>(this.HttpClient, requestUri, wkt, cancellationToken);
-      }
-
-      /// <summary>
-      /// Gets postal code records based on one or more area IDs.
+      /// Gets postal code records based on one or more area IDs. Use the methods in the <see cref="AreaHelper"/> class to retrieve the IDs.
       /// </summary>
       /// <param name="gemeenteId">A gemeente code.</param>
       /// <param name="wijkId">A district ('wijk') code.</param>   
-      /// <param name="buurtId">A neighbourhood ('buurt') code.</param>
-      /// <param name="epsg">The EPSG code of the target coordinate system. Currently supports EPSG codes 4326 and 28992 only.</param>
+      /// <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="PostalCode6Record"/> is requested.</param>
+      /// <param name="epsg">The target coordinate system.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="PostalCode4Record"/> type.</returns>
-      public async Task<PostalCode6Record> GetPostalCode6ByGWB(int gemeenteId, int wijkId, int buurtId, int epsg = 28992, CancellationToken cancellationToken = default)
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeByArea<IPostalCodeRecord>(int gemeenteId, int wijkId, int buurtId = -1, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
-         SetEpsgHeader(epsg);
-         var requestUri = $"postalcodes6/gwb?gemeenteId={gemeenteId}&wijkId={wijkId}&buurtId={buurtId}";
-         return await HttpGet<PostalCode6Record>(this.HttpClient, requestUri, cancellationToken);
-      }
+         string requestUri;
+         SetEpsgHeader(epsg);         
+         if (typeof(IPostalCodeRecord) == typeof(PostalCode4Record))
+         {
+            requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
+         }
+         else
+         {
+            requestUri = $"postalcodes6/gwb?gemeenteId={gemeenteId}&wijkId={wijkId}&buurtId={buurtId}";
+         }
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, cancellationToken);
+      }          
 
       /// <summary>
       /// Gets the key figures record for the specified postal code area.
       /// </summary>
-      /// <param name="id">A 6-digit Dutch postal code.</param>
+      /// <param name="id">A Dutch postal code.</param>
       /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="KerncijferRecord"/> type.</returns>
-      public async Task<KerncijferRecord> GetKeyFigures6Record(string id, CancellationToken cancellationToken = default)
-      {
-         var requestUri = $"postalcodes6/keyfigures/{id}";
-         return await HttpGet<KerncijferRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      #endregion
-
-      #region GWB
+      /// <returns><see cref="KerncijferRecord"/></returns>
+      public async Task<KerncijferRecord> GetKeyFigures(string id, CancellationToken cancellationToken = default)
+      {         
+         string requestUri = $"postalcodes{(id.Length == 4 ? "4" : "6")}/keyfigures/{id}";
+         return await HttpGet<KerncijferRecord>(HttpClient, Cache, requestUri, cancellationToken);
+      }      
 
       /// <summary>
-      /// Query for postal code's gemeenten. 
+      /// Sets the X-EPSG request header to the passed value.
       /// </summary>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default)
+      /// <param name="epsg">A coordinate system supplied by <see cref="CoordinateSystem"/>.</param>
+      internal void SetEpsgHeader(CoordinateSystem epsg)
       {
-         var requestUri = $"postalcodes/gwb/gemeenten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
+         SetRequestHeaderValue(HttpClient, "X-EPSG", ((int)epsg).ToString());
       }
 
       /// <summary>
-      /// Query for postal code's 'wijken' by 'gemeenten'. 
+      /// Returns the postal code service URI based on the passed type.
       /// </summary>
-      /// <param name="gemeenteId">A gemeente ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default)
-      {
-         var requestUri = $"postalcodes/gwb/gemeente/{gemeenteId}/wijken";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      /// <summary>
-      /// Query for postal code's 'buurten' by 'wijken'. 
-      /// </summary>
-      /// <param name="wijkId">A wijk ID.</param>
-      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-      /// <returns>A <see cref="GWBRecord"/> type.</returns>
-      public async Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default)
-      {
-         var requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
-         return await HttpGet<GWBRecord>(this.HttpClient, requestUri, cancellationToken);
-      }
-
-      #endregion
-
-      internal void SetEpsgHeader(int epsg)
-      {
-         SetRequestHeaderValue(HttpClient, "X-EPSG", epsg.ToString());
-      }
+      /// <typeparam name="IPostalCodeRecord">A class that inherits from <see cref="IPostalCodeRecord"/>.</typeparam>
+      /// <returns>The proper postal code service URI.</returns>
+      internal static string BuildBaseUri<IPostalCodeRecord>()
+      {         
+         return $"postalcodes{((typeof(IPostalCodeRecord) == typeof(PostalCode4Record)) ? "4" : "6")}";         
+      }     
    }
 }
