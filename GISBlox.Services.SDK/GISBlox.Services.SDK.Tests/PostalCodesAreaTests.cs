@@ -87,7 +87,7 @@
          string buurtnaam = "Hof";
          int expectedBuurtIdHof = 3070100;
 
-         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
+         int buurtIdHof = record.RecordSet.SingleOrDefault(buurt => buurt.Naam == buurtnaam).ID;
          Assert.IsTrue(buurtIdHof == expectedBuurtIdHof);
 
          await Task.Delay(API_QUOTA_DELAY);
@@ -106,7 +106,7 @@
          string buurtnaam = "Hof";
          int expectedBuurtIdHof = 3070100;
 
-         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
+         int buurtIdHof = record.RecordSet.SingleOrDefault(buurt => buurt.Naam == buurtnaam).ID;
          Assert.IsTrue(buurtIdHof == expectedBuurtIdHof);
 
          await Task.Delay(API_QUOTA_DELAY);
@@ -125,7 +125,7 @@
          string buurtnaam = "Stadhuisplein";
          int expectedBuurtIdStadhuisplein = 3070107;
 
-         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
+         int buurtIdHof = record.RecordSet.SingleOrDefault(buurt => buurt.Naam == buurtnaam).ID;
          Assert.IsTrue(buurtIdHof == expectedBuurtIdStadhuisplein);
 
          await Task.Delay(API_QUOTA_DELAY);
@@ -144,7 +144,7 @@
          string buurtnaam = "Stadhuisplein";
          int expectedBuurtIdStadhuisplein = 3070107;
 
-         int buurtIdHof = record.RecordSet.Where(buurt => buurt.Naam == buurtnaam).SingleOrDefault().ID;
+         int buurtIdHof = record.RecordSet.SingleOrDefault(buurt => buurt.Naam == buurtnaam).ID;
          Assert.IsTrue(buurtIdHof == expectedBuurtIdStadhuisplein);
 
          GWBRecord recordCached = await _client.PostalCodes.AreaHelper.GetBuurten(gemeente, wijk);

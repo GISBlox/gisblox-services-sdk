@@ -17,7 +17,7 @@
             List<Subscription> subscriptions = await client.Info.GetSubscriptions();
             subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: {sub.Name} \r\nDescription: {sub.Description} \r\nRegistration date: {sub.RegisterDate} Expiration date: {sub.ExpirationDate} Expired: {sub.Expired}"));
             
-            Assert.IsTrue(subscriptions.Any());
+            Assert.IsTrue(subscriptions.Count != 0);
          }
       }
 
@@ -36,7 +36,7 @@
             List<Subscription> subscriptionsCached = await client.Info.GetSubscriptions();
             Assert.IsTrue(subscriptionsCached.Count == subscriptions.Count);
 
-            Assert.IsTrue(subscriptions.Any());
+            Assert.IsTrue(subscriptions.Count != 0);
          }
       }
    }
