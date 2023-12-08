@@ -156,8 +156,8 @@ namespace GISBlox.Services.SDK.Tests
                if (typeProperty.TryGetProperty("type", out var geomType) && geomType.ValueKind == JsonValueKind.String)               
                {
                   // Type check
-                  string typeName = geomType.GetString().ToUpper();
-                  if (typeName == expectedType.ToUpper())
+                  string typeName = geomType.GetString();
+                  if (typeName.Equals(expectedType, StringComparison.InvariantCultureIgnoreCase))
                   {
                      // Any coordinates?
                      if (typeProperty.TryGetProperty("coordinates", out var coordinates) && coordinates.ValueKind == JsonValueKind.Array)

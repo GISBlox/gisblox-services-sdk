@@ -657,11 +657,19 @@
             <summary>
             This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.AreaCodeHelper.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
@@ -847,11 +855,19 @@
             <summary>
             This class contains methods to communicate with the Dutch Postal Codes API.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
+            This class contains methods to communicate with the Dutch Postal Codes API.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
+            </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>

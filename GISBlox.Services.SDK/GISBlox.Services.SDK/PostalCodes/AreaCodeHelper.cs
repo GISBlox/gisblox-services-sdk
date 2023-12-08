@@ -4,6 +4,7 @@
 
 using GISBlox.Services.SDK.Models;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -14,15 +15,13 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// <summary>
    /// This class contains methods to retrieve records for Gemeente, Wijk and/or Buurt queries.
    /// </summary>
-   public class AreaCodeHelper : ApiClient
+   /// <remarks>
+   /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+   /// </remarks>
+   /// <param name="httpClient">The current instance of the HTTPClient class.</param>
+   /// <param name="cache">The current instance of the MemoryCache class.</param>
+   public class AreaCodeHelper(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache)
    {
-      /// <summary>
-      /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
-      /// </summary>
-      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      /// <param name="cache">The current instance of the MemoryCache class.</param>
-      public AreaCodeHelper(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
-      { }
 
       /// <summary>
       /// Query for a specific gemeente.
@@ -36,7 +35,7 @@ namespace GISBlox.Services.SDK.PostalCodes
          GWBRecord records = await GetGemeenten(cancellationToken);
          if (records != null) 
          { 
-            gemeente = records.RecordSet.Where(g => g.Naam.ToLower() == name.ToLower()).SingleOrDefault();
+            gemeente = records.RecordSet.SingleOrDefault(g => g.Naam.Equals(name, StringComparison.InvariantCultureIgnoreCase));
          }
          return gemeente;
       }
@@ -106,7 +105,7 @@ namespace GISBlox.Services.SDK.PostalCodes
          GWBRecord wijken = await GetWijken(gemeenteId, cancellationToken);
          if (wijken != null)
          {
-            GWB wijk = wijken.RecordSet.Where(w => w.ID == wijkId).SingleOrDefault();
+            GWB wijk = wijken.RecordSet.SingleOrDefault(w => w.ID == wijkId);
             if (wijk != null)
             {
                buurten = await GetBuurten(wijk.ID, cancellationToken);
@@ -128,7 +127,7 @@ namespace GISBlox.Services.SDK.PostalCodes
          GWBRecord wijken = await GetWijken(gemeente, cancellationToken);
          if (wijken != null)
          {
-            GWB result = wijken.RecordSet.Where(w => w.Naam.ToLower() == wijk.ToLower()).SingleOrDefault();
+            GWB result = wijken.RecordSet.SingleOrDefault(w => w.Naam.Equals(wijk, StringComparison.InvariantCultureIgnoreCase));
             if (result != null)
             {
                buurten = await GetBuurten(result.ID, cancellationToken);

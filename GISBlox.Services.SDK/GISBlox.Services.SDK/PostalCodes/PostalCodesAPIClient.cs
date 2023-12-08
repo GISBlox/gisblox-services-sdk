@@ -13,19 +13,14 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// <summary>
    /// This class contains methods to communicate with the Dutch Postal Codes API.
    /// </summary>
-   public class PostalCodesAPIClient : ApiClient, IPostalCodesAPI
+   /// <remarks>
+   /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
+   /// </remarks>
+   /// <param name="httpClient">The current instance of the HTTPClient class.</param>
+   /// <param name="cache">The current instance of the MemoryCache class.</param>
+   public class PostalCodesAPIClient(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache), IPostalCodesAPI
    {
-      readonly AreaCodeHelper _areaHelper;
-
-      /// <summary>
-      /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient class.
-      /// </summary>
-      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      /// <param name="cache">The current instance of the MemoryCache class.</param>
-      public PostalCodesAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
-      {
-         _areaHelper = new AreaCodeHelper(httpClient, cache);
-      }
+      readonly AreaCodeHelper _areaHelper = new(httpClient, cache);
 
       /// <summary>
       /// Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
