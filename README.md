@@ -2,7 +2,7 @@
 
 <p align="center">
   <br>
-  <img src="GBLS.png" alt="GISBlox Location Services logo" width="150px" height="150px"/>
+  <img src="GBLS.png" alt="GISBlox Location Services logo" width="120px" height="120px"/>
   <br><br>
   <i>The GISBlox Services .NET SDK enables applications to connect to the GISBlox Services API.</i>
   <br>
@@ -18,8 +18,8 @@
 
 ## Introduction
 
-This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). It supports the Location Services:
-* Getting information on Dutch postal codes (used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot))
+This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). It supports the following Location Services:
+* Dutch postal codes (used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot))
 * Reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa
 * Converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON)
 * Retrieving subscription information
