@@ -8,28 +8,44 @@
             <summary>
             Represents client-side API errors that occur during application execution.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.ClientApiException class.
+            </remarks>
+            <param name="message">The exception message.</param>
+            <param name="statusCode">The HTTP status code.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ClientApiException.#ctor(System.String,System.Net.HttpStatusCode)">
+            <summary>
+            Represents client-side API errors that occur during application execution.
+            </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.ClientApiException class.
+            </remarks>
+            <param name="message">The exception message.</param>
+            <param name="statusCode">The HTTP status code.</param>
         </member>
         <member name="P:GISBlox.Services.SDK.ClientApiException.StatusCode">
             <summary>
             The HTTP status code of the error.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.ClientApiException.#ctor(System.String,System.Net.HttpStatusCode)">
-            <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.ClientApiException class.
-            </summary>
-            <param name="message">The exception message.</param>
-            <param name="statusCode">The HTTP status code.</param>
-        </member>
         <member name="T:GISBlox.Services.SDK.Conversion.ConversionAPIClient">
             <summary>
             This class converts WKT geometry objects into GeoJSON. 
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
+            This class converts WKT geometry objects into GeoJSON. 
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
+            </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
@@ -119,11 +135,19 @@
             <summary>
             This class contains methods to communicate with the Info API.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Info.InfoAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
+            This class contains methods to communicate with the Info API.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
+            </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
@@ -1015,11 +1039,19 @@
             <summary>
             This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+            This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
             </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+            </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>

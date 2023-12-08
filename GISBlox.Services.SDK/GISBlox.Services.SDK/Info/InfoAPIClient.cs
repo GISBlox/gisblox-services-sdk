@@ -14,16 +14,13 @@ namespace GISBlox.Services.SDK.Info
    /// <summary>
    /// This class contains methods to communicate with the Info API.
    /// </summary>
-   public class InfoAPIClient : ApiClient, IInfoAPI
+   /// <remarks>
+   /// Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
+   /// </remarks>
+   /// <param name="httpClient">The current instance of the HTTPClient class.</param>
+   /// <param name="cache">The current instance of the MemoryCache class.</param>
+   public class InfoAPIClient(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache), IInfoAPI
    {
-      /// <summary>
-      /// Initializes a new instance of the GISBlox.Services.SDK.Info.InfoAPIClient class.
-      /// </summary>
-      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      /// <param name="cache">The current instance of the MemoryCache class.</param>
-      public InfoAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
-      { }
-
       /// <summary>
       /// Returns the subscriptions of the authorized user.
       /// </summary>

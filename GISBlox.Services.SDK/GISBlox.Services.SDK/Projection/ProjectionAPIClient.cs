@@ -14,16 +14,13 @@ namespace GISBlox.Services.SDK.Projection
    /// <summary>
    /// This class reprojects coordinates to Rijksdriehoeksstelsel locations and vice versa.
    /// </summary>
-   public class ProjectionAPIClient : ApiClient, IProjectionAPI
+   /// <remarks>
+   /// Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
+   /// </remarks>
+   /// <param name="httpClient">The current instance of the HTTPClient class.</param>
+   /// <param name="cache">The current instance of the MemoryCache class.</param>
+   public class ProjectionAPIClient(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache), IProjectionAPI
    {
-      /// <summary>
-      /// Initializes a new instance of the GISBlox.Services.SDK.Projection.ProjectionAPIClient class.
-      /// </summary>
-      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      /// <param name="cache">The current instance of the MemoryCache class.</param>
-      public ProjectionAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
-      { }
-
       /// <summary>
       /// Reprojects a coordinate to an RDPoint.
       /// </summary>

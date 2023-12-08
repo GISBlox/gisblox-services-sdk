@@ -13,16 +13,13 @@ namespace GISBlox.Services.SDK.Conversion
    /// <summary>
    /// This class converts WKT geometry objects into GeoJSON. 
    /// </summary>
-   public class ConversionAPIClient : ApiClient, IConversionAPI
+   /// <remarks>
+   /// Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
+   /// </remarks>
+   /// <param name="httpClient">The current instance of the HTTPClient class.</param>
+   /// <param name="cache">The current instance of the MemoryCache class.</param>
+   public class ConversionAPIClient(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache), IConversionAPI
    {
-      /// <summary>
-      /// Initializes a new instance of the GISBlox.Services.SDK.Conversion.ConversionAPIClient class.
-      /// </summary>
-      /// <param name="httpClient">The current instance of the HTTPClient class.</param>
-      /// <param name="cache">The current instance of the MemoryCache class.</param>
-      public ConversionAPIClient(HttpClient httpClient, IMemoryCache cache) : base(httpClient, cache)
-      { }
-
       /// <summary>
       /// Converts a WKT geometry string into a GeoJson Feature(Collection) string.
       /// </summary>
