@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">  
-  <a href="https://github.com/bartelsk/PowerDesigner/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/bartelsk/powerdesigner" alt="Apache 2 license" />
+  <a href="https://github.com/GISBlox/gisblox-services-sdk/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/GISBlox/gisblox-services-sdk" alt="MIT license" />
   </a>
 </p>
 
