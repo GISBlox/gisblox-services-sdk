@@ -1,6 +1,7 @@
 <h1 align="center">GISBlox Services SDK</h1>
 
-<p align="center">  
+<p align="center">
+  <br>
   <img src="GBLS.png" alt="GISBlox Location Services logo" width="120px" height="120px"/>
   <br><br>
   <i>Connect to the GISBlox Services API from .NET</i>
@@ -28,7 +29,7 @@ To get no-code access to the GISBlox Services API from the command-line, you can
 ## Requirements
 You must have a personal service key to access the GISBlox Services API.
 
-To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a **free** subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel. [More information](http://library.gisblox.com/content/nl-nl/gb1810090).
+To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a **free** subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel. [More information](http://library.gisblox.com/content/nl-nl/gb1810090)
 
 ## Installation
 Either download this repository, make a (forked) git clone or install via NuGet:
@@ -38,8 +39,6 @@ PM> Install-Package GISBlox.Services.SDK -Version 2.1.0
 ```
 
 ## Usage
-
-Check out the [Tests](/GISBlox.Services.SDK/GISBlox.Services.SDK.Tests) project for more detailed use cases.
 
 In the following examples, the ```baseUrl``` variable should be set to `https://services.gisblox.com`, and the ```serviceKey``` variable should be set to your GISBlox Location Services service key.
 
@@ -52,6 +51,8 @@ using (var client = GISBloxClient.CreateClient(baseUrl, serviceKey))
 }
 
 ```
+
+Check out the [Tests](/GISBlox.Services.SDK/GISBlox.Services.SDK.Tests) project for more detailed use cases.
 
 ## Postal codes API
 The postal codes API supports querying for both 4 digit and 6 digit postcal code records. Every endpoint in the ```Dutch Postal Codes``` sections of the [developer portal](https://services.gisblox.com/) is available in the SDK.
