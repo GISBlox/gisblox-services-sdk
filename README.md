@@ -1,10 +1,9 @@
 <h1 align="center">GISBlox Services SDK</h1>
 
-<p align="center">
-  <br>
+<p align="center">  
   <img src="GBLS.png" alt="GISBlox Location Services logo" width="120px" height="120px"/>
   <br><br>
-  <i>The GISBlox Services .NET SDK enables applications to connect to the GISBlox Services API.</i>
+  <i>Connect to the GISBlox Services API from .NET</i>
   <br>
 </p>
 
