@@ -4,6 +4,96 @@
         <name>GISBlox.Services.SDK</name>
     </assembly>
     <members>
+        <member name="T:GISBlox.Services.SDK.ApiClient">
+            <summary>
+            Base class for API clients.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.HttpClient">
+            <summary>
+            The HTTP client used for API requests.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.Cache">
+            <summary>
+            The memory cache used for caching responses.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.ApiClient"/> class.
+            </summary>
+            <param name="httpClient">The HTTP client to use for API requests.</param>
+            <param name="cache">The memory cache to use for caching responses.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpGet``1(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a GET request to the specified URI.
+            </summary>
+            <typeparam name="T">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="cache">The memory cache to use for caching responses.</param>
+            <param name="requestUri">The URI of the resource to retrieve.</param>
+            <param name="epsg">The EPSG code to use for the request.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost``1(System.Net.Http.HttpClient,System.String,``0,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request to the specified URI.
+            </summary>
+            <typeparam name="TBody">The type of the request body.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to create or update.</param>
+            <param name="body">The request body content.</param>
+            <param name="epsg">The EPSG code to use for the request.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns></returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost``2(System.Net.Http.HttpClient,System.String,``0,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request to the specified URI.
+            </summary>
+            <typeparam name="TBody">The type of the request body.</typeparam>
+            <typeparam name="TResult">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to create or update.</param>
+            <param name="body">The request body content.</param>
+            <param name="epsg">The EPSG code to use for the request.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.SetRequestHeaderValues(System.Net.Http.HttpRequestMessage,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Sets the request header values.
+            </summary>
+            <param name="request">The HTTP request message.</param>
+            <param name="headers">The headers to set.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.GetErrorContentAsync(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Gets the error content from the HTTP response.
+            </summary>
+            <param name="response">The HTTP response message.</param>
+            <returns>The error content as a string.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.Dispose(System.Boolean)">
+            <summary>
+            Disposes the resources used by the API client.
+            </summary>
+            <param name="disposing">Indicates whether the method is being called from Dispose (true) or from a finalizer (false).</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.Dispose">
+            <summary>
+            Disposes the resources used by the API client.
+            </summary>
+        </member>
         <member name="T:GISBlox.Services.SDK.ClientApiException">
             <summary>
             Represents client-side API errors that occur during application execution.
@@ -949,12 +1039,6 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/></returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.SetEpsgHeader(GISBlox.Services.SDK.Models.CoordinateSystem)">
-            <summary>
-            Sets the X-EPSG request header to the passed value.
-            </summary>
-            <param name="epsg">A coordinate system supplied by <see cref="T:GISBlox.Services.SDK.Models.CoordinateSystem"/>.</param>
-        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.BuildBaseUri``1">
             <summary>
             Returns the postal code service URI based on the passed type.
@@ -1123,17 +1207,13 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Location"/> types.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.SetCompleteHeader(System.Boolean)">
+        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.SetHeaders(System.Boolean,System.Boolean,System.Int32)">
             <summary>
-            Sets the X-Complete request header to the passed value.
+            Sets the X-Complete and optional X-Rounding-Decimals request headers to the passed value.
             </summary>
             <param name="complete">True to mark as complete, False to not.</param>
-        </member>
-        <member name="M:GISBlox.Services.SDK.Projection.ProjectionAPIClient.SetDecimalsHeader(System.Int32)">
-            <summary>
-            Sets the X-Rounding-Decimals request header to the passed value.
-            </summary>
-            <param name="decimals">The amount of rounding decimals.</param>
+            <param name="addDecimals">True to add the X-Rounding-Decimals header, False to not.</param>
+            <param name="decimals">The amount of fractional digits to round to. -1 for no rounding.</param>
         </member>
     </members>
 </doc>

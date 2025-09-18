@@ -47,7 +47,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetGemeenten(CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/gemeenten";
-         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }      
 
       /// <summary>
@@ -59,7 +59,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetWijken(int gemeenteId, CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/gemeente/{gemeenteId}/wijken";
-         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
 
       /// <summary>
@@ -88,7 +88,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       public async Task<GWBRecord> GetBuurten(int wijkId, CancellationToken cancellationToken = default)
       {
          string requestUri = $"postalcodes/gwb/wijk/{wijkId}/buurten";
-         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, cancellationToken);
+         return await HttpGet<GWBRecord>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
 
       /// <summary>

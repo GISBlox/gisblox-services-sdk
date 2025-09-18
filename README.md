@@ -35,7 +35,7 @@ To generate a service key, create an account in the [GISBlox Account Center](htt
 Either download this repository, make a (forked) git clone or install via NuGet:
 
 ```
-PM> Install-Package GISBlox.Services.SDK -Version 2.1.0
+PM> Install-Package GISBlox.Services.SDK -Version 2.2.0
 ```
 
 ## Usage

@@ -9,10 +9,10 @@
     <RepositoryUrl>https://github.com/GISBlox/gisblox-services-sdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>GISBlox</PackageTags>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
@@ -21,13 +21,16 @@
     <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="C:\Users\thirt\.nuget\packages\microsoft.visualstudio.diagnosticshub.benchmarkdotnetdiagnosers\18.0.36421.1\contentFiles\cs\any\BenchmarkProfilerAgentConfig.g.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
   </ItemGroup>
 </Project>
