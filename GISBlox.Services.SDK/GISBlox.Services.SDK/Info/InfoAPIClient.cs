@@ -28,8 +28,8 @@ namespace GISBlox.Services.SDK.Info
       /// <returns>A List with <see cref="Subscription"/> types.</returns>
       public async Task<List<Subscription>> GetSubscriptions(CancellationToken cancellationToken = default)
       {
-         var requestUri = "info/subscriptions";         
-         return await HttpGet<List<Subscription>>(HttpClient, Cache, requestUri, cancellationToken);
+         var requestUri = "info/subscriptions";
+         return await HttpGet<List<Subscription>>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
    }
 }

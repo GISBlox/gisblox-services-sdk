@@ -9,10 +9,10 @@
     <RepositoryUrl>https://github.com/GISBlox/gisblox-services-sdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>GISBlox</PackageTags>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
     <Version>2.2.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key.snk.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
@@ -20,6 +20,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>C:\Dev\Repos\GitHub\GISBlox\gisblox-services-sdk\GISBlox.Services.SDK\GISBlox.Services.SDK\GISBlox.Services.SDK.xml</DocumentationFile>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="C:\Users\thirt\.nuget\packages\microsoft.visualstudio.diagnosticshub.benchmarkdotnetdiagnosers\18.0.36421.1\contentFiles\cs\any\BenchmarkProfilerAgentConfig.g.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
