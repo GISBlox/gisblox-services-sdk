@@ -53,7 +53,7 @@ namespace GISBlox.Services.SDK
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }
         }        
-        
+                
         /// <summary>
         /// Sends a GET request to the specified URI.
         /// </summary>
@@ -91,7 +91,7 @@ namespace GISBlox.Services.SDK
                 }
             }
             return JsonSerializer.Deserialize<T>(responseContent);
-        }
+        }        
 
         /// <summary>
         /// Sends a POST request to the specified URI.
@@ -152,6 +152,59 @@ namespace GISBlox.Services.SDK
             }
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Deserialize<TResult>(responseContent);
+        }
+
+        /// <summary>
+        /// Sends a POST request with a plain text body (text/plain; charset=utf-8).
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for the request.</param>
+        /// <param name="requestUri">The URI of the resource to create or update.</param>
+        /// <param name="textBody">The plain text request body content.</param>        
+        /// <param name="customHeaders">Any custom headers to include in the request.</param>
+        /// <param name="cancellationToken">The cancellation token to use for the request.</param>
+        /// <exception cref="ClientApiException"></exception>
+        protected static async Task HttpPost(HttpClient httpClient, string requestUri, string textBody, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+                        
+            SetRequestHeaderValues(request, customHeaders);
+
+            request.Content = new StringContent(textBody ?? string.Empty, Encoding.UTF8, "text/plain");
+            var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorContent = await GetErrorContentAsync(response);
+                throw new ClientApiException(!string.IsNullOrEmpty(errorContent) ? errorContent : response.ReasonPhrase, response.StatusCode);
+            }
+        }
+
+        /// <summary>
+        /// Sends a POST request with a plain text body (text/plain; charset=utf-8) and returns a response.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the response content.</typeparam>
+        /// <param name="httpClient">The HTTP client to use for the request.</param>
+        /// <param name="requestUri">The URI of the resource to create or update.</param>
+        /// <param name="textBody">The plain text request body content.</param>        
+        /// <param name="customHeaders">Any custom headers to include in the request.</param>
+        /// <param name="cancellationToken">The cancellation token to use for the request.</param>
+        /// <returns>The response content.</returns>
+        /// <exception cref="ClientApiException"></exception>
+        protected static async Task<string> HttpPost<TResult>(HttpClient httpClient, string requestUri, string textBody, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+                        
+            SetRequestHeaderValues(request, customHeaders);
+
+            request.Content = new StringContent(textBody ?? string.Empty, Encoding.UTF8, "text/plain");
+            var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorContent = await GetErrorContentAsync(response);
+                throw new ClientApiException(!string.IsNullOrEmpty(errorContent) ? errorContent : response.ReasonPhrase, response.StatusCode);
+            }
+            return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);            
         }
 
         /// <summary>
