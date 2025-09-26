@@ -1249,13 +1249,21 @@
             Interface for UrlShortenerAPI class.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI.ShortenAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI.Shorten(System.String,System.Threading.CancellationToken)">
             <summary>
             Shortens a (data) URL.
             </summary>
             <param name="url">The URL to shorten.</param>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The shortened URL.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI.CreateGeoJsonUrl(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a GeoJSON (data) URL.
+            </summary>
+            <param name="geoJson">The GeoJSON data to host.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>The created GeoJSON URL.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient">
             <summary>
@@ -1271,13 +1279,21 @@
             <param name="httpClient">The HTTP client.</param>
             <param name="cache">The memory cache.</param>
         </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.ShortenAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.Shorten(System.String,System.Threading.CancellationToken)">
             <summary>
             Shortens a (data) URL.
             </summary>
             <param name="url">The URL to shorten.</param>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The shortened URL.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.CreateGeoJsonUrl(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a GeoJSON (data) URL.
+            </summary>
+            <param name="geoJson">The GeoJSON data to host.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>The created GeoJSON URL.</returns>
         </member>
     </members>
 </doc>

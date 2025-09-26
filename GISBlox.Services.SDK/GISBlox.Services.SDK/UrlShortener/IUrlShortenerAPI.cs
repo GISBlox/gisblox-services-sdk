@@ -19,6 +19,14 @@ namespace GISBlox.Services.SDK.UrlShortener
         /// <param name="url">The URL to shorten.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The shortened URL.</returns>
-        Task<string> ShortenAsync(string url, CancellationToken cancellationToken = default);
+        Task<string> Shorten(string url, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates a GeoJSON (data) URL.
+        /// </summary>
+        /// <param name="geoJson">The GeoJSON data to host.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The created GeoJSON URL.</returns>
+        Task<string> CreateGeoJsonUrl(string geoJson, CancellationToken cancellationToken = default);
     }
 }
