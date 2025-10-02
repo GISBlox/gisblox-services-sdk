@@ -69,29 +69,115 @@
             <returns>The deserialized response content.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param>        
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>A task representing the asynchronous delete operation.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete``1(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI and returns a deserialized response.
+            </summary>
+            <typeparam name="TResult">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param>        
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-            Sends a POST request with a plain text body (text/plain; charset=utf-8).
+            Sends a POST request with a JSON string body.
             </summary>
             <param name="httpClient">The HTTP client to use for the request.</param>
             <param name="requestUri">The URI of the resource to create or update.</param>
-            <param name="textBody">The plain text request body content.</param>        
+            <param name="jsonContent">The JSON string to use as the request body.</param>
             <param name="customHeaders">Any custom headers to include in the request.</param>
             <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>A task representing the asynchronous operation.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost``1(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-            Sends a POST request with a plain text body (text/plain; charset=utf-8) and returns a response.
+            Sends a POST request with a JSON string body and returns a deserialized response.
             </summary>
             <typeparam name="TResult">The type of the response content.</typeparam>
             <param name="httpClient">The HTTP client to use for the request.</param>
             <param name="requestUri">The URI of the resource to create or update.</param>
-            <param name="textBody">The plain text request body content.</param>        
+            <param name="jsonContent">The JSON string to use as the request body.</param>
             <param name="customHeaders">Any custom headers to include in the request.</param>
             <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>The response content.</returns>
+            <returns>The deserialized response content.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost(System.Net.Http.HttpClient,System.String,System.IO.Stream,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with a stream as the request body.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to create or update.</param>
+            <param name="streamContent">The stream content to use as the request body.</param>
+            <param name="contentType">The media type of the content stream. Defaults to application/octet-stream.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when streamContent is null.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost``1(System.Net.Http.HttpClient,System.String,System.IO.Stream,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with a stream as the request body and returns the deserialized response.
+            </summary>
+            <typeparam name="TResult">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to create or update.</param>
+            <param name="streamContent">The stream content to use as the request body.</param>
+            <param name="contentType">The media type of the content stream. Defaults to application/octet-stream.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when streamContent is null.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFile(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a JSON file from the specified URI.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="cache">The memory cache to use for caching responses.</param>
+            <param name="requestUri">The URI of the JSON file to download.</param>
+            <param name="useCache">Whether to use cache for the downloaded file.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The JSON file content as a string.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFileToDisk(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Downloads a JSON file from the specified URI and saves it to disk.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the JSON file to download.</param>
+            <param name="filePath">The path where the file should be saved.</param>
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The full path to the saved file.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.ReadStreamBytes(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Reads the entire content of a stream into a byte array.
+            </summary>
+            <param name="streamContent">The stream to read from.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>A byte array containing the entire content of the stream.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.SetRequestHeaderValues(System.Net.Http.HttpRequestMessage,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
@@ -100,11 +186,21 @@
             <param name="request">The HTTP request message.</param>
             <param name="headers">The headers to set.</param>
         </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.GetErrorContentAsync(System.Net.Http.HttpResponseMessage)">
+        <member name="M:GISBlox.Services.SDK.ApiClient.EnsureSuccessStatusCodeAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
+            <summary>
+            Ensures that the HTTP response has a success status code, otherwise throws a ClientApiException with error details.
+            </summary>
+            <param name="response">The HTTP response message to check.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the response does not have a success status code.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.GetErrorContentAsync(System.Net.Http.HttpResponseMessage,System.Threading.CancellationToken)">
             <summary>
             Gets the error content from the HTTP response.
             </summary>
             <param name="response">The HTTP response message.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
             <returns>The error content as a string.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.Dispose(System.Boolean)">
@@ -186,6 +282,153 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A GeoJson string with the converted WKT geometry.</returns>
         </member>
+        <member name="T:GISBlox.Services.SDK.DataLake.DataLakeAPIClient">
+            <summary>
+            This class contains methods to interact with the Data Lake API.
+            </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            This class contains methods to interact with the Data Lake API.
+            </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.DeleteFile(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a file from the data lake.
+            </summary>
+            <param name="fileName">A file name.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.DownloadFile(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>        
+            Downloads a file from the data lake and saves it to the specified local path.
+            </summary>
+            <param name="fileName">The name of the file to download.</param>
+            <param name="localPath">The local target location for the file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param> 
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.DownloadFileData(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Downloads the data of a file from the data lake.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.GetCustomerFiles(System.Threading.CancellationToken)">
+            <summary>        
+            Returns a list of files in the customer's data lake.
+            </summary>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.GetCustomerFolder(System.Threading.CancellationToken)">
+            <summary>
+            Returns the customer's data lake folder information.
+            </summary>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.UploadFile(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Uploads a file to the data lake from the specified local path.
+            </summary>
+            <param name="localPath">The path to the local file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.UploadFile(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a file in the data lake from the specified stream.
+            </summary>
+            <param name="stream">The stream from which to create a file.</param>
+            <param name="fileName">The name for the new file in the data lake.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.UploadFileData(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a file in the data lake from the specified JSON data.
+            </summary>
+            <param name="jsonData">The JSON data.</param>
+            <param name="fileName">The name for the new file in the data lake.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.DataLake.IDataLakeAPI">
+            <summary>
+            Interface for DataLakeAPI class.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.DeleteFile(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a file from the data lake.
+            </summary>
+            <param name="fileName">A file name.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.DownloadFile(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>        
+            Downloads a file from the data lake and saves it to the specified local path.
+            </summary>
+            <param name="fileName">The name of the file to download.</param>
+            <param name="localPath">The local target location for the file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>        
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.DownloadFileData(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Downloads the data of a file from the data lake.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>        
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.GetCustomerFiles(System.Threading.CancellationToken)">
+            <summary>        
+            Returns a list of files in the customer's data lake.
+            </summary>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>        
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.GetCustomerFolder(System.Threading.CancellationToken)">
+            <summary>
+            Returns the customer's data lake folder information.
+            </summary>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.UploadFile(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Uploads a file to the data lake from the specified local path.
+            </summary>
+            <param name="localPath">The path to the local file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.UploadFile(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a file in the data lake from the specified stream.
+            </summary>
+            <param name="stream">The stream from which to create a file.</param>
+            <param name="fileName">The name for the new file in the data lake.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.UploadFileData(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a file in the data lake from the specified JSON data.
+            </summary>
+            <param name="jsonData">The JSON data.</param>
+            <param name="fileName">The name for the new file in the data lake.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.GISBloxClient">
             <summary>
             The main entry point for every available GISBlox Location Service method.
@@ -228,9 +471,9 @@
             Entry point to the Info API.
             </summary>
         </member>
-        <member name="P:GISBlox.Services.SDK.GISBloxClient.UrlShortener">
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.DataLake">
             <summary>
-            Entry point to the URL Shortener API.
+            Entry point to the Data Lake API.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.GISBloxClient.Dispose">
@@ -332,6 +575,26 @@
             Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
             </summary>
             <param name="geometry">A WKT geometry.</param>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.CustomerFiles">
+            <summary>
+            Represents a collection of customer file names.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerFiles.Files">
+            <summary>
+            A list of file names.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.CustomerFolder">
+            <summary>
+            Represents a customer folder in the data lake.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerFolder.FolderId">
+            <summary>
+            The customer folder ID.
+            </summary>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Coordinate">
             <summary>
@@ -1243,57 +1506,6 @@
             <param name="complete">True to mark as complete, False to not.</param>
             <param name="addDecimals">True to add the X-Rounding-Decimals header, False to not.</param>
             <param name="decimals">The amount of fractional digits to round to. -1 for no rounding.</param>
-        </member>
-        <member name="T:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI">
-            <summary>
-            Interface for UrlShortenerAPI class.
-            </summary>
-        </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI.Shorten(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Shortens a (data) URL.
-            </summary>
-            <param name="url">The URL to shorten.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The shortened URL.</returns>
-        </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.IUrlShortenerAPI.CreateGeoJsonUrl(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Creates a GeoJSON (data) URL.
-            </summary>
-            <param name="geoJson">The GeoJSON data to host.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The created GeoJSON URL.</returns>
-        </member>
-        <member name="T:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient">
-            <summary>
-            The class contains methods to communicate with the URL Shortener API.
-            </summary>
-            <param name="httpClient">The HTTP client.</param>
-            <param name="cache">The memory cache.</param>
-        </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
-            <summary>
-            The class contains methods to communicate with the URL Shortener API.
-            </summary>
-            <param name="httpClient">The HTTP client.</param>
-            <param name="cache">The memory cache.</param>
-        </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.Shorten(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Shortens a (data) URL.
-            </summary>
-            <param name="url">The URL to shorten.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The shortened URL.</returns>
-        </member>
-        <member name="M:GISBlox.Services.SDK.UrlShortener.UrlShortenerAPIClient.CreateGeoJsonUrl(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Creates a GeoJSON (data) URL.
-            </summary>
-            <param name="geoJson">The GeoJSON data to host.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The created GeoJSON URL.</returns>
         </member>
     </members>
 </doc>

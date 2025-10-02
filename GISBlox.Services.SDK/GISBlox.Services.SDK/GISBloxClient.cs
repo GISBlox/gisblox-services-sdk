@@ -3,10 +3,10 @@
 // ------------------------------------------------------------
 
 using GISBlox.Services.SDK.Conversion;
+using GISBlox.Services.SDK.DataLake;
 using GISBlox.Services.SDK.Info;
 using GISBlox.Services.SDK.PostalCodes;
 using GISBlox.Services.SDK.Projection;
-using GISBlox.Services.SDK.UrlShortener;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Diagnostics;
@@ -50,11 +50,11 @@ namespace GISBlox.Services.SDK
 
             IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
+            this.DataLake = new DataLakeAPIClient(httpClient, cache);
             this.PostalCodes = new PostalCodesAPIClient(httpClient, cache);
             this.Projection = new ProjectionAPIClient(httpClient, cache);
             this.Conversion = new ConversionAPIClient(httpClient, cache);
-            this.Info = new InfoAPIClient(httpClient, cache);
-            this.UrlShortener = new UrlShortenerAPIClient(httpClient, cache);
+            this.Info = new InfoAPIClient(httpClient, cache);            
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace GISBlox.Services.SDK
         public IInfoAPI Info { get; }
 
         /// <summary>
-        /// Entry point to the URL Shortener API.
+        /// Entry point to the Data Lake API.
         /// </summary>
-        public IUrlShortenerAPI UrlShortener { get; }
+        public IDataLakeAPI DataLake { get; }
 
         /// <summary>
         /// Disposes the GISBloxClient class.
