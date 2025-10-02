@@ -4,7 +4,7 @@
     public class DataLakeTests
     {
         GISBloxClient _client;
-        const string BASE_URL = "https://services-private.gisblox.com";
+        const string BASE_URL = "https://services.gisblox.com";
         const int API_QUOTA_DELAY = 1000;  // Allows to run all tests together without exceeding API call quota
 
         #region Initialization and cleanup
