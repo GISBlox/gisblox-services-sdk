@@ -20,6 +20,7 @@
 
 This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). It supports the following Location Services:
 * Dutch postal codes (used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot))
+* Access to the GISBlox GeoJson Data Lake
 * Reprojecting [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations and vice versa
 * Converting [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON)
 * Retrieving subscription information
@@ -29,7 +30,7 @@ To get no-code access to the GISBlox Services API from the command-line, you can
 ## Requirements
 You must have a personal service key to access the GISBlox Services API.
 
-To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a **free** subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel. [More information](http://library.gisblox.com/content/nl-nl/gb1810090)
+To generate a service key, create an account in the [GISBlox Account Center](https://account.gisblox.com/) and add a **free** subscription to the GISBlox Location Services. Once subscribed, click the Location Services tile and copy the service key from the information panel.
 
 ## Installation
 Either download this repository, make a (forked) git clone or install via NuGet:
