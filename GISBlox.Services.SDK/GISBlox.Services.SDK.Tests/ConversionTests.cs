@@ -4,8 +4,7 @@ namespace GISBlox.Services.SDK.Tests
    public class ConversionTests
    {
       GISBloxClient _client;
-      const string BASE_URL = "https://services.gisblox.com";
-      const int API_QUOTA_DELAY = 1000;  // Allows to run all tests together without exceeding API call quota
+      const string BASE_URL = "https://services-private.gisblox.com";      
 
       #region Initialization and cleanup
 
@@ -27,113 +26,274 @@ namespace GISBlox.Services.SDK.Tests
 
       #endregion
 
+      #region WKT/WKB -> GeoJson
+
       [TestMethod]
       public async Task ConvertPoint()
       {         
          WKT wkt = new("POINT (30 10 5)");
-         string geoJson = await ConvertToGeoJson(wkt);         
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);         
          
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertPoint_WKB()
+      {
+         // TODO: Replace with actual WKB for POINT (30105)
+         byte[] wkbBytes = new byte[] { /* WKB bytes for POINT (30105) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertMultiPoint()
       {
          WKT wkt = new("MULTIPOINT ((10 40), (40 30 2), (20 20), (30 10))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertMultiPoint_WKB()
+      {
+         // TODO: Replace with actual WKB for MULTIPOINT ((1040), (40302), (2020), (3010))
+         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTIPOINT ((1040), (40302), (2020), (3010)) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertLineString()
       {
          WKT wkt = new("LINESTRING (30 10, 10 30, 40 40)"); ;
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertLineString_WKB()
+      {
+         // TODO: Replace with actual WKB for LINESTRING (3010,1030,4040)
+         byte[] wkbBytes = new byte[] { /* WKB bytes for LINESTRING (3010,1030,4040) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertMultiLineString()
       {
          WKT wkt = new("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertMultiLineString_WKB()
+      {
+         // TODO: Replace with actual WKB for MULTILINESTRING ((1010,2020,1040),(4040,3030,4020,3010))
+         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTILINESTRING ((1010,2020,1040),(4040,3030,4020,3010)) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertPolygon()
       {
          WKT wkt = new("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertPolygon_WKB()
+      {
+         // TODO: Replace with actual WKB for POLYGON ((3010,4040,2040,1020,3010))
+         byte[] wkbBytes = new byte[] { /* WKB bytes for POLYGON ((3010,4040,2040,1020,3010)) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertPolygonWithInnerRing()
       {
          WKT wkt = new("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }
 
-         await Task.Delay(API_QUOTA_DELAY);
+      [TestMethod]
+      public async Task ConvertPolygonWithInnerRing_WKB()
+      {
+         // TODO: Replace with actual WKB for POLYGON ((3510,4545,1540,1020,3510),(2030,3535,3020,2030))
+         byte[] wkbBytes = new byte[] { /* WKB bytes for POLYGON ((3510,4545,1540,1020,3510),(2030,3535,3020,2030)) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertMultiPolygon()
       {
          WKT wkt = new("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
-         
-         await Task.Delay(API_QUOTA_DELAY);
+      }
+
+      [TestMethod]
+      public async Task ConvertMultiPolygon_WKB()
+      {
+         // TODO: Replace with actual WKB for MULTIPOLYGON (((3020,4540,1040,3020)),((155,4010,1020,510,155)))
+         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTIPOLYGON (((3020,4540,1040,3020)),((155,4010,1020,510,155))) */ };
+         WKB wkb = new(wkbBytes);
+         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertMultiPolygonWithInnerRing()
       {
          WKT wkt = new("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))");
-         string geoJson = await ConvertToGeoJson(wkt);
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
-
-         await Task.Delay(API_QUOTA_DELAY);
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");         
       }
+
+      #endregion
+
+      #region GeoJson -> WKT 
+
+      [TestMethod]
+      public async Task ToWkt_FromString()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
+         var wktList = await _client.Conversion.ToWkt(geoJson, CancellationToken.None);
+         
+         Assert.IsNotNull(wktList, "Returned WKT list is null.");
+         Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
+         Assert.IsFalse(string.IsNullOrWhiteSpace(wktList[0].Geometry), "WKT geometry is empty.");
+         
+         Assert.AreEqual("POINT(30 10)", wktList[0].Geometry);
+      }
+
+      [TestMethod]
+      public async Task ToWktWithProperties_FromString()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
+         var wktList = await _client.Conversion.ToWkt(geoJson, CancellationToken.None);
+
+         Assert.IsNotNull(wktList, "Returned WKT list is null.");
+         Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
+         Assert.IsFalse(string.IsNullOrWhiteSpace(wktList[0].Geometry), "WKT geometry is empty.");
+
+         var wkt = wktList.FirstOrDefault();
+         Assert.AreEqual("POINT Z (30 10 5)", wkt.Geometry);
+
+         Assert.IsNotNull(wkt.Properties, "WKT properties are null.");
+         Assert.IsGreaterThan(0, wkt.Properties.Count, "WKT properties are empty.");
+
+         Assert.AreEqual(23L, wkt.Properties[0]["zValue"]);
+         Assert.AreEqual("Single Point", wkt.Properties[0]["name"]);
+      }
+
+      [TestMethod]
+      public async Task ToWkt_FromStream()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
+         using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
+         var wktList = await _client.Conversion.ToWkt(stream, "test.json", CancellationToken.None);
+         
+         Assert.IsNotNull(wktList, "Returned WKT list is null.");
+         Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
+         Assert.IsFalse(string.IsNullOrWhiteSpace(wktList[0].Geometry), "WKT geometry is empty.");
+      }
+
+      #endregion
+
+      #region GeoJson -> WKB
+
+      [TestMethod]
+      public async Task ToWkb_FromString()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
+         var wkbList = await _client.Conversion.ToWkb(geoJson, CancellationToken.None);
+         
+         Assert.IsNotNull(wkbList, "Returned WKB list is null.");
+         Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
+         Assert.IsNotNull(wkbList[0].Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkbList[0].Geometry.Length, "WKB geometry is empty.");
+      }
+
+      [TestMethod]
+      public async Task ToWkb_FromStream()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
+         using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
+         var wkbList = await _client.Conversion.ToWkb(stream, "test.json", CancellationToken.None);
+         
+         Assert.IsNotNull(wkbList, "Returned WKB list is null.");
+         Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
+         Assert.IsNotNull(wkbList[0].Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkbList[0].Geometry.Length, "WKB geometry is empty.");
+      }
+
+      #endregion
 
       #region Private methods
 
       /// <summary>
-      /// Calls the API and returns the results.
+      /// Converts a WKT geometry into a GeoJson Feature(Collection) string.
       /// </summary>
-      /// <param name="wkt">A WKT geometry string.</param>
+      /// <param name="wkt">A WKT type.</param>
       /// <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
       /// <returns>A GeoJson string with the converted WKT geometry.</returns>
-      private async Task<string> ConvertToGeoJson(WKT wkt, bool asFeatureCollection = false)
+      private async Task<string> ConvertToGeoJsonFromWKT(WKT wkt, bool asFeatureCollection = false)
       {
          return await _client.Conversion.ToGeoJson(wkt, asFeatureCollection);         
+      }
+
+      /// <summary>
+      /// Converts a WKB geometry into a GeoJson Feature(Collection) string.
+      /// </summary>
+      /// <param name="wkb">A WKB type.</param>
+      /// <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
+      /// <returns>A GeoJson string with the converted WKB geometry.</returns>
+      private async Task<string> ConvertToGeoJsonFromWKB(WKB wkb, bool asFeatureCollection = false)
+      {
+         return await _client.Conversion.ToGeoJson(wkb, asFeatureCollection);
       }
 
       /// <summary>
