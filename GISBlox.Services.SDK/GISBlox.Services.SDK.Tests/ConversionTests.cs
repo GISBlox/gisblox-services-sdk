@@ -4,7 +4,11 @@ namespace GISBlox.Services.SDK.Tests
    public class ConversionTests
    {
       GISBloxClient _client;
-      const string BASE_URL = "https://services-private.gisblox.com";      
+      const string BASE_URL = "https://services-private.gisblox.com";
+
+      private const string WKB_POINT_30_10 = "AQEAAAAAAAAAAAA+QAAAAAAAACRA";
+      private static readonly byte[] WKB_POINT_30_10_BYTES = [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64 ];
+      private static readonly byte[] WKB_POINT_30_10_5_BYTES = [1, 233, 3, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 20, 64];
 
       #region Initialization and cleanup
 
@@ -13,7 +17,7 @@ namespace GISBlox.Services.SDK.Tests
       {
          // Get the service key from the test.runsettings file
          string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
-         
+
          // Create the service client object
          _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
       }
@@ -30,20 +34,18 @@ namespace GISBlox.Services.SDK.Tests
 
       [TestMethod]
       public async Task ConvertPoint()
-      {         
+      {
          WKT wkt = new("POINT (30 10 5)");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);         
-         
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
       public async Task ConvertPoint_WKB()
-      {
-         // TODO: Replace with actual WKB for POINT (30105)
-         byte[] wkbBytes = new byte[] { /* WKB bytes for POINT (30105) */ };
-         WKB wkb = new(wkbBytes);
+      { 
+         WKB wkb = new(WKB_POINT_30_10_BYTES);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -189,7 +191,7 @@ namespace GISBlox.Services.SDK.Tests
          string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");         
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
       }
 
       #endregion
@@ -201,11 +203,11 @@ namespace GISBlox.Services.SDK.Tests
       {
          string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
          var wktList = await _client.Conversion.ToWkt(geoJson, CancellationToken.None);
-         
+
          Assert.IsNotNull(wktList, "Returned WKT list is null.");
          Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
          Assert.IsFalse(string.IsNullOrWhiteSpace(wktList[0].Geometry), "WKT geometry is empty.");
-         
+
          Assert.AreEqual("POINT(30 10)", wktList[0].Geometry);
       }
 
@@ -235,10 +237,34 @@ namespace GISBlox.Services.SDK.Tests
          string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
          using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
          var wktList = await _client.Conversion.ToWkt(stream, "test.json", CancellationToken.None);
-         
+
          Assert.IsNotNull(wktList, "Returned WKT list is null.");
          Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
-         Assert.IsFalse(string.IsNullOrWhiteSpace(wktList[0].Geometry), "WKT geometry is empty.");
+
+         var wkt = wktList.FirstOrDefault();
+         Assert.IsFalse(string.IsNullOrWhiteSpace(wkt.Geometry), "WKT geometry is empty.");
+
+         Assert.AreEqual("POINT(30 10)", wkt.Geometry);
+      }
+
+      [TestMethod]
+      public async Task ToWktWithProperties_FromStream()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
+         using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
+         var wktList = await _client.Conversion.ToWkt(stream, "test.json", CancellationToken.None);
+
+         Assert.IsNotNull(wktList, "Returned WKT list is null.");
+         Assert.IsGreaterThan(0, wktList.Count, "Returned WKT list is empty.");
+
+         var wkt = wktList.FirstOrDefault();
+         Assert.IsFalse(string.IsNullOrWhiteSpace(wkt.Geometry), "WKT geometry is empty.");
+         Assert.AreEqual("POINT Z (30 10 5)", wkt.Geometry);
+
+         Assert.IsNotNull(wkt.Properties, "WKT properties are null.");
+         Assert.IsGreaterThan(0, wkt.Properties.Count, "WKT properties are empty.");
+         Assert.AreEqual(23L, wkt.Properties[0]["zValue"]);
+         Assert.AreEqual("Single Point", wkt.Properties[0]["name"]);
       }
 
       #endregion
@@ -250,11 +276,35 @@ namespace GISBlox.Services.SDK.Tests
       {
          string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
          var wkbList = await _client.Conversion.ToWkb(geoJson, CancellationToken.None);
-         
+
          Assert.IsNotNull(wkbList, "Returned WKB list is null.");
          Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
-         Assert.IsNotNull(wkbList[0].Geometry, "WKB geometry is null.");
-         Assert.IsGreaterThan(0, wkbList[0].Geometry.Length, "WKB geometry is empty.");
+
+         var wkb = wkbList.FirstOrDefault();
+         Assert.IsNotNull(wkb.Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkb.Geometry.Length, "WKB geometry is empty.");
+
+         CollectionAssert.AreEqual(WKB_POINT_30_10_BYTES, wkb.Geometry, "WKB geometry does not match expected value.");
+      }
+
+      [TestMethod]
+      public async Task ToWkbWithProperties_FromString()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
+         var wkbList = await _client.Conversion.ToWkb(geoJson, CancellationToken.None);
+
+         Assert.IsNotNull(wkbList, "Returned WKB list is null.");
+         Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
+         
+         var wkb = wkbList.FirstOrDefault();
+         Assert.IsNotNull(wkb.Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkb.Geometry.Length, "WKB geometry is empty.");
+         CollectionAssert.AreEqual(WKB_POINT_30_10_5_BYTES, wkb.Geometry, "WKB geometry does not match expected value.");
+
+         Assert.IsNotNull(wkb.Properties, "WKB properties are null.");
+         Assert.IsGreaterThan(0, wkb.Properties.Count, "WKB properties are empty.");
+         Assert.AreEqual(23L, wkb.Properties[0]["zValue"]);
+         Assert.AreEqual("Single Point", wkb.Properties[0]["name"]);
       }
 
       [TestMethod]
@@ -263,11 +313,38 @@ namespace GISBlox.Services.SDK.Tests
          string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10]},\"properties\":{}}";
          using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
          var wkbList = await _client.Conversion.ToWkb(stream, "test.json", CancellationToken.None);
-         
+
          Assert.IsNotNull(wkbList, "Returned WKB list is null.");
          Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
-         Assert.IsNotNull(wkbList[0].Geometry, "WKB geometry is null.");
-         Assert.IsGreaterThan(0, wkbList[0].Geometry.Length, "WKB geometry is empty.");
+
+         var wkb = wkbList.FirstOrDefault();
+         Assert.IsNotNull(wkb.Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkb.Geometry.Length, "WKB geometry is empty.");
+
+         CollectionAssert.AreEqual(WKB_POINT_30_10_BYTES, wkb.Geometry, "WKB geometry does not match expected value.");
+      }
+
+      [TestMethod]
+      public async Task ToWkbWithProperties_FromStream()
+      {
+         string geoJson = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
+         using var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(geoJson));
+         var wkbList = await _client.Conversion.ToWkb(stream, "test.json", CancellationToken.None);
+
+         Assert.IsNotNull(wkbList, "Returned WKB list is null.");
+         Assert.IsGreaterThan(0, wkbList.Count, "Returned WKB list is empty.");
+
+         var wkb = wkbList.FirstOrDefault();
+         Assert.IsNotNull(wkb.Geometry, "WKB geometry is null.");
+         Assert.IsGreaterThan(0, wkb.Geometry.Length, "WKB geometry is empty.");
+
+         CollectionAssert.AreEqual(WKB_POINT_30_10_5_BYTES, wkb.Geometry, "WKB geometry does not match expected value.");
+
+         Assert.IsNotNull(wkb.Properties, "WKB properties are null.");
+         Assert.IsGreaterThan(0, wkb.Properties.Count, "WKB properties are empty.");
+
+         Assert.AreEqual(23L, wkb.Properties[0]["zValue"]);
+         Assert.AreEqual("Single Point", wkb.Properties[0]["name"]);
       }
 
       #endregion
@@ -282,7 +359,7 @@ namespace GISBlox.Services.SDK.Tests
       /// <returns>A GeoJson string with the converted WKT geometry.</returns>
       private async Task<string> ConvertToGeoJsonFromWKT(WKT wkt, bool asFeatureCollection = false)
       {
-         return await _client.Conversion.ToGeoJson(wkt, asFeatureCollection);         
+         return await _client.Conversion.ToGeoJson(wkt, asFeatureCollection);
       }
 
       /// <summary>
@@ -293,7 +370,16 @@ namespace GISBlox.Services.SDK.Tests
       /// <returns>A GeoJson string with the converted WKB geometry.</returns>
       private async Task<string> ConvertToGeoJsonFromWKB(WKB wkb, bool asFeatureCollection = false)
       {
-         return await _client.Conversion.ToGeoJson(wkb, asFeatureCollection);
+         // the byte array in wkb.Geometry should be sent over the line as base64 encoded string
+         string base64Geometry = Convert.ToBase64String(wkb.Geometry);
+         // we need to create a new WKT object with the base64 encoded geometry as string ???
+
+         WKT encodedWKB = new WKT
+         {
+            Geometry = base64Geometry,
+            Properties = wkb.Properties
+         };
+         return await ConvertToGeoJsonFromWKT(encodedWKB, asFeatureCollection);
       }
 
       /// <summary>
@@ -313,7 +399,7 @@ namespace GISBlox.Services.SDK.Tests
             JsonElement jsonObject = doc.RootElement;
             if (jsonObject.TryGetProperty("geometry", out var typeProperty) && typeProperty.ValueKind == JsonValueKind.Object)
             {
-               if (typeProperty.TryGetProperty("type", out var geomType) && geomType.ValueKind == JsonValueKind.String)               
+               if (typeProperty.TryGetProperty("type", out var geomType) && geomType.ValueKind == JsonValueKind.String)
                {
                   // Type check
                   string typeName = geomType.GetString();
@@ -325,7 +411,7 @@ namespace GISBlox.Services.SDK.Tests
                         isValid = true;
                      }
                   }
-               }               
+               }
             }
          }
          catch (Exception)

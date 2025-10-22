@@ -5,7 +5,6 @@
 using GISBlox.Services.SDK.Common;
 using GISBlox.Services.SDK.Models;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -87,8 +86,8 @@ namespace GISBlox.Services.SDK.Conversion
       public async Task<List<WKB>> ToWkb(Stream stream, string fileName, CancellationToken cancellationToken = default)
       {
          var requestUri = "convert/toWkb/" + fileName;
-         
-         var result = await HttpPost<Stream, List<WKB>>(HttpClient, requestUri, stream, null, null, cancellationToken);
+
+         var result = await HttpPost<List<WKB>>(HttpClient, requestUri, stream, "application/json", null, cancellationToken);
          PropertyValueNormalizer.NormalizeWkbList(result);
          return result;
       }
@@ -118,8 +117,8 @@ namespace GISBlox.Services.SDK.Conversion
       public async Task<List<WKT>> ToWkt(Stream stream, string fileName, CancellationToken cancellationToken = default)
       {
          var requestUri = "convert/toWkt/" + fileName;
-         
-         var result = await HttpPost<Stream, List<WKT>>(HttpClient, requestUri, stream, null, null, cancellationToken);
+
+         var result = await HttpPost<List<WKT>>(HttpClient, requestUri, stream, "application/json", null, cancellationToken);         
          PropertyValueNormalizer.NormalizeWktList(result);
          return result;
       }     
