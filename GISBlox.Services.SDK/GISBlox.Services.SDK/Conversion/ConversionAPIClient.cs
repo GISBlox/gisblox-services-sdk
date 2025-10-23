@@ -32,7 +32,7 @@ namespace GISBlox.Services.SDK.Conversion
       /// <returns>A GeoJson string with the converted WKT geometry.</returns>
       public async Task<string> ToGeoJson(WKT wkt, bool asFeatureCollection = false, CancellationToken cancellationToken = default)
       {
-         var requestUri = "convert/toGeoJson?source=WKT";
+         var requestUri = "convert/toGeoJson?format=WKT";
 
          Dictionary<string, string> customHeaders = new()
             {
@@ -51,7 +51,7 @@ namespace GISBlox.Services.SDK.Conversion
       /// <returns>A GeoJson string with the converted WKB geometry.</returns>
       public async Task<string> ToGeoJson(WKB wkb, bool asFeatureCollection = false, CancellationToken cancellationToken = default)
       {
-         var requestUri = "convert/toGeoJson?source=WKB";
+         var requestUri = "convert/toGeoJson?format=WKB";
 
          Dictionary<string, string> customHeaders = new()
             {

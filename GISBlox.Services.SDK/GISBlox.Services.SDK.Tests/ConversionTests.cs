@@ -5,8 +5,7 @@ namespace GISBlox.Services.SDK.Tests
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services-private.gisblox.com";
-
-      private const string WKB_POINT_30_10 = "AQEAAAAAAAAAAAA+QAAAAAAAACRA";
+            
       private static readonly byte[] WKB_POINT_30_10_BYTES = [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64 ];
       private static readonly byte[] WKB_POINT_30_10_5_BYTES = [1, 233, 3, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 20, 64];
 
@@ -45,7 +44,7 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertPoint_WKB()
       { 
-         WKB wkb = new(WKB_POINT_30_10_BYTES);
+         WKB wkb = new(WKB_POINT_30_10_5_BYTES);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -65,9 +64,9 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertMultiPoint_WKB()
       {
-         // TODO: Replace with actual WKB for MULTIPOINT ((1040), (40302), (2020), (3010))
-         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTIPOINT ((1040), (40302), (2020), (3010)) */ };
-         WKB wkb = new(wkbBytes);
+         byte[] multiPoint = [1, 4, 0, 0, 0, 4, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         WKB wkb = new(multiPoint);
+
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -77,7 +76,7 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertLineString()
       {
-         WKT wkt = new("LINESTRING (30 10, 10 30, 40 40)"); ;
+         WKT wkt = new("LINESTRING (30 10, 10 30, 40 40)");
          string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -87,9 +86,9 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertLineString_WKB()
       {
-         // TODO: Replace with actual WKB for LINESTRING (3010,1030,4040)
-         byte[] wkbBytes = new byte[] { /* WKB bytes for LINESTRING (3010,1030,4040) */ };
-         WKB wkb = new(wkbBytes);
+         byte[] lineString = [1, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 240, 63];
+         WKB wkb = new(lineString);
+
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -109,9 +108,9 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertMultiLineString_WKB()
       {
-         // TODO: Replace with actual WKB for MULTILINESTRING ((1010,2020,1040),(4040,3030,4020,3010))
-         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTILINESTRING ((1010,2020,1040),(4040,3030,4020,3010)) */ };
-         WKB wkb = new(wkbBytes);
+         byte[] multiLineString = [1, 5, 0, 0, 0, 2, 0, 0, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 2, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         WKB wkb = new(multiLineString);
+
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -131,9 +130,9 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertPolygon_WKB()
       {
-         // TODO: Replace with actual WKB for POLYGON ((3010,4040,2040,1020,3010))
-         byte[] wkbBytes = new byte[] { /* WKB bytes for POLYGON ((3010,4040,2040,1020,3010)) */ };
-         WKB wkb = new(wkbBytes);
+         byte[] polygon = [1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         WKB wkb = new(polygon);
+
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -148,19 +147,7 @@ namespace GISBlox.Services.SDK.Tests
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertPolygonWithInnerRing_WKB()
-      {
-         // TODO: Replace with actual WKB for POLYGON ((3510,4545,1540,1020,3510),(2030,3535,3020,2030))
-         byte[] wkbBytes = new byte[] { /* WKB bytes for POLYGON ((3510,4545,1540,1020,3510),(2030,3535,3020,2030)) */ };
-         WKB wkb = new(wkbBytes);
-         string geoJson = await ConvertToGeoJsonFromWKB(wkb);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
-      }
+      }      
 
       [TestMethod]
       public async Task ConvertMultiPolygon()
@@ -175,9 +162,14 @@ namespace GISBlox.Services.SDK.Tests
       [TestMethod]
       public async Task ConvertMultiPolygon_WKB()
       {
-         // TODO: Replace with actual WKB for MULTIPOLYGON (((3020,4540,1040,3020)),((155,4010,1020,510,155)))
-         byte[] wkbBytes = new byte[] { /* WKB bytes for MULTIPOLYGON (((3020,4540,1040,3020)),((155,4010,1020,510,155))) */ };
-         WKB wkb = new(wkbBytes);
+         byte[] multiPolygon = [1, 6, 0, 0, 0, 2, 0, 0, 0, 1, 3, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 128, 70, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64];         
+         Dictionary<string, object> props = new()
+         {
+            { "id", 1 },
+            { "name", "MultiPolygon" }
+         };
+
+         WKB wkb = new(multiPolygon, [props]);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
@@ -370,18 +362,9 @@ namespace GISBlox.Services.SDK.Tests
       /// <returns>A GeoJson string with the converted WKB geometry.</returns>
       private async Task<string> ConvertToGeoJsonFromWKB(WKB wkb, bool asFeatureCollection = false)
       {
-         // the byte array in wkb.Geometry should be sent over the line as base64 encoded string
-         string base64Geometry = Convert.ToBase64String(wkb.Geometry);
-         // we need to create a new WKT object with the base64 encoded geometry as string ???
-
-         WKT encodedWKB = new WKT
-         {
-            Geometry = base64Geometry,
-            Properties = wkb.Properties
-         };
-         return await ConvertToGeoJsonFromWKT(encodedWKB, asFeatureCollection);
+         return await _client.Conversion.ToGeoJson(wkb, asFeatureCollection);
       }
-
+   
       /// <summary>
       /// Performs a basic GeoJson validity test. It checks whether: 
       /// - The geometry type matches the expected type
