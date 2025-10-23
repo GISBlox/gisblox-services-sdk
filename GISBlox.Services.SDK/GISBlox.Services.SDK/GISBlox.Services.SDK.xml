@@ -239,6 +239,22 @@
             The HTTP status code of the error.
             </summary>
         </member>
+        <member name="T:GISBlox.Services.SDK.Common.PropertyValueNormalizer">
+            <summary>
+            Normalizes property dictionaries by converting wrapper objects that contain a Value and ValueType
+            into concrete CLR types. Only intended for use with Conversion API results (ToWkt/ToWkb).
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Common.PropertyValueNormalizer.NormalizeWktList(System.Collections.Generic.List{GISBlox.Services.SDK.Models.WKT})">
+            <summary>
+            Normalize properties for a list of WKT results.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Common.PropertyValueNormalizer.NormalizeWkbList(System.Collections.Generic.List{GISBlox.Services.SDK.Models.WKB})">
+            <summary>
+            Normalize properties for a list of WKB results.
+            </summary>
+        </member>
         <member name="T:GISBlox.Services.SDK.Conversion.ConversionAPIClient">
             <summary>
             This class converts WKT geometry objects into GeoJSON. 
@@ -268,6 +284,49 @@
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A GeoJson string with the converted WKT geometry.</returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToGeoJson(GISBlox.Services.SDK.Models.WKB,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Converts a WKB geometry into a GeoJson Feature(Collection) string.
+            </summary>
+            <param name="wkb">A WKB type.</param>
+            <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A GeoJson string with the converted WKB geometry.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToWkb(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKB geometries.
+            </summary>
+            <param name="geoJson">A GeoJson string.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKB geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToWkb(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson stream into a list of WKB geometries.
+            </summary>
+            <param name="stream">A stream containing the GeoJson data.</param>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKB geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToWkt(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKT geometries.
+            </summary>
+            <param name="geoJson">A GeoJson string.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKT geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.ConversionAPIClient.ToWkt(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKT geometries.
+            </summary>
+            <param name="stream">A stream containing the GeoJson data.</param>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKT geometries.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.Conversion.IConversionAPI">
             <summary>
             Interface for ConversionAPI class.
@@ -281,6 +340,49 @@
             <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A GeoJson string with the converted WKT geometry.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToGeoJson(GISBlox.Services.SDK.Models.WKB,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Converts a WKB geometry into a GeoJson Feature(Collection) string.
+            </summary>
+            <param name="wkb">A WKB type.</param>
+            <param name="asFeatureCollection">Indicates whether to include the GeoJson feature in a feature collection.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A GeoJson string with the converted WKB geometry.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToWkb(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKB geometries.
+            </summary>
+            <param name="geoJson">A GeoJson string.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKB geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToWkb(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson stream into a list of WKB geometries.
+            </summary>
+            <param name="stream">A stream containing the GeoJson data.</param>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKB geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToWkt(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKT geometries.
+            </summary>
+            <param name="geoJson">A GeoJson string.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKT geometries.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Conversion.IConversionAPI.ToWkt(System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts a GeoJson string into a list of WKT geometries.
+            </summary>
+            <param name="stream">A stream containing the GeoJson data.</param>
+            <param name="fileName">The name of the file.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A list of WKT geometries.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.DataLake.DataLakeAPIClient">
             <summary>
@@ -555,9 +657,42 @@
             Specifies whether the subscription has expired.
             </summary>
         </member>
+        <member name="T:GISBlox.Services.SDK.Models.WKB">
+            <summary>
+            This class represents a WKB geometry and its properties.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKB.Geometry">
+            <summary>
+            Specifies the WKB geometry.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKB.Properties">
+            <summary>
+            Specifies the properties associated with the WKB geometry.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor">
+            <summary>
+            Initializes a new instance of GISBlox.Models.Conversion.WKB class.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry.
+            </summary>
+            <param name="geometry">The WKB geometry.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor(System.Byte[],System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}})">
+            <summary>
+            Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry and properties.
+            </summary>
+            <param name="geometry">The WKB geometry.</param>
+            <param name="properties">The properties associated with the WKB geometry.</param>
+        </member>
         <member name="T:GISBlox.Services.SDK.Models.WKT">
             <summary>
-            This class represents a WKT geometry string representation.
+            This class represents a WKT geometry string and its properties.
             </summary>
         </member>
         <member name="P:GISBlox.Services.SDK.Models.WKT.Geometry">
@@ -565,16 +700,28 @@
             Specifies the WKT geometry.
             </summary>
         </member>
+        <member name="P:GISBlox.Services.SDK.Models.WKT.Properties">
+            <summary>
+            Specifies the properties associated with the WKT geometry.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the GISBlox.Services.SDK.Models.WKT class.
+            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
             </summary>
             <param name="geometry">A WKT geometry.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String,System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}})">
+            <summary>
+            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            </summary>
+            <param name="geometry">A WKT geometry.</param>
+            <param name="properties">A list of properties associated with the geometry.</param>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.CustomerFiles">
             <summary>
