@@ -4,7 +4,7 @@ namespace GISBlox.Services.SDK.Tests
    public class ConversionTests
    {
       GISBloxClient _client;
-      const string BASE_URL = "https://services-private.gisblox.com";
+      const string BASE_URL = "https://services.gisblox.com";
             
       private static readonly byte[] WKB_POINT_30_10_BYTES = [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64 ];
       private static readonly byte[] WKB_POINT_30_10_5_BYTES = [1, 233, 3, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 20, 64];
