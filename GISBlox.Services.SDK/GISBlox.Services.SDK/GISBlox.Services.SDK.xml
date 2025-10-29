@@ -146,9 +146,9 @@
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
             <exception cref="T:System.ArgumentNullException">Thrown when streamContent is null.</exception>
         </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFile(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFileData(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-            Downloads a JSON file from the specified URI.
+            Downloads the content of a JSON file from the specified URI.
             </summary>
             <param name="httpClient">The HTTP client to use for the request.</param>
             <param name="cache">The memory cache to use for caching responses.</param>
@@ -159,16 +159,16 @@
             <returns>The JSON file content as a string.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFileToDisk(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.ApiClient.DownloadFileToDisk(System.Net.Http.HttpClient,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-            Downloads a JSON file from the specified URI and saves it to disk.
+            Downloads a file from the specified URI and saves it to disk.
             </summary>
             <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the JSON file to download.</param>
+            <param name="requestUri">The URI of the file to download.</param>
             <param name="filePath">The path where the file should be saved.</param>
+            <param name="contentType">The media type to accept (e.g., application/json, application/octet-stream). Defaults to application/json.</param>
             <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>The full path to the saved file.</returns>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>      
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.ReadStreamBytes(System.IO.Stream,System.Threading.CancellationToken)">
@@ -408,7 +408,7 @@
             <summary>
             Deletes a file from the data lake.
             </summary>
-            <param name="fileName">A file name.</param>
+            <param name="fileName">A file name. Note this is a case-sensitive string!</param>
             <param name="cancellationToken">The cancellation token to use for the operation.</param>
             <returns>True if successful, False if not.</returns>
         </member>
@@ -416,16 +416,27 @@
             <summary>        
             Downloads a file from the data lake and saves it to the specified local path.
             </summary>
-            <param name="fileName">The name of the file to download.</param>
+            <param name="fileName">The name of the file to download. Note this is a case-sensitive string!</param>
             <param name="localPath">The local target location for the file.</param>
             <param name="cancellationToken">The cancellation token to use for the operation.</param> 
+            <returns>True if successful, False if not.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.DownloadFileData(System.String,System.Threading.CancellationToken)">
             <summary>
             Downloads the data of a file from the data lake.
             </summary>
-            <param name="fileName">The name of the file.</param>
+            <param name="fileName">The name of the file. Note this is a case-sensitive string!</param>
             <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>The file data as a string.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.ExportFileAsGeoParquet(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Exports a file from the data lake to the specified local path in GeoParquet format.
+            </summary>
+            <param name="fileName">The name of the file to export. Note this is a case-sensitive string!</param>
+            <param name="localPath">The local target location for the exported file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.GetCustomerFiles(System.Threading.CancellationToken)">
             <summary>        
@@ -474,7 +485,7 @@
             <summary>
             Deletes a file from the data lake.
             </summary>
-            <param name="fileName">A file name.</param>
+            <param name="fileName">A file name. Note this is a case-sensitive string!</param>
             <param name="cancellationToken">The cancellation token to use for the operation.</param>
             <returns>True if successful, False if not.</returns>
         </member>
@@ -482,16 +493,27 @@
             <summary>        
             Downloads a file from the data lake and saves it to the specified local path.
             </summary>
-            <param name="fileName">The name of the file to download.</param>
+            <param name="fileName">The name of the file to download. Note this is a case-sensitive string!</param>
             <param name="localPath">The local target location for the file.</param>
-            <param name="cancellationToken">The cancellation token to use for the operation.</param>        
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>     
+            <returns>True if successful, False if not.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.DownloadFileData(System.String,System.Threading.CancellationToken)">
             <summary>
             Downloads the data of a file from the data lake.
             </summary>
-            <param name="fileName">The name of the file.</param>
-            <param name="cancellationToken">The cancellation token to use for the operation.</param>        
+            <param name="fileName">The name of the file. Note this is a case-sensitive string!</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>   
+            <returns>The file data as a string.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.ExportFileAsGeoParquet(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Exports a file from the data lake to the specified local path in GeoParquet format.
+            </summary>
+            <param name="fileName">The name of the file to export. Note this is a case-sensitive string!</param>
+            <param name="localPath">The local target location for the exported file.</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if successful, False if not.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.GetCustomerFiles(System.Threading.CancellationToken)">
             <summary>        
