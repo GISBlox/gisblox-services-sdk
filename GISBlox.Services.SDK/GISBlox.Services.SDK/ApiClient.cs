@@ -78,7 +78,7 @@ namespace GISBlox.Services.SDK
             if (epsg != null) request.Headers.Add("X-EPSG", epsg);
             SetRequestHeaderValues(request, customHeaders);
 
-            var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
             responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -87,7 +87,7 @@ namespace GISBlox.Services.SDK
                cache.Set(cacheKey, responseContent);
             }
          }
-         return JsonSerializer.Deserialize<T>(responseContent);
+         return JsonSerializer.Deserialize<T>(responseContent, JsonSerializerOptions);
       }
 
       /// <summary>
@@ -110,7 +110,7 @@ namespace GISBlox.Services.SDK
          SetRequestHeaderValues(request, customHeaders);
 
          request.Content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
       }
@@ -136,19 +136,19 @@ namespace GISBlox.Services.SDK
          SetRequestHeaderValues(request, customHeaders);
 
          request.Content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
          var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent);
+         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
       }
 
       /// <summary>
       /// Sends a DELETE request to the specified URI.
       /// </summary>
       /// <param name="httpClient">The HTTP client to use for the request.</param>
-      /// <param name="requestUri">The URI of the resource to delete.</param>        
+      /// <param name="requestUri">The URI of the resource to delete.</param> 
       /// <param name="customHeaders">Any custom headers to include in the request.</param>
       /// <param name="cancellationToken">The cancellation token to use for the request.</param>
       /// <returns>A task representing the asynchronous delete operation.</returns>
@@ -159,7 +159,7 @@ namespace GISBlox.Services.SDK
 
          SetRequestHeaderValues(request, customHeaders);
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
       }
@@ -169,7 +169,7 @@ namespace GISBlox.Services.SDK
       /// </summary>
       /// <typeparam name="TResult">The type of the response content.</typeparam>
       /// <param name="httpClient">The HTTP client to use for the request.</param>
-      /// <param name="requestUri">The URI of the resource to delete.</param>        
+      /// <param name="requestUri">The URI of the resource to delete.</param> 
       /// <param name="customHeaders">Any custom headers to include in the request.</param>
       /// <param name="cancellationToken">The cancellation token to use for the request.</param>
       /// <returns>The deserialized response content.</returns>
@@ -180,12 +180,12 @@ namespace GISBlox.Services.SDK
 
          SetRequestHeaderValues(request, customHeaders);
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
          var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent);
+         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
       }
 
       /// <summary>
@@ -208,7 +208,7 @@ namespace GISBlox.Services.SDK
          var content = new StringContent(jsonContent ?? string.Empty, Encoding.UTF8, "application/json");
          request.Content = content;
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
       }
@@ -234,12 +234,12 @@ namespace GISBlox.Services.SDK
          var content = new StringContent(jsonContent ?? string.Empty, Encoding.UTF8, "application/json");
          request.Content = content;
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
          var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent);
+         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
       }
 
       /// <summary>
@@ -258,17 +258,27 @@ namespace GISBlox.Services.SDK
       {
          ArgumentNullException.ThrowIfNull(streamContent);
 
-         byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
-
          using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
          SetRequestHeaderValues(request, customHeaders);
 
-         // Use ByteArrayContent which doesn't depend on the original stream
-         var content = new ByteArrayContent(contentBytes);
+         HttpContent content;
+         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
+         {
+            // Respect current position; send remaining bytes only
+            int remaining = (int)(ms.Length - ms.Position);
+            int start = buffer.Offset + (int)ms.Position;
+            content = new ByteArrayContent(buffer.Array, start, remaining);
+         }
+         else
+         {
+            // Fallback: copy the stream content into a byte[]
+            byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
+            content = new ByteArrayContent(contentBytes);
+         }
          content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
          request.Content = content;
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
       }
@@ -290,22 +300,32 @@ namespace GISBlox.Services.SDK
       {
          ArgumentNullException.ThrowIfNull(streamContent);
 
-         byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
-
          using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
          SetRequestHeaderValues(request, customHeaders);
 
-         // Use ByteArrayContent which doesn't depend on the original stream
-         var content = new ByteArrayContent(contentBytes);
+         HttpContent content;
+         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
+         {
+            // Respect current position; send remaining bytes only
+            int remaining = (int)(ms.Length - ms.Position);
+            int start = buffer.Offset + (int)ms.Position;
+            content = new ByteArrayContent(buffer.Array, start, remaining);
+         }
+         else
+         {
+            // Fallback: copy the stream content into a byte[]
+            byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
+            content = new ByteArrayContent(contentBytes);
+         }
          content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
          request.Content = content;
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
          var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent);
+         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
       }
 
       /// <summary>
@@ -334,7 +354,7 @@ namespace GISBlox.Services.SDK
 
          SetRequestHeaderValues(request, customHeaders);
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
          try
          {
@@ -362,7 +382,7 @@ namespace GISBlox.Services.SDK
       /// <param name="filePath">The path where the file should be saved.</param>
       /// <param name="contentType">The media type to accept (e.g., application/json, application/octet-stream). Defaults to application/json.</param>
       /// <param name="customHeaders">Any custom headers to include in the request.</param>
-      /// <param name="cancellationToken">The cancellation token to use for the request.</param>      
+      /// <param name="cancellationToken">The cancellation token to use for the request.</param> 
       /// <exception cref="ClientApiException"></exception>
       protected static async Task DownloadFileToDisk(HttpClient httpClient, string requestUri, string filePath, string contentType = "application/json", Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
@@ -374,7 +394,7 @@ namespace GISBlox.Services.SDK
 
          SetRequestHeaderValues(request, customHeaders);
 
-         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+         using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
          try
          {
@@ -409,19 +429,27 @@ namespace GISBlox.Services.SDK
       {
          // Read the entire stream into a byte array to ensure we have the full content
          // regardless of what happens to the original stream after this method returns
-         byte[] contentBytes;
-         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer))
+         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
          {
-            // Optimization for memory streams - avoid extra copy if possible
-            contentBytes = [.. buffer];
+            // Respect current position; copy only the remaining bytes
+            int remaining = (int)(ms.Length - ms.Position);
+
+            if (remaining == buffer.Count && ms.Position ==0 && buffer.Offset ==0)
+            {
+               // Common case: entire buffer contains the content - return a copy to avoid exposing internal buffer
+               var copy = new byte[buffer.Count];
+               Buffer.BlockCopy(buffer.Array, buffer.Offset, copy,0, buffer.Count);
+               return copy;
+            }
+
+            var result = new byte[remaining];
+            Buffer.BlockCopy(buffer.Array, buffer.Offset + (int)ms.Position, result,0, remaining);
+            return result;
          }
-         else
-         {
-            using var memoryStream = new MemoryStream();
-            await streamContent.CopyToAsync(memoryStream, cancellationToken);
-            contentBytes = memoryStream.ToArray();
-         }
-         return contentBytes;
+
+         using var memoryStream = new MemoryStream();
+         await streamContent.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+         return memoryStream.ToArray();
       }
 
       /// <summary>
@@ -434,11 +462,12 @@ namespace GISBlox.Services.SDK
          if (headers == null) return;
          foreach (var kvp in headers)
          {
-            if (request.Headers.Contains(kvp.Key))
+            // Use TryAddWithoutValidation to avoid format exceptions and extra remove/add overhead
+            if (!request.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value))
             {
-               request.Headers.Remove(kvp.Key);
+               // If it cannot be added to request headers, and content exists, try content headers
+               request.Content?.Headers.TryAddWithoutValidation(kvp.Key, kvp.Value);
             }
-            request.Headers.Add(kvp.Key, kvp.Value);
          }
       }
 

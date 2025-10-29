@@ -143,7 +143,7 @@
          Assert.IsTrue(result);
 
          // Wait to avoid exceeding API call quota
-         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+         await Task.Delay(1000, CancellationToken.None);
 
          // Verify we can download the same file content
          var downloadedContent = await _client.DataLake.DownloadFileData(fileName, CancellationToken.None);

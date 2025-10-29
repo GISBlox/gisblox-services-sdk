@@ -74,7 +74,7 @@
             Sends a DELETE request to the specified URI.
             </summary>
             <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param>        
+            <param name="requestUri">The URI of the resource to delete.</param> 
             <param name="customHeaders">Any custom headers to include in the request.</param>
             <param name="cancellationToken">The cancellation token to use for the request.</param>
             <returns>A task representing the asynchronous delete operation.</returns>
@@ -86,7 +86,7 @@
             </summary>
             <typeparam name="TResult">The type of the response content.</typeparam>
             <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param>        
+            <param name="requestUri">The URI of the resource to delete.</param> 
             <param name="customHeaders">Any custom headers to include in the request.</param>
             <param name="cancellationToken">The cancellation token to use for the request.</param>
             <returns>The deserialized response content.</returns>
@@ -168,7 +168,7 @@
             <param name="filePath">The path where the file should be saved.</param>
             <param name="contentType">The media type to accept (e.g., application/json, application/octet-stream). Defaults to application/json.</param>
             <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>      
+            <param name="cancellationToken">The cancellation token to use for the request.</param> 
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.ReadStreamBytes(System.IO.Stream,System.Threading.CancellationToken)">
