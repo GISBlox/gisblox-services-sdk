@@ -7,13 +7,18 @@ using System.Collections.Generic;
 namespace GISBlox.Services.SDK.Models
 {
     /// <summary>
-    /// Represents a collection of customer file names.
+    /// Represents a collection of customer files.
     /// </summary>
     public class CustomerFiles
     {
-        /// <summary>
-        /// A list of file names.
-        /// </summary>
-        public List<string> Files { get; set; }
+      /// <summary>
+      /// The customer folder ID.
+      /// </summary>      
+      public string FolderId { get; set; }
+
+      /// <summary>
+      /// A list of data lake files.
+      /// </summary>
+      public List<DataLakeFile> Files { get; set; }
     }
 }

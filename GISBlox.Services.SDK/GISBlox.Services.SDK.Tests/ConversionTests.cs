@@ -29,21 +29,95 @@ namespace GISBlox.Services.SDK.Tests
 
       #endregion
 
-      #region WKT/WKB -> GeoJson
+      #region WKT -> GeoJson
 
       [TestMethod]
-      public async Task ConvertPoint()
+      public async Task FromWkt_ConvertPoint()
       {
          WKT wkt = new("POINT (30 10 5)");
          string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
+      }      
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPoint()
+      {
+         WKT wkt = new("MULTIPOINT ((10 40), (40 30 2), (20 20), (30 10))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
+      }     
+
+      [TestMethod]
+      public async Task FromWkt_ConvertLineString()
+      {
+         WKT wkt = new("LINESTRING (30 10, 10 30, 40 40)");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
+      }     
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiLineString()
+      {
+         WKT wkt = new("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
+      }     
+
+      [TestMethod]
+      public async Task FromWkt_ConvertPolygon()
+      {
+         WKT wkt = new("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
       }
 
       [TestMethod]
-      public async Task ConvertPoint_WKB()
-      { 
+      public async Task FromWkt_ConvertPolygonWithInnerRing()
+      {
+         WKT wkt = new("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }      
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPolygon()
+      {
+         WKT wkt = new("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+      }    
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPolygonWithInnerRing()
+      {
+         WKT wkt = new("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))");
+         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+      }
+
+      #endregion
+
+      #region WKB -> GeoJson
+
+      [TestMethod]
+      public async Task FromWkb_ConvertPoint()
+      {
          WKB wkb = new(WKB_POINT_30_10_5_BYTES);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
 
@@ -52,17 +126,7 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       [TestMethod]
-      public async Task ConvertMultiPoint()
-      {
-         WKT wkt = new("MULTIPOINT ((10 40), (40 30 2), (20 20), (30 10))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertMultiPoint_WKB()
+      public async Task FromWkb_ConvertMultiPoint()
       {
          byte[] multiPoint = [1, 4, 0, 0, 0, 4, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
          WKB wkb = new(multiPoint);
@@ -74,17 +138,7 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       [TestMethod]
-      public async Task ConvertLineString()
-      {
-         WKT wkt = new("LINESTRING (30 10, 10 30, 40 40)");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertLineString_WKB()
+      public async Task FromWkb_ConvertLineString()
       {
          byte[] lineString = [1, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 240, 63];
          WKB wkb = new(lineString);
@@ -96,17 +150,7 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       [TestMethod]
-      public async Task ConvertMultiLineString()
-      {
-         WKT wkt = new("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertMultiLineString_WKB()
+      public async Task FromWkb_ConvertMultiLineString()
       {
          byte[] multiLineString = [1, 5, 0, 0, 0, 2, 0, 0, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 2, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
          WKB wkb = new(multiLineString);
@@ -118,17 +162,7 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       [TestMethod]
-      public async Task ConvertPolygon()
-      {
-         WKT wkt = new("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertPolygon_WKB()
+      public async Task FromWkb_ConvertPolygon()
       {
          byte[] polygon = [1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
          WKB wkb = new(polygon);
@@ -140,29 +174,9 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       [TestMethod]
-      public async Task ConvertPolygonWithInnerRing()
+      public async Task FromWkb_ConvertMultiPolygon()
       {
-         WKT wkt = new("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
-      }      
-
-      [TestMethod]
-      public async Task ConvertMultiPolygon()
-      {
-         WKT wkt = new("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertMultiPolygon_WKB()
-      {
-         byte[] multiPolygon = [1, 6, 0, 0, 0, 2, 0, 0, 0, 1, 3, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 128, 70, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64];         
+         byte[] multiPolygon = [1, 6, 0, 0, 0, 2, 0, 0, 0, 1, 3, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 128, 70, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64];
          Dictionary<string, object> props = new()
          {
             { "id", 1 },
@@ -171,16 +185,6 @@ namespace GISBlox.Services.SDK.Tests
 
          WKB wkb = new(multiPolygon, [props]);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
-
-         Assert.IsNotNull(geoJson, "Response is empty.");
-         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
-      }
-
-      [TestMethod]
-      public async Task ConvertMultiPolygonWithInnerRing()
-      {
-         WKT wkt = new("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))");
-         string geoJson = await ConvertToGeoJsonFromWKT(wkt);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");

@@ -725,12 +725,17 @@
         </member>
         <member name="T:GISBlox.Services.SDK.Models.CustomerFiles">
             <summary>
-            Represents a collection of customer file names.
+            Represents a collection of customer files.
             </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerFiles.FolderId">
+            <summary>
+            The customer folder ID.
+            </summary>      
         </member>
         <member name="P:GISBlox.Services.SDK.Models.CustomerFiles.Files">
             <summary>
-            A list of file names.
+            A list of data lake files.
             </summary>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.CustomerFolder">
@@ -741,6 +746,36 @@
         <member name="P:GISBlox.Services.SDK.Models.CustomerFolder.FolderId">
             <summary>
             The customer folder ID.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.DataLakeFile">
+            <summary>
+            Represents a file in the data lake.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.DataLakeFile.CreateDate">
+            <summary>
+            The creation date of the file.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.DataLakeFile.ModifiedDate">
+            <summary>
+            The last modified date of the file.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.DataLakeFile.Size">
+            <summary>
+            The size of the file in bytes.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.DataLakeFile.ContentType">
+            <summary>
+            The content type of the file.
+            </summary> 
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.DataLakeFile.Name">
+            <summary>
+            The name of the file.
             </summary>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Coordinate">

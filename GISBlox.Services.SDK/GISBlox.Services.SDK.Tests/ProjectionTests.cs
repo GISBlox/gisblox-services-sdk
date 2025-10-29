@@ -33,7 +33,7 @@
       public async Task ReprojectToRDS()
       {
          Coordinate coord = new(51.998929, 4.375587);
-         RDPoint rdPoint = await _client.Projection.ToRDS(coord);
+         RDPoint rdPoint = await _client.Projection.ToRDS(coord, CancellationToken.None);
 
          Assert.IsNotNull(rdPoint, "Response is empty.");
          Assert.IsTrue(rdPoint.X == 85530 && rdPoint.Y == 446100);
@@ -43,12 +43,12 @@
       public async Task ReprojectToRDSComplete()
       {
          Coordinate coord = new(51.998929, 4.375587);
-         Location location = await _client.Projection.ToRDSComplete(coord);
+         Location location = await _client.Projection.ToRDSComplete(coord, CancellationToken.None);
 
          Assert.IsNotNull(location, "Response is empty.");
          Assert.IsTrue(location.X == 85530 && location.Y == 446100 && location.Lat == 51.998929 && location.Lon == 4.375587);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
@@ -60,14 +60,14 @@
             new Coordinate(53.1, 4.2),
             new Coordinate(53.11, 4.3)
          ];
-         List<RDPoint> rdPoints = await _client.Projection.ToRDS(coords);
+         List<RDPoint> rdPoints = await _client.Projection.ToRDS(coords, CancellationToken.None);
 
          Assert.IsNotNull(rdPoints.Count != 0, "Response is empty.");
          Assert.IsTrue(rdPoints[0].X == 85530 && rdPoints[0].Y == 446100);
          Assert.IsTrue(rdPoints[1].X == 75483 && rdPoints[1].Y == 568787);
          Assert.IsTrue(rdPoints[2].X == 82197 && rdPoints[2].Y == 569794);
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -79,14 +79,14 @@
             new Coordinate(53.1, 4.2),
             new Coordinate(53.11, 4.3)
          ];
-         List<Location> loc = await _client.Projection.ToRDSComplete(coords);
+         List<Location> loc = await _client.Projection.ToRDSComplete(coords, CancellationToken.None);
 
          Assert.IsNotNull(loc.Count != 0, "Response is empty.");
          Assert.IsTrue(loc[0].X == 85530 && loc[0].Y == 446100 && loc[0].Lat == 51.998929 && loc[0].Lon == 4.375587);
          Assert.IsTrue(loc[1].X == 75483 && loc[1].Y == 568787 && loc[1].Lat == 53.1 && loc[1].Lon == 4.2);
          Assert.IsTrue(loc[2].X == 82197 && loc[2].Y == 569794 && loc[2].Lat == 53.11 && loc[2].Lon == 4.3);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       #endregion
@@ -97,7 +97,7 @@
       public async Task ReprojectToWGS84()
       {
          RDPoint rdPoint = new(85530, 446100);
-         Coordinate coord = await _client.Projection.ToWGS84(rdPoint, 6);        // Round the coordinate to 6 digits
+         Coordinate coord = await _client.Projection.ToWGS84(rdPoint, 6, CancellationToken.None);        // Round the coordinate to 6 digits
 
          Assert.IsNotNull(coord, "Response is empty.");
          Assert.IsTrue(coord.Lat == 51.998927 && coord.Lon == 4.375584);
@@ -107,12 +107,12 @@
       public async Task ReprojectToWGS84Complete()
       {
          RDPoint rdPoint = new(85530, 446100);
-         Location location = await _client.Projection.ToWGS84Complete(rdPoint);  // No rounding
+         Location location = await _client.Projection.ToWGS84Complete(rdPoint, -1, CancellationToken.None);  // No rounding
 
          Assert.IsNotNull(location, "Response is empty.");
          Assert.IsTrue(location.Lat == 51.998927449317591 && location.Lon == 4.3755841993518345 && location.X == 85530 && location.Y == 446100);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
@@ -124,14 +124,14 @@
             new RDPoint(1, 2),
             new RDPoint(111000, 550000)
          ];
-         List<Coordinate> coords = await _client.Projection.ToWGS84(rdPoints);   // No rounding
+         List<Coordinate> coords = await _client.Projection.ToWGS84(rdPoints, -1, CancellationToken.None);   // No rounding
 
          Assert.IsNotNull(coords.Count != 0, "Response is empty.");
          Assert.IsTrue(coords[0].Lat == 52.9791861737104 && coords[0].Lon == 4.56833613045079);
          Assert.IsTrue(coords[1].Lat == 0 && coords[1].Lon == 0);
          Assert.IsTrue(coords[2].Lat == 52.93526683092437 && coords[2].Lon == 4.7327735938900535);
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -143,7 +143,7 @@
             new RDPoint(1, 2),
             new RDPoint(111000, 550000)
          ];
-         List<Location> coords = await _client.Projection.ToWGS84Complete(rdPoints, 5);   // Round the coordinates to 5 digits
+         List<Location> coords = await _client.Projection.ToWGS84Complete(rdPoints, 5, CancellationToken.None);   // Round the coordinates to 5 digits
 
          Assert.IsNotNull(coords.Count != 0, "Response is empty.");
          Assert.IsTrue(coords[0].Lat == 52.97919 && coords[0].Lon == 4.56834 && coords[0].X == 100000 && coords[0].Y == 555000);
