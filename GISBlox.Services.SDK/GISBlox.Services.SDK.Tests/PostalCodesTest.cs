@@ -33,33 +33,33 @@
       public async Task GetPostalCode4Record()
       {
          string id = "3811";
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
          
          PostalCode4 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
-         
-         await Task.Delay(API_QUOTA_DELAY);
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
       public async Task GetPostalCode4RecordCached()
       {
          string id = "3811";
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
 
          PostalCode4 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
 
-         PostalCode4Record recordCached = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id);
+         PostalCode4Record recordCached = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id, CoordinateSystem.RDNew, CancellationToken.None);
          
          Assert.IsNotNull(recordCached, "Response is empty.");
-         Assert.IsTrue(record.MetaData.Query == recordCached.MetaData.Query);
+         Assert.AreEqual(recordCached.MetaData.Query, record.MetaData.Query);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
@@ -67,15 +67,15 @@
       {
          string id = "3811";
          bool includeSource = false;
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 6);
+         Assert.HasCount(6, record.PostalCode);
 
          List<string> expectedIDs = ["3817", "3814", "3816", "3813", "3812", "3818"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -83,30 +83,30 @@
       {
          string id = "3811";
          bool includeSource = true;
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 7);
+         Assert.HasCount(7, record.PostalCode);
 
          List<string> expectedIDs = ["3811", "3817", "3814", "3816", "3813", "3812", "3818"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
       public async Task GetPostalCode4ByGeometry()
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, 0, CoordinateSystem.RDNew, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 3);
+         Assert.HasCount(3, record.PostalCode);
 
          List<string> expectedIDs = ["1791", "1796", "1797"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -114,15 +114,15 @@
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
          int buffer = 5000;    // meters, since CS of WKT is 28992.
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 5);
+         Assert.HasCount(5, record.PostalCode);
 
          List<string> expectedIDs = ["1791", "1793", "1795", "1796", "1797"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         
-         await Task.Delay(API_QUOTA_DELAY * 2);
+
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -130,16 +130,16 @@
       {
          string wkt = "POINT(121843 487293)";
          int buffer = 200;   // meters, since CS of WKT is 28992.
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 2);
+         Assert.HasCount(2, record.PostalCode);
 
          List<string> expectedIDs = ["1011", "1012"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.905333126288754 52.371542282338666)");
+         Assert.AreEqual("POINT (4.905333126288753 52.37154228233867)", record.PostalCode[1].Location.Geometry.Centroid);
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -153,28 +153,28 @@
                  
          string expectedPostalCode = "2809";
 
-         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode4Record>(gemeenteId, wijkId);
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode4Record>(gemeenteId, wijkId, -1, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
         
          PostalCode4 pc = record.PostalCode[0];
-         Assert.IsTrue(pc.Id == expectedPostalCode);
-         Assert.IsTrue(pc.Location.Gemeente == expectedGemeente);
-         Assert.IsTrue(pc.Location.Wijken == expectedWijk);
+         Assert.AreEqual(expectedPostalCode, pc.Id);
+         Assert.AreEqual(expectedGemeente, pc.Location.Gemeente);
+         Assert.AreEqual(expectedWijk, pc.Location.Wijken);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
       public async Task GetKeyFigures4()
       {
          string id = "3811";
-         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id);
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.MetaData.TotalAttributes == 37);
+         Assert.AreEqual(37, record.MetaData.TotalAttributes);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       #endregion
@@ -185,14 +185,14 @@
       public async Task GetPostalCode6Record()
       {
          string id = "3811CJ";
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode6Record>(id);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode6Record>(id, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
 
          PostalCode6 pc = record.PostalCode[0];
          Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155155.51254284632 463159.828901163)");
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
@@ -200,15 +200,15 @@
       {
          string id = "3069BS";
          bool includeSource = false;
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 7);
+         Assert.HasCount(7, record.PostalCode);
 
          List<string> expectedIDs = ["3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -216,30 +216,30 @@
       {
          string id = "3069BS";
          bool includeSource = true;
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 8);
+         Assert.HasCount(8, record.PostalCode);
 
          List<string> expectedIDs = ["3069BS", "3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
       public async Task GetPostalCode6ByGeometry()
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, 0, CoordinateSystem.RDNew, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 3);
+         Assert.HasCount(3, record.PostalCode);
 
          List<string> expectedIDs = ["1791PB", "1796AZ", "1797RT"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -247,15 +247,15 @@
       {
          string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
          int buffer = 750;    // meters, since CS of WKT is 28992.
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.RDNew, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 6);
+         Assert.HasCount(6, record.PostalCode);
 
          List<string> expectedIDs = ["1791PB", "1796AZ", "1797RT", "1791NT", "1796MV", "1791PE"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -263,16 +263,16 @@
       {
          string wkt = "POINT(121843 487293)";
          int buffer = 50;   // meters, since CS of WKT is 28992.
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.PostalCode.Count == 12);
+         Assert.HasCount(12, record.PostalCode);
 
          List<string> expectedIDs = ["1011MA", "1011JV", "1011JT", "1011JS", "1011JR", "1011JP", "1011HB", "1011ME", "1011GD", "1012CR", "1012CS", "1012CW"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.IsTrue(record.PostalCode[1].Location.Geometry.Centroid == "POINT (4.899542319809452 52.37146607902681)");
+         Assert.AreEqual("POINT (4.899542319809449 52.37146607902682)", record.PostalCode[1].Location.Geometry.Centroid);
 
-         await Task.Delay(API_QUOTA_DELAY * 2);
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
 
       [TestMethod]
@@ -289,29 +289,29 @@
 
          string expectedPostalCode = "2809RA";
 
-         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode6Record>(gemeenteId, wijkId, buurtId, CoordinateSystem.WGS84);
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode6Record>(gemeenteId, wijkId, buurtId, CoordinateSystem.WGS84, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
 
          PostalCode6 pc = record.PostalCode[0];
-         Assert.IsTrue(pc.Id == expectedPostalCode);
-         Assert.IsTrue(pc.Location.Gemeente == expectedGemeente);
-         Assert.IsTrue(pc.Location.Wijk == expectedWijk);
-         Assert.IsTrue(pc.Location.Buurt == expectedBuurt);
+         Assert.AreEqual(expectedPostalCode, pc.Id);
+         Assert.AreEqual(expectedGemeente, pc.Location.Gemeente);
+         Assert.AreEqual(expectedWijk, pc.Location.Wijk);
+         Assert.AreEqual(expectedBuurt, pc.Location.Buurt);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
       public async Task GetKeyFigures6()
       {
          string id = "3811BB";
-         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id);
+         KerncijferRecord record = await _client.PostalCodes.GetKeyFigures(id, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
-         Assert.IsTrue(record.MetaData.TotalAttributes == 35);
+         Assert.AreEqual(35, record.MetaData.TotalAttributes);
 
-         await Task.Delay(API_QUOTA_DELAY);
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       #endregion     
