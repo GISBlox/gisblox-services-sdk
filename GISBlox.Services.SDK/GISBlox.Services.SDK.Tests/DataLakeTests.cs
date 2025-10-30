@@ -5,8 +5,7 @@
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
-      const int API_QUOTA_DELAY = 1000;  // Allows to run all tests together without exceeding API call quota
-
+      
       const string TEST_GEOJSON_POINT = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
 
       #region Initialization and cleanup
@@ -51,7 +50,7 @@
          Console.WriteLine($"Displaying the first 25 files in folder '{files.FolderId}':");
          files.Files.Take(25).ToList().ForEach(f => Console.WriteLine($"- {f.Name} - {f.Size} bytes - last modified: {f.ModifiedDate}"));
       }
-     
+
       [TestMethod]
       public async Task UploadFile()
       {
@@ -116,10 +115,22 @@
          string fileName = "test_upload.json";
          string localPath = Path.Combine(Path.GetTempPath(), fileName);
 
-         var localFilePath = await _client.DataLake.DownloadFile(fileName, localPath, CancellationToken.None);
+         bool success = await _client.DataLake.DownloadFile(fileName, localPath, CancellationToken.None);
 
-         Assert.IsNotNull(localFilePath);
-         Assert.IsTrue(File.Exists(localFilePath));
+         Assert.IsTrue(success);
+         Assert.IsTrue(File.Exists(localPath));
+      }
+
+      [TestMethod]
+      public async Task ExportFileAsGeoParquet()
+      {
+         string fileName = "test_upload.json";
+         string localPath = Path.Combine(Path.GetTempPath(), "test.parquet");
+
+         bool success = await _client.DataLake.ExportFileAsGeoParquet(fileName, localPath, CancellationToken.None);
+         
+         Assert.IsTrue(success);
+         Assert.IsTrue(File.Exists(localPath));
       }
 
       [TestMethod]
@@ -132,7 +143,7 @@
          Assert.IsTrue(result);
 
          // Wait to avoid exceeding API call quota
-         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+         await Task.Delay(1000, CancellationToken.None);
 
          // Verify we can download the same file content
          var downloadedContent = await _client.DataLake.DownloadFileData(fileName, CancellationToken.None);
@@ -144,7 +155,7 @@
          Assert.AreEqual("POINT Z (30 10 5)", contents.First().Geometry);
          Assert.AreEqual("Single Point", contents.First().Properties[0]["name"]?.ToString());
          Assert.AreEqual("23", contents.First().Properties[0]["zValue"]?.ToString());
-         
+
          // Clean up the test file
          await _client.DataLake.DeleteFile(fileName, CancellationToken.None);
       }
