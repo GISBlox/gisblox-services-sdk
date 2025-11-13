@@ -18,7 +18,7 @@ namespace GISBlox.Services.SDK.Tests
          string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
 
          // Create the service client object
-         _client = GISBloxClient.CreateClient(BASE_URL, serviceKey);
+         _client = GISBloxClient.CreateClient(BASE_URL, serviceKey, applicationName: "GISBlox.Services.SDK.Tests");
       }
 
       [TestCleanup]

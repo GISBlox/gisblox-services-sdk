@@ -22,13 +22,13 @@ namespace GISBlox.Services.SDK.Models
       public List<Dictionary<string, object>> Properties { get; set; }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
       /// </summary>
       public WKT()
       { }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
       /// </summary>
       /// <param name="geometry">A WKT geometry.</param>
       public WKT(string geometry)
@@ -37,7 +37,7 @@ namespace GISBlox.Services.SDK.Models
       }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
       /// </summary>
       /// <param name="geometry">A WKT geometry.</param>
       /// <param name="properties">A list of properties associated with the geometry.</param>

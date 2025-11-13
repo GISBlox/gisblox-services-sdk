@@ -15,7 +15,7 @@ namespace GISBlox.Services.SDK.DataLake
    /// This class contains methods to interact with the Data Lake API.
    /// </summary>
    /// <remarks>
-   /// Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+   /// Initializes a new instance of the GISBlox.Services.SDK.DataLake.DataLakeAPIClient class.
    /// </remarks>
    /// <param name="httpClient">The current instance of the HTTPClient class.</param>
    /// <param name="cache">The current instance of the MemoryCache class.</param>

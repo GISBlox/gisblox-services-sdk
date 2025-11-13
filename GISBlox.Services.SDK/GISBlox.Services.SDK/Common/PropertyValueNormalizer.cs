@@ -4,6 +4,7 @@
 
 using GISBlox.Services.SDK.Models;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
@@ -16,6 +17,29 @@ namespace GISBlox.Services.SDK.Common
    /// </summary>
    internal static class PropertyValueNormalizer
    {
+      // Frozen dictionary for fast type lookups - immutable and optimized for reads
+      private static readonly FrozenDictionary<string, Func<object, object>> TypeConverters = new Dictionary<string, Func<object, object>>(StringComparer.OrdinalIgnoreCase)
+      {
+         ["string"] = value => value?.ToString(),
+         ["int"] = value => value == null ? 0 : Convert.ToInt32(value, CultureInfo.InvariantCulture),
+         ["int32"] = value => value == null ? 0 : Convert.ToInt32(value, CultureInfo.InvariantCulture),
+         ["long"] = value => value == null ? 0L : Convert.ToInt64(value, CultureInfo.InvariantCulture),
+         ["int64"] = value => value == null ? 0L : Convert.ToInt64(value, CultureInfo.InvariantCulture),
+         ["double"] = value => value == null ? 0d : Convert.ToDouble(value, CultureInfo.InvariantCulture),
+         ["decimal"] = value => value == null ? 0m : Convert.ToDecimal(value, CultureInfo.InvariantCulture),
+         ["float"] = value => value == null ? 0f : Convert.ToSingle(value, CultureInfo.InvariantCulture),
+         ["single"] = value => value == null ? 0f : Convert.ToSingle(value, CultureInfo.InvariantCulture),
+         ["bool"] = value => value != null && Convert.ToBoolean(value, CultureInfo.InvariantCulture),
+         ["boolean"] = value => value != null && Convert.ToBoolean(value, CultureInfo.InvariantCulture),
+         ["datetime"] = ConvertDateTime,
+         ["date"] = ConvertDateTime,
+         ["guid"] = ConvertGuid,
+         ["byte[]"] = ConvertByteArray,
+         ["binary"] = ConvertByteArray,
+         ["bytes"] = ConvertByteArray,
+         ["null"] = _ => null
+      }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+
       /// <summary>
       /// Normalize properties for a list of WKT results.
       /// </summary>
@@ -68,12 +92,20 @@ namespace GISBlox.Services.SDK.Common
          if (value is Dictionary<string, object> nested)
          {
             // Try to find keys (case-insensitive): Value and ValueType
+            // Use modern .NET pattern for case-insensitive lookup
             string valueKey = null;
             string typeKey = null;
+            
             foreach (var k in nested.Keys)
             {
-               if (valueKey == null && string.Equals(k, "Value", StringComparison.OrdinalIgnoreCase)) valueKey = k;
-               if (typeKey == null && string.Equals(k, "ValueType", StringComparison.OrdinalIgnoreCase)) typeKey = k;
+               if (valueKey == null && k.Equals("Value", StringComparison.OrdinalIgnoreCase)) 
+                  valueKey = k;
+               if (typeKey == null && k.Equals("ValueType", StringComparison.OrdinalIgnoreCase)) 
+                  typeKey = k;
+               
+               // Early exit if both found
+               if (valueKey != null && typeKey != null) 
+                  break;
             }
 
             if (valueKey != null && typeKey != null)
@@ -147,54 +179,47 @@ namespace GISBlox.Services.SDK.Common
       private static object ConvertByValueType(object value, string valueType)
       {
          if (string.IsNullOrWhiteSpace(valueType)) return value;
-         var t = valueType.Trim();
-
-         // Normalize type token
-         t = t.Replace("System.", string.Empty, StringComparison.OrdinalIgnoreCase);
-
-         switch (t.ToLowerInvariant())
+         
+         // Normalize type token - remove "System." prefix
+         var normalizedType = valueType.AsSpan().Trim();
+         if (normalizedType.StartsWith("System.", StringComparison.OrdinalIgnoreCase))
          {
-            case "string":
-               return value?.ToString();
-            case "int":
-            case "int32":
-               return value == null ? 0 : Convert.ToInt32(value, CultureInfo.InvariantCulture);
-            case "long":
-            case "int64":
-               return value == null ? 0L : Convert.ToInt64(value, CultureInfo.InvariantCulture);
-            case "double":
-               return value == null ? 0d : Convert.ToDouble(value, CultureInfo.InvariantCulture);
-            case "decimal":
-               return value == null ? 0m : Convert.ToDecimal(value, CultureInfo.InvariantCulture);
-            case "float":
-            case "single":
-               return value == null ? 0f : Convert.ToSingle(value, CultureInfo.InvariantCulture);
-            case "bool":
-            case "boolean":
-               return value != null && Convert.ToBoolean(value, CultureInfo.InvariantCulture);
-            case "datetime":
-            case "date":
-               if (value is DateTime dt) return dt;
-               if (value is long ticks) return new DateTime(ticks);
-               if (DateTime.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var parsed))
-                  return parsed;
-               return value;
-            case "guid":
-               if (value is Guid g) return g;
-               if (Guid.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), out var guid))
-                  return guid;
-               return value;
-            case "byte[]":
-            case "binary":
-            case "bytes":
-               if (value is byte[] b) return b;
-               var s = Convert.ToString(value, CultureInfo.InvariantCulture);
-               try { return Convert.FromBase64String(s); } catch { return value; }
-            case "null":
-               return null;
-            default:
-               return value;
+            normalizedType = normalizedType.Slice(7); // "System.".Length
          }
+
+         // Use frozen dictionary for fast lookup
+         if (TypeConverters.TryGetValue(normalizedType.ToString(), out var converter))
+         {
+            return converter(value);
+         }
+
+         return value;
+      }
+
+      private static object ConvertDateTime(object value)
+      {
+         if (value is DateTime dt) return dt;
+         if (value is long ticks) return new DateTime(ticks);
+         if (DateTime.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), 
+             CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var parsed))
+            return parsed;
+         return value;
+      }
+
+      private static object ConvertGuid(object value)
+      {
+         if (value is Guid g) return g;
+         if (Guid.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), out var guid))
+            return guid;
+         return value;
+      }
+
+      private static object ConvertByteArray(object value)
+      {
+         if (value is byte[] b) return b;
+         var s = Convert.ToString(value, CultureInfo.InvariantCulture);
+         try { return Convert.FromBase64String(s); } 
+         catch { return value; }
       }
    }
 }
