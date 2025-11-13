@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Authors>Bartels Online</Authors>
     <Description>Client library for connecting to the GISBlox Services REST API.</Description>
     <Copyright>© Bartels Online. All rights reserved.</Copyright>
