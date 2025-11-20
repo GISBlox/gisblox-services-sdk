@@ -12,7 +12,7 @@
          string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
 
          // Create the service client object
-         using (var client = GISBloxClient.CreateClient(BASE_URL, serviceKey))
+         using (var client = GISBloxClient.CreateClient(BASE_URL, serviceKey, applicationName: "GISBlox.Services.SDK.Tests"))
          {
             List<Subscription> subscriptions = await client.Info.GetSubscriptions(CancellationToken.None);
             subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: {sub.Name} \r\nDescription: {sub.Description} \r\nRegistration date: {sub.RegisterDate} Expiration date: {sub.ExpirationDate} Expired: {sub.Expired}"));
@@ -28,13 +28,13 @@
          string serviceKey = Environment.GetEnvironmentVariable("ServiceKey");
 
          // Create the service client object
-         using (var client = GISBloxClient.CreateClient(BASE_URL, serviceKey))
+         using (var client = GISBloxClient.CreateClient(BASE_URL, serviceKey, applicationName: "GISBlox.Services.SDK.Tests"))
          {
             List<Subscription> subscriptions = await client.Info.GetSubscriptions(CancellationToken.None);
             subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: {sub.Name} \r\nDescription: {sub.Description} \r\nRegistration date: {sub.RegisterDate} Expiration date: {sub.ExpirationDate} Expired: {sub.Expired}"));
 
             List<Subscription> subscriptionsCached = await client.Info.GetSubscriptions(CancellationToken.None);
-            Assert.AreEqual(subscriptions.Count, subscriptionsCached.Count);
+            Assert.HasCount(subscriptions.Count, subscriptionsCached);
 
             Assert.AreNotEqual(0, subscriptions.Count);
          }

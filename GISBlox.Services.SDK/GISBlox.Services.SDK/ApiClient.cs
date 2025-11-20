@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -30,7 +31,13 @@ namespace GISBlox.Services.SDK
       /// </summary>
       protected readonly IMemoryCache Cache;
 
-      private static readonly JsonSerializerOptions JsonSerializerOptions = new() { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never };
+      /// <summary>
+      /// Provides the default options used for JSON serialization and deserialization with web defaults.
+      /// </summary>
+      private static readonly JsonSerializerOptions JsonSerializerOptions = new(JsonSerializerDefaults.Web)
+      {
+         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
+      };
 
       /// <summary>
       /// Initializes a new instance of the <see cref="ApiClient"/> class.
@@ -71,7 +78,7 @@ namespace GISBlox.Services.SDK
       {
          string cacheKey = epsg != null ? $"{requestUri}::epsg={epsg}" : requestUri;
 
-         if (!cache.TryGetValue(cacheKey, out string responseContent))
+         if (!cache.TryGetValue(cacheKey, out T cachedResult))
          {
             using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
@@ -81,13 +88,13 @@ namespace GISBlox.Services.SDK
             using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
-            responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(responseContent))
+            cachedResult = await response.Content.ReadFromJsonAsync<T>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+            if (cachedResult is not null)
             {
-               cache.Set(cacheKey, responseContent);
+               cache.Set(cacheKey, cachedResult);
             }
          }
-         return JsonSerializer.Deserialize<T>(responseContent, JsonSerializerOptions);
+         return cachedResult;
       }
 
       /// <summary>
@@ -109,7 +116,7 @@ namespace GISBlox.Services.SDK
          if (epsg != null) request.Headers.Add("X-EPSG", epsg);
          SetRequestHeaderValues(request, customHeaders);
 
-         request.Content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
+         request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -135,13 +142,12 @@ namespace GISBlox.Services.SDK
          if (epsg != null) request.Headers.Add("X-EPSG", epsg);
          SetRequestHeaderValues(request, customHeaders);
 
-         request.Content = new StringContent(JsonSerializer.Serialize(body, JsonSerializerOptions), Encoding.UTF8, "application/json");
+         request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
+         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
       /// <summary>
@@ -184,8 +190,7 @@ namespace GISBlox.Services.SDK
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
+         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
       /// <summary>
@@ -238,8 +243,7 @@ namespace GISBlox.Services.SDK
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
+         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
       /// <summary>
@@ -324,8 +328,7 @@ namespace GISBlox.Services.SDK
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-         return JsonSerializer.Deserialize<TResult>(responseContent, JsonSerializerOptions);
+         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
       /// <summary>

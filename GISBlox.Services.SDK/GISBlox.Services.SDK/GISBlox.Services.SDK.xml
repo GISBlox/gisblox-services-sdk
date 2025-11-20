@@ -19,6 +19,11 @@
             The memory cache used for caching responses.
             </summary>
         </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.JsonSerializerOptions">
+            <summary>
+            Provides the default options used for JSON serialization and deserialization with web defaults.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.ApiClient"/> class.
@@ -389,7 +394,7 @@
             This class contains methods to interact with the Data Lake API.
             </summary>
             <remarks>
-            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            Initializes a new instance of the GISBlox.Services.SDK.DataLake.DataLakeAPIClient class.
             </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
@@ -399,7 +404,7 @@
             This class contains methods to interact with the Data Lake API.
             </summary>
             <remarks>
-            Initializes a new instance of the GISBlox.Services.SDK.PostalCodes.AreaCodeHelper class.
+            Initializes a new instance of the GISBlox.Services.SDK.DataLake.DataLakeAPIClient class.
             </remarks>
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
@@ -555,24 +560,26 @@
         </member>
         <member name="T:GISBlox.Services.SDK.GISBloxClient">
             <summary>
-            The main entry point for every available GISBlox Location Service method.
+            The main entry point for every available GISBlox Location Services method.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.GISBloxClient.#ctor(System.String,System.String,System.Int64)">
+        <member name="M:GISBlox.Services.SDK.GISBloxClient.#ctor(System.String,System.String,System.Int64,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.GISBloxClient"/> class.
             </summary>
             <param name="baseUrl">The base URL of the services API, i.e. https://services.gisblox.com</param>
             <param name="serviceKey">The service key.</param>
             <param name="timeoutSeconds">The timeout in seconds for the http requests.</param>
+            <param name="applicationName">Optional name (tag) of the calling application.</param>
         </member>
-        <member name="M:GISBlox.Services.SDK.GISBloxClient.CreateClient(System.String,System.String,System.Int64)">
+        <member name="M:GISBlox.Services.SDK.GISBloxClient.CreateClient(System.String,System.String,System.Int64,System.String)">
             <summary>
             Create the client object with specified base URL, service key and timeout.
             </summary>
             <param name="baseUrl">Base URL for the GISBlox Services resource, i.e. https://services.gisblox.com</param>
             <param name="serviceKey">The service key.</param>
             <param name="timeoutSeconds">Web request time out in seconds</param>
+            <param name="applicationName">Optional name (tag) of the calling application.</param>
             <returns></returns>
         </member>
         <member name="P:GISBlox.Services.SDK.GISBloxClient.PostalCodes">
@@ -696,18 +703,18 @@
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKB class.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKB class.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor(System.Byte[])">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKB class with the specified geometry.
             </summary>
             <param name="geometry">The WKB geometry.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKB.#ctor(System.Byte[],System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}})">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry and properties.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKB class with the specified geometry and properties.
             </summary>
             <param name="geometry">The WKB geometry.</param>
             <param name="properties">The properties associated with the WKB geometry.</param>
@@ -729,18 +736,18 @@
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
             </summary>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String)">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
             </summary>
             <param name="geometry">A WKT geometry.</param>
         </member>
         <member name="M:GISBlox.Services.SDK.Models.WKT.#ctor(System.String,System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}})">
             <summary>
-            Initializes a new instance of GISBlox.Models.Conversion.WKT class.
+            Initializes a new instance of GISBlox.Services.SDK.Models.WKT class.
             </summary>
             <param name="geometry">A WKT geometry.</param>
             <param name="properties">A list of properties associated with the geometry.</param>

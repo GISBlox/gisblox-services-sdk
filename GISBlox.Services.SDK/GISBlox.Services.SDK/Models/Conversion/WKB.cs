@@ -22,13 +22,13 @@ namespace GISBlox.Services.SDK.Models
       public List<Dictionary<string, object>> Properties { get; set; }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKB class.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKB class.
       /// </summary>
       public WKB()
       { }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKB class with the specified geometry.
       /// </summary>
       /// <param name="geometry">The WKB geometry.</param>
       public WKB(byte[] geometry)
@@ -37,7 +37,7 @@ namespace GISBlox.Services.SDK.Models
       }
 
       /// <summary>
-      /// Initializes a new instance of GISBlox.Models.Conversion.WKB class with the specified geometry and properties.
+      /// Initializes a new instance of GISBlox.Services.SDK.Models.WKB class with the specified geometry and properties.
       /// </summary>
       /// <param name="geometry">The WKB geometry.</param>
       /// <param name="properties">The properties associated with the WKB geometry.</param>

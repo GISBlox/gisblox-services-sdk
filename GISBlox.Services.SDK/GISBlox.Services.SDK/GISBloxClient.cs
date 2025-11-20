@@ -18,7 +18,7 @@ using System.Reflection;
 namespace GISBlox.Services.SDK
 {
     /// <summary>
-    /// The main entry point for every available GISBlox Location Service method.
+    /// The main entry point for every available GISBlox Location Services method.
     /// </summary>
     public class GISBloxClient : IDisposable
     {
@@ -28,7 +28,8 @@ namespace GISBlox.Services.SDK
         /// <param name="baseUrl">The base URL of the services API, i.e. https://services.gisblox.com</param>
         /// <param name="serviceKey">The service key.</param>
         /// <param name="timeoutSeconds">The timeout in seconds for the http requests.</param>
-        protected GISBloxClient(string baseUrl, string serviceKey, long timeoutSeconds = 30)
+        /// <param name="applicationName">Optional name (tag) of the calling application.</param>
+        protected GISBloxClient(string baseUrl, string serviceKey, long timeoutSeconds = 30, string applicationName = null)
         {
             var apiUrl = new Uri(new Uri(baseUrl), "v1/");
 
@@ -48,6 +49,11 @@ namespace GISBlox.Services.SDK
             httpClient.DefaultRequestHeaders.Add("X-Service-Key", serviceKey);
             httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("gisblox-services-sdk", GetAssemblyFileVersion()));
 
+            if (!string.IsNullOrWhiteSpace(applicationName))
+            {                
+                httpClient.DefaultRequestHeaders.Add("X-Application-Name", applicationName);
+            }
+
             IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
             this.DataLake = new DataLakeAPIClient(httpClient, cache);
@@ -63,10 +69,11 @@ namespace GISBlox.Services.SDK
         /// <param name="baseUrl">Base URL for the GISBlox Services resource, i.e. https://services.gisblox.com</param>
         /// <param name="serviceKey">The service key.</param>
         /// <param name="timeoutSeconds">Web request time out in seconds</param>
+        /// <param name="applicationName">Optional name (tag) of the calling application.</param>
         /// <returns></returns>
-        public static GISBloxClient CreateClient(string baseUrl, string serviceKey, long timeoutSeconds = 30)
+        public static GISBloxClient CreateClient(string baseUrl, string serviceKey, long timeoutSeconds = 30, string applicationName = null)
         {
-            return new GISBloxClient(baseUrl, serviceKey, timeoutSeconds);
+            return new GISBloxClient(baseUrl, serviceKey, timeoutSeconds, applicationName);
         }
 
         /// <summary>
@@ -98,11 +105,12 @@ namespace GISBlox.Services.SDK
         /// Disposes the GISBloxClient class.
         /// </summary>
         public void Dispose()
-        {
-            PostalCodes.Dispose();
-            Projection.Dispose();
-            Conversion.Dispose();
-            Info.Dispose();
+        {            
+            DataLake?.Dispose();
+            PostalCodes?.Dispose();
+            Projection?.Dispose();
+            Conversion?.Dispose();
+            Info?.Dispose();
             GC.SuppressFinalize(this);
         }
 
