@@ -30,15 +30,8 @@ namespace GISBlox.Services.SDK.DataLake
       public async Task<bool> DeleteFile(string fileName, CancellationToken cancellationToken = default)
       {
          var requestUri = $"datalake/delete/{fileName}";
-         try
-         {
-            await HttpDelete(HttpClient, requestUri, null, cancellationToken);
-            return true;
-         }
-         catch (ClientApiException)
-         {
-            throw;
-         }
+         await HttpDelete(HttpClient, requestUri, null, cancellationToken);
+         return true;
       }
 
       /// <summary>        
@@ -51,15 +44,8 @@ namespace GISBlox.Services.SDK.DataLake
       public async Task<bool> DownloadFile(string fileName, string localPath, CancellationToken cancellationToken = default)
       {
          var requestUri = $"datalake/load/{fileName}";
-         try
-         {
-            await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/json", null, cancellationToken);
-            return true;
-         }
-         catch (ClientApiException)
-         {
-            throw;
-         }
+         await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/json", null, cancellationToken);
+         return true;
       }
       
       /// <summary>
@@ -84,15 +70,8 @@ namespace GISBlox.Services.SDK.DataLake
       public async Task<bool> ExportFileAsGeoParquet(string fileName, string localPath, CancellationToken cancellationToken = default)
       {
          var requestUri = $"datalake/export/{fileName}?format=geoparquet";
-         try
-         {
-            await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/octet-stream", null, cancellationToken);
-            return true;
-         }
-         catch (ClientApiException)
-         {
-            throw;
-         }
+         await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/octet-stream", null, cancellationToken);
+         return true;
       }
 
       /// <summary>        
@@ -138,15 +117,8 @@ namespace GISBlox.Services.SDK.DataLake
       public async Task<bool> UploadFile(Stream stream, string fileName, CancellationToken cancellationToken = default)
       {
          var requestUri = $"datalake/save/{fileName}";
-         try
-         {
-            await HttpPost(HttpClient, requestUri, stream, "application/json", null, cancellationToken);
-            return true;
-         }
-         catch (ClientApiException)
-         {
-            throw;
-         }
+         await HttpPost(HttpClient, requestUri, stream, "application/json", null, cancellationToken);
+         return true;
       }
 
       /// <summary>
@@ -159,15 +131,8 @@ namespace GISBlox.Services.SDK.DataLake
       public async Task<bool> UploadFileData(string jsonData, string fileName, CancellationToken cancellationToken = default)
       {
          var requestUri = $"datalake/save/{fileName}";
-         try
-         {
-            await HttpPost(HttpClient, requestUri, jsonData, null, cancellationToken);
-            return true;
-         }
-         catch (ClientApiException)
-         {
-            throw;
-         }
+         await HttpPost(HttpClient, requestUri, jsonData, null, cancellationToken);
+         return true;
       }
    }
 }
