@@ -16,11 +16,9 @@
 
 <hr>
 
-## Introduction
+## 🧑‍💻 Introduction
 
-This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). 
-
-It supports the following Location Services:
+This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). It supports the following Location Services:
 
 #### Conversion
   * Convert [WKB](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) and [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON), and vice versa. 
