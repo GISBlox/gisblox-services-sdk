@@ -16,17 +16,28 @@
 
 <hr>
 
-## Introduction
+## 🧑‍💻 Introduction
 
-This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). 
+This SDK enables applications to connect to the [GISBlox Services API](https://services.gisblox.com/). It supports the following Location Services:
 
-It supports the following Location Services:
+#### Conversion
+  * Convert [WKB](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) and [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON), and vice versa. 
+  Supports both single-shot conversions, as well as batch processing of large collections.
 
-* Reproject [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations, and vice versa
-* Convert [WKB](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) and [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) geometry objects into [GeoJson](https://en.wikipedia.org/wiki/GeoJSON), and vice versa
-* Work with Dutch postal codes (used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot))
-* Access the GISBlox GeoJson Data Lake
-* Retrieve subscription information
+#### Data Lake
+  * Access the GISBlox GeoJson Data Lake: upload and manage your GeoJson datasets in the cloud. Supports exporting to modern data formats, such as GeoParquet.
+
+#### Info
+  * Quickly retrieve an overview of your subscriptions and their details.
+
+#### Map Analytics
+  * Analyze user behavior on interactive maps (see [Map Analytics](https://www.gisblox.com/map-analytics)) to provide clarity on engagement and map usage.
+
+#### Postal codes
+  * Query and visualize Dutch postal codes (as used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot)) to turn raw postal code data into meaningful insights for regional analysis and decision-making.
+
+#### Projection
+  * Project [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations, and vice versa. Includes batch processing capabilities. 
 
 To get no-code access to the GISBlox Services API from the command-line, you can use the [GISBlox Services CLI](https://github.com/GISBlox/gisblox-services-cli).
 
@@ -39,6 +50,8 @@ To generate a service key:
 2. Navigate to your [Subscriptions Dashboard](https://account.gisblox.com/profiel/abonnementen)
 3. Click the `Add` button and select the **free** subscription to the **GISBlox Location Services** in the dropdown.
 4. Once subscribed, click the **Location Services** tile and copy the service key from the information panel.
+
+Based on your requirements, you may need to add additional subscriptions to your account.
 
 
 ## Installation

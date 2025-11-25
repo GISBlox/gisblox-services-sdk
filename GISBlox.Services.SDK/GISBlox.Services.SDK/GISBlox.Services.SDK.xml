@@ -607,6 +607,11 @@
             Entry point to the Data Lake API.
             </summary>
         </member>
+        <member name="P:GISBlox.Services.SDK.GISBloxClient.MapAnalytics">
+            <summary>
+            Entry point to the Map Analytics API.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.GISBloxClient.Dispose">
             <summary>
             Disposes the GISBloxClient class.
@@ -650,6 +655,95 @@
             </summary>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A List with <see cref="T:GISBlox.Services.SDK.Models.Subscription"/> types.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI">
+            <summary>
+            Interface for MapAnalyticsAPI class.
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the engagement metrics for a specific map.
+            </summary>
+            <param name="mapId">The ID of the map.</param>
+            <param name="dateRange">The date range for the engagement data.</param>
+            <param name="endDate">The end date for the engagement data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>An engagement record for the specified map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the KPI data for a specific map.
+            </summary>
+            <param name="mapId">The ID of the map.</param>
+            <param name="dateRange">The date range for the KPI data.</param>
+            <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>A KPI record for the specified map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the KPI data for every tracked map.
+            </summary>
+            <param name="dateRange">The date range for which to retrieve the KPIs.</param>
+            <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>A KPI record for each map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.ListTrackedMaps">
+            <summary>
+            Gets a list of maps that are tracked for the customer.
+            </summary>
+            <returns>A customer map record with a list of tracked maps and their IDs.</returns>
+        </member>
+        <member name="T:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient">
+            <summary>
+            This class provides methods to interact with the Map Analytics API, providing access to data of tracked maps.
+            </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            This class provides methods to interact with the Map Analytics API, providing access to data of tracked maps.
+            </summary>
+            <remarks>
+            Initializes a new instance of the GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient class.
+            </remarks>
+            <param name="httpClient">The current instance of the HTTPClient class.</param>
+            <param name="cache">The current instance of the MemoryCache class.</param>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the engagement metrics for a specific map.
+            </summary>
+            <param name="mapId">The ID of the map.</param>
+            <param name="dateRange">The date range for the engagement data.</param>
+            <param name="endDate">The end date for the engagement data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>An engagement record for the specified map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the KPI data for a specific map.
+            </summary>
+            <param name="mapId">The ID of the map.</param>
+            <param name="dateRange">The date range for the KPI data.</param>
+            <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>A KPI record for the specified map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+            <summary>
+            Gets the KPI data for every tracked map.
+            </summary>
+            <param name="dateRange">The date range for which to retrieve the KPIs.</param>
+            <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <returns>A KPI record for each map.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.ListTrackedMaps">
+            <summary>
+            Gets a list of maps that are tracked for the customer.
+            </summary>
+            <returns>A customer map record with a list of tracked maps and their IDs.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Subscription">
             <summary>
@@ -899,6 +993,208 @@
             </summary>
             <param name="x">The x-coordinate of the point in RDNew projection (EPSG:28992).</param>
             <param name="y">The y-coordinate of the point in RDNew projection (EPSG:28992).</param>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum">
+            <summary>
+            Represents the date range for analytics queries.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum.OneWeek">
+            <summary>
+            Represents a one-week date range.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum.TwoWeeks">
+            <summary>
+            Represents a time span of two weeks.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum.ThreeWeeks">
+            <summary>
+            Represents a time span of three weeks.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum.OneMonth">
+            <summary>
+            Represents a time span of one month.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.CustomerMap">
+            <summary>
+            Represents a customer map.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerMap.Id">
+            <summary>
+            The unique identifier for the map.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerMap.Name">
+            <summary>
+            The name of the map.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.CustomerMapRecord">
+            <summary>
+            Represents the customer maps record containing a list of customer maps.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.CustomerMapRecord.Maps">
+            <summary>
+            A list of customer maps.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Engagement">
+            <summary>
+            Represents engagement data for a specific map.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.SessionDate">
+            <summary>
+            The date of the engagement session.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.Views">
+            <summary>
+            The total number of map views on the session date.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.ViewDuration">
+            <summary>
+            The total duration of map views in seconds on the session date.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.Interactions">
+            <summary>
+            The total amount of interactions with the map on the session date.
+            </summary> 
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.ZoomCount">
+            <summary>
+            The number of times the map was zoomed in or out on the session date.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.PanCount">
+            <summary>
+            The number of times the map was panned on the session date.
+            </summary> 
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Engagement.MarkerClickCount">
+            <summary>
+            The number of times a map marker has been clicked on the session date.
+            </summary>
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.EngagementRecord">
+            <summary>
+            Represents the engagement record containing engagement data for a specific map over a defined date range.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.MapId">
+            <summary>
+            The unique identifier of the map.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.MapName">
+            <summary>
+            The name of the map.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.DateRange">
+            <summary>
+            The selected date range of the engagement data.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.StartDate">
+            <summary>
+            The start date of the date range.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.EndDate">
+            <summary>
+            The end date of the date range.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.EngagementRecord.Engagements">
+            <summary>
+            The collection of engagements associated with the specified map.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.Kpi">
+            <summary>
+            Represents a Key Performance Indicator (KPI).
+            The KPI contains both current and historic values along with trend information.
+            The historic value is typically from the previous comparable period (date range).
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kpi.Name">
+            <summary>
+            The name of the KPI.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kpi.Value">
+            <summary>
+            The numeric value of the KPI.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kpi.ValuePrev">
+            <summary>
+            The historic numeric value of the KPI in the previous period.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kpi.Trend">
+            <summary>
+            The trend indicator of the KPI (1 for up, -1 for down, 0 for no change).
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.Kpi.DiffPct">
+            <summary>
+            The difference percentage between the current and historic KPI values.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.MapKpi">
+            <summary>
+            Represents a collection of Key Performance Indicators (KPIs) for a specific map.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpi.MapId">
+            <summary>
+            The unique identifier of the map.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpi.MapName">
+            <summary>
+            The name of the map.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpi.Kpis">
+            <summary>
+            A collection of key performance indicators (KPIs) associated with the map.
+            </summary>      
+        </member>
+        <member name="T:GISBlox.Services.SDK.Models.MapKpiRecord">
+            <summary>
+            Represents the map KPI record containing key performance indicators (KPIs) for a specific map over a defined date range.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpiRecord.DateRange">
+            <summary>
+            The selected date range of the KPI data.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpiRecord.StartDate">
+            <summary>
+            The start date of the date range.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpiRecord.EndDate">
+            <summary>
+            The end date of the date range.
+            </summary>      
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.MapKpiRecord.MapKpis">
+            <summary>
+            The collection of key performance indicators (KPIs) associated with the specified map.
+            </summary>      
         </member>
         <member name="T:GISBlox.Services.SDK.Models.BoundingBox">
             <summary>
