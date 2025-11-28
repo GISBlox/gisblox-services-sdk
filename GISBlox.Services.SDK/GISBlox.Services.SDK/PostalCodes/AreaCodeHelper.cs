@@ -20,7 +20,7 @@ namespace GISBlox.Services.SDK.PostalCodes
    /// </remarks>
    /// <param name="httpClient">The current instance of the HTTPClient class.</param>
    /// <param name="cache">The current instance of the MemoryCache class.</param>
-   public class AreaCodeHelper(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache)
+   public class AreaCodeHelper(HttpClient httpClient, IMemoryCache cache) : ApiClient(httpClient, cache), IAreaCodeHelper
    {
       /// <summary>
       /// Query for a specific gemeente.

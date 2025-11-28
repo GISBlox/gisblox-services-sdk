@@ -29,7 +29,7 @@
       [TestMethod]
       public async Task ListTrackedMaps()
       {
-         var record = await _client.MapAnalytics.ListTrackedMaps();
+         var record = await _client.MapAnalytics.ListTrackedMaps(CancellationToken.None);
 
          Assert.IsNotNull(record);
          Assert.IsNotNull(record.Maps);
@@ -41,7 +41,7 @@
          string mapId = "7D6C2135-C878-4945-8622-60D3FE9B4BC3";
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.ThreeWeeks;
 
-         var record = await _client.MapAnalytics.GetMapEngagement(mapId, dateRange);
+         var record = await _client.MapAnalytics.GetMapEngagement(mapId, dateRange, null, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.AreEqual(mapId, record.MapId);
@@ -58,7 +58,7 @@
          string mapId = "7D6C2135-C878-4945-8622-60D3FE9B4BC3";
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.ThreeWeeks;
 
-         var record = await _client.MapAnalytics.GetMapEngagement(mapId, dateRange, endDate);
+         var record = await _client.MapAnalytics.GetMapEngagement(mapId, dateRange, endDate, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
 
@@ -78,7 +78,7 @@
          string mapId = "7D6C2135-C878-4945-8622-60D3FE9B4BC3";
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.ThreeWeeks;
 
-         var record = await _client.MapAnalytics.GetMapKpis(mapId, dateRange);
+         var record = await _client.MapAnalytics.GetMapKpis(mapId, dateRange, null, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.AreEqual(dateRange.ToString(), record.DateRange);
@@ -101,7 +101,7 @@
          string mapId = "7D6C2135-C878-4945-8622-60D3FE9B4BC3";
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.TwoWeeks;
 
-         var record = await _client.MapAnalytics.GetMapKpis(mapId, dateRange, endDate);
+         var record = await _client.MapAnalytics.GetMapKpis(mapId, dateRange, endDate, CancellationToken.None);
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.AreEqual(dateRange.ToString(), record.DateRange);
@@ -124,7 +124,7 @@
       {
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.TwoWeeks;
 
-         var record = await _client.MapAnalytics.GetMapsKpis(dateRange);
+         var record = await _client.MapAnalytics.GetMapsKpis(dateRange, null, CancellationToken.None);
 
          Assert.IsNotNull(record);
 
@@ -146,7 +146,7 @@
          DateTime endDate = DateTime.Parse("2025-11-21");
          AnalyticsDateRangeEnum dateRange = AnalyticsDateRangeEnum.TwoWeeks;
 
-         var record = await _client.MapAnalytics.GetMapsKpis(dateRange, endDate);
+         var record = await _client.MapAnalytics.GetMapsKpis(dateRange, endDate, CancellationToken.None);
 
          Assert.IsNotNull(record);
 
