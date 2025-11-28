@@ -661,36 +661,40 @@
             Interface for MapAnalyticsAPI class.
             </summary>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the engagement metrics for a specific map.
             </summary>
             <param name="mapId">The ID of the map.</param>
             <param name="dateRange">The date range for the engagement data.</param>
             <param name="endDate">The end date for the engagement data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>An engagement record for the specified map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the KPI data for a specific map.
             </summary>
             <param name="mapId">The ID of the map.</param>
             <param name="dateRange">The date range for the KPI data.</param>
             <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A KPI record for the specified map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the KPI data for every tracked map.
             </summary>
             <param name="dateRange">The date range for which to retrieve the KPIs.</param>
             <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A KPI record for each map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.ListTrackedMaps">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.IMapAnalyticsAPI.ListTrackedMaps(System.Threading.CancellationToken)">
             <summary>
             Gets a list of maps that are tracked for the customer.
             </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A customer map record with a list of tracked maps and their IDs.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient">
@@ -713,36 +717,40 @@
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapEngagement(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the engagement metrics for a specific map.
             </summary>
             <param name="mapId">The ID of the map.</param>
             <param name="dateRange">The date range for the engagement data.</param>
             <param name="endDate">The end date for the engagement data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>An engagement record for the specified map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapKpis(System.String,GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the KPI data for a specific map.
             </summary>
             <param name="mapId">The ID of the map.</param>
             <param name="dateRange">The date range for the KPI data.</param>
             <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A KPI record for the specified map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime})">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.GetMapsKpis(GISBlox.Services.SDK.Models.AnalyticsDateRangeEnum,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
             <summary>
             Gets the KPI data for every tracked map.
             </summary>
             <param name="dateRange">The date range for which to retrieve the KPIs.</param>
             <param name="endDate">The end date for the KPI data (optional). If not specified, the end date will be set to yesterday.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A KPI record for each map.</returns>
         </member>
-        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.ListTrackedMaps">
+        <member name="M:GISBlox.Services.SDK.MapAnalytics.MapAnalyticsAPIClient.ListTrackedMaps(System.Threading.CancellationToken)">
             <summary>
             Gets a list of maps that are tracked for the customer.
             </summary>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>A customer map record with a list of tracked maps and their IDs.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Models.Subscription">
