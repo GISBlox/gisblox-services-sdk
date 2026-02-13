@@ -4,6 +4,7 @@
    public class InfoTests
    {
       const string BASE_URL = "https://services.gisblox.com";
+      const int API_QUOTA_DELAY = 5000;  // Allows to run all tests together without exceeding API call quota
 
       [TestMethod]
       public async Task GetSubscriptionInfo()
@@ -19,6 +20,8 @@
             
             Assert.AreNotEqual(0, subscriptions.Count);
          }
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
       [TestMethod]
@@ -32,6 +35,8 @@
          {
             List<Subscription> subscriptions = await client.Info.GetSubscriptions(CancellationToken.None);
             subscriptions.ForEach(sub => Console.WriteLine($"\r\nName: {sub.Name} \r\nDescription: {sub.Description} \r\nRegistration date: {sub.RegisterDate} Expiration date: {sub.ExpirationDate} Expired: {sub.Expired}"));
+
+            await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
 
             List<Subscription> subscriptionsCached = await client.Info.GetSubscriptions(CancellationToken.None);
             Assert.HasCount(subscriptions.Count, subscriptionsCached);

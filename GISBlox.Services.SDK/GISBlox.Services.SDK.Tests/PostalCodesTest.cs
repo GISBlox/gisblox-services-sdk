@@ -38,7 +38,7 @@
          Assert.IsNotNull(record, "Response is empty.");
          
          PostalCode4 pc = record.PostalCode[0];
-         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029 463048)");
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
@@ -52,7 +52,7 @@
          Assert.IsNotNull(record, "Response is empty.");
 
          PostalCode4 pc = record.PostalCode[0];
-         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029.15793771204 463047.87594218826)");
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155029 463048)");
 
          PostalCode4Record recordCached = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id, CoordinateSystem.RDNew, CancellationToken.None);
          
@@ -190,7 +190,7 @@
          Assert.IsNotNull(record, "Response is empty.");
 
          PostalCode6 pc = record.PostalCode[0];
-         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155155.51254284632 463159.828901163)");
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (155156 463160)");
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
