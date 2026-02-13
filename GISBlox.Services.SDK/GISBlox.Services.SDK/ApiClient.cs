@@ -147,6 +147,11 @@ namespace GISBlox.Services.SDK
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
+         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+         {
+            return default;
+         }
+
          return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
@@ -243,6 +248,11 @@ namespace GISBlox.Services.SDK
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
+         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+         {
+            return default;
+         }
+
          return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
 
@@ -327,6 +337,11 @@ namespace GISBlox.Services.SDK
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
+
+         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+         {
+            return default;
+         }
 
          return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
