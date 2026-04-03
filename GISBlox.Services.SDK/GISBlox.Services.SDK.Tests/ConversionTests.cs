@@ -111,6 +111,86 @@ namespace GISBlox.Services.SDK.Tests
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
       }
 
+      [TestMethod]
+      public async Task FromWkt_ConvertPointBatch()
+      {
+         List<WKT> wkts = [new("POINT (30 10 5)"), new("POINT (40 20 6)")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPointBatch()
+      {
+         List<WKT> wkts = [new("MULTIPOINT ((10 40), (40 30 2), (20 20), (30 10))"), new("MULTIPOINT ((20 43), (40 30 2), (20 20), (30 10))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertLineStringBatch()
+      {
+         List<WKT> wkts = [new("LINESTRING (30 10, 10 30, 40 40)"), new("LINESTRING (20 20, 30 30, 40 40)")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiLineStringBatch()
+      {
+         List<WKT> wkts = [new("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))"), new("MULTILINESTRING ((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertPolygonBatch()
+      {
+         List<WKT> wkts = [new("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))"), new("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertPolygonWithInnerRingBatch()
+      {
+         List<WKT> wkts = [new("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))"), new("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPolygonBatch()
+      {
+         List<WKT> wkts = [new("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))"), new("MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkt_ConvertMultiPolygonWithInnerRingBatch()
+      {
+         List<WKT> wkts = [new("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))"), new("MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))")];
+         string geoJson = await ConvertToGeoJsonFromWKT(wkts);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+      }
+
       #endregion
 
       #region WKB -> GeoJson
@@ -185,6 +265,77 @@ namespace GISBlox.Services.SDK.Tests
 
          WKB wkb = new(multiPolygon, [props]);
          string geoJson = await ConvertToGeoJsonFromWKB(wkb);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertPointBatch()
+      {
+         List<WKB> wkbs = [new(WKB_POINT_30_10_5_BYTES), new(WKB_POINT_30_10_BYTES)];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POINT"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertMultiPointBatch()
+      {
+         byte[] multiPoint = [1, 4, 0, 0, 0, 4, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         List<WKB> wkbs = [new(multiPoint)];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOINT"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertLineStringBatch()
+      {
+         byte[] lineString = [1, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 240, 63];
+         List<WKB> wkbs = [new(lineString)];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "LINESTRING"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertMultiLineStringBatch()
+      {
+         byte[] multiLineString = [1, 5, 0, 0, 0, 2, 0, 0, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 1, 2, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         List<WKB> wkbs = [new(multiLineString)];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTILINESTRING"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertPolygonBatch()
+      {
+         byte[] polygon = [1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 36, 64];
+         List<WKB> wkbs = [new(polygon)];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
+
+         Assert.IsNotNull(geoJson, "Response is empty.");
+         Assert.IsTrue(await IsValidGeoJson(geoJson, "POLYGON"), "Invalid GeoJSON.");
+      }
+
+      [TestMethod]
+      public async Task FromWkb_ConvertMultiPolygonBatch()
+      {
+         byte[] multiPolygon = [1, 6, 0, 0, 0, 2, 0, 0, 0, 1, 3, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 128, 70, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 62, 64, 0, 0, 0, 0, 0, 0, 52, 64, 1, 3, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 68, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 52, 64, 0, 0, 0, 0, 0, 0, 20, 64, 0, 0, 0, 0, 0, 0, 36, 64, 0, 0, 0, 0, 0, 0, 46, 64, 0, 0, 0, 0, 0, 0, 20, 64];
+         Dictionary<string, object> props = new()
+         {
+            { "id", 1 },
+            { "name", "MultiPolygon" }
+         };
+
+         List<WKB> wkbs = [new(multiPolygon, [props])];
+         string geoJson = await ConvertToGeoJsonFromWKB(wkbs);
 
          Assert.IsNotNull(geoJson, "Response is empty.");
          Assert.IsTrue(await IsValidGeoJson(geoJson, "MULTIPOLYGON"), "Invalid GeoJSON.");
@@ -359,6 +510,17 @@ namespace GISBlox.Services.SDK.Tests
       }
 
       /// <summary>
+      /// Converts a collection of Well-Known Text (WKT) geometries to a GeoJSON string.
+      /// </summary>
+      /// <param name="wkts">A list of WKT objects representing the geometries to convert.</param>
+      /// <param name="asFeatureCollection">Indicates whether to include the GeoJson features in a feature collection.</param>
+      /// <returns>A GeoJson string with the converted WKT geometry types.</returns>
+      private async Task<string> ConvertToGeoJsonFromWKT(List<WKT> wkts, bool asFeatureCollection = false)
+      {
+         return await _client.Conversion.ToGeoJson(wkts, asFeatureCollection);
+      }
+
+      /// <summary>
       /// Converts a WKB geometry into a GeoJson Feature(Collection) string.
       /// </summary>
       /// <param name="wkb">A WKB type.</param>
@@ -368,7 +530,18 @@ namespace GISBlox.Services.SDK.Tests
       {
          return await _client.Conversion.ToGeoJson(wkb, asFeatureCollection);
       }
-   
+
+      /// <summary>
+      /// Converts a list of WKB geometries into a GeoJson Feature(Collection) string.
+      /// </summary>
+      /// <param name="wkbs">A list of WKB geometry types.</param>
+      /// <param name="asFeatureCollection">Indicates whether to include the GeoJson features in a feature collection.</param>
+      /// <returns>A GeoJson string with the converted WKB geometry types.</returns>
+      private async Task<string> ConvertToGeoJsonFromWKB(List<WKB> wkbs, bool asFeatureCollection = false)
+      {
+         return await _client.Conversion.ToGeoJson(wkbs, asFeatureCollection);
+      }
+
       /// <summary>
       /// Performs a basic GeoJson validity test. It checks whether: 
       /// - The geometry type matches the expected type
@@ -384,21 +557,28 @@ namespace GISBlox.Services.SDK.Tests
          {
             JsonDocument doc = await Task.Run(() => JsonDocument.Parse(geoJson));
             JsonElement jsonObject = doc.RootElement;
-            if (jsonObject.TryGetProperty("geometry", out var typeProperty) && typeProperty.ValueKind == JsonValueKind.Object)
+
+            // Handle array of features (batch conversion)
+            if (jsonObject.ValueKind == JsonValueKind.Array)
             {
-               if (typeProperty.TryGetProperty("type", out var geomType) && geomType.ValueKind == JsonValueKind.String)
+               if (jsonObject.GetArrayLength() > 0)
                {
-                  // Type check
-                  string typeName = geomType.GetString();
-                  if (typeName.Equals(expectedType, StringComparison.InvariantCultureIgnoreCase))
+                  // Validate all features in the array
+                  isValid = true;
+                  foreach (var feature in jsonObject.EnumerateArray())
                   {
-                     // Any coordinates?
-                     if (typeProperty.TryGetProperty("coordinates", out var coordinates) && coordinates.ValueKind == JsonValueKind.Array)
+                     if (!ValidateFeature(feature, expectedType))
                      {
-                        isValid = true;
+                        isValid = false;
+                        break;
                      }
                   }
                }
+            }
+            // Handle single feature object
+            else if (jsonObject.ValueKind == JsonValueKind.Object)
+            {
+               isValid = ValidateFeature(jsonObject, expectedType);
             }
          }
          catch (Exception)
@@ -406,6 +586,33 @@ namespace GISBlox.Services.SDK.Tests
             throw;
          }
          return isValid;
+      }
+
+      /// <summary>
+      /// Validates a single GeoJSON feature.
+      /// </summary>
+      /// <param name="feature">The feature element to validate.</param>
+      /// <param name="expectedType">The expected geometry type.</param>
+      /// <returns>True if valid, False if not.</returns>
+      private static bool ValidateFeature(JsonElement feature, string expectedType)
+      {
+         if (feature.TryGetProperty("geometry", out var geometry) && geometry.ValueKind == JsonValueKind.Object)
+         {
+            if (geometry.TryGetProperty("type", out var geomType) && geomType.ValueKind == JsonValueKind.String)
+            {
+               // Type check
+               string typeName = geomType.GetString();
+               if (typeName.Equals(expectedType, StringComparison.InvariantCultureIgnoreCase))
+               {
+                  // Any coordinates?
+                  if (geometry.TryGetProperty("coordinates", out var coordinates) && coordinates.ValueKind == JsonValueKind.Array)
+                  {
+                     return true;
+                  }
+               }
+            }
+         }
+         return false;
       }
 
       #endregion
