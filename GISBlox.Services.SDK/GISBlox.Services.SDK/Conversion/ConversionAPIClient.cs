@@ -35,11 +35,28 @@ namespace GISBlox.Services.SDK.Conversion
          var requestUri = "convert/toGeoJson?format=WKT";
 
          Dictionary<string, string> customHeaders = new()
-            {
-                { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
-            };
-
+         {
+            { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
+         };
          return await HttpPost<dynamic, string>(HttpClient, requestUri, wkt, null, customHeaders, cancellationToken);
+      }
+
+      /// <summary>
+      /// Converts a list of WKT geometry strings into a GeoJson Feature(Collection) string.
+      /// </summary>
+      /// <param name="wkts">A list of WKT types.</param>
+      /// <param name="asFeatureCollection">Indicates whether to include the GeoJson features in a feature collection.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A GeoJson string with the converted WKT geometries.</returns>
+      public async Task<string> ToGeoJson(List<WKT> wkts, bool asFeatureCollection = false, CancellationToken cancellationToken = default)
+      {
+         var requestUri = "convert/toGeoJson/batch?format=WKT";
+
+         Dictionary<string, string> customHeaders = new()
+         {
+            { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
+         };
+         return await HttpPost<dynamic, string>(HttpClient, requestUri, wkts, null, customHeaders, cancellationToken);
       }
 
       /// <summary>
@@ -54,11 +71,28 @@ namespace GISBlox.Services.SDK.Conversion
          var requestUri = "convert/toGeoJson?format=WKB";
 
          Dictionary<string, string> customHeaders = new()
-            {
-                { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
-            };
-
+         {
+            { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
+         };
          return await HttpPost<dynamic, string>(HttpClient, requestUri, wkb, null, customHeaders, cancellationToken);
+      }
+
+      /// <summary>
+      /// Converts a list of WKB geometry types into a GeoJson Feature(Collection) string.
+      /// </summary>
+      /// <param name="wkbs">A list of WKB geometry types.</param>
+      /// <param name="asFeatureCollection">Indicates whether to include the GeoJson features in a feature collection.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+      /// <returns>A GeoJson string with the converted WKB geometry types.</returns>
+      public async Task<string> ToGeoJson(List<WKB> wkbs, bool asFeatureCollection = false, CancellationToken cancellationToken = default)
+      {
+         var requestUri = "convert/toGeoJson/batch?format=WKB";
+
+         Dictionary<string, string> customHeaders = new()
+         {
+            { "X-AsFeatureCollection", asFeatureCollection ? "1" : "0" }
+         };
+         return await HttpPost<dynamic, string>(HttpClient, requestUri, wkbs, null, customHeaders, cancellationToken);
       }
 
       /// <summary>
@@ -70,7 +104,7 @@ namespace GISBlox.Services.SDK.Conversion
       public async Task<List<WKB>> ToWkb(string geoJson, CancellationToken cancellationToken = default)
       {
          var requestUri = "convert/toWkb";
-         
+
          var result = await HttpPost<string, List<WKB>>(HttpClient, requestUri, geoJson, null, null, cancellationToken);
          PropertyValueNormalizer.NormalizeWkbList(result);
          return result;
@@ -101,7 +135,7 @@ namespace GISBlox.Services.SDK.Conversion
       public async Task<List<WKT>> ToWkt(string geoJson, CancellationToken cancellationToken = default)
       {
          var requestUri = "convert/toWkt";
-         
+
          var result = await HttpPost<string, List<WKT>>(HttpClient, requestUri, geoJson, null, null, cancellationToken);
          PropertyValueNormalizer.NormalizeWktList(result);
          return result;
@@ -118,9 +152,9 @@ namespace GISBlox.Services.SDK.Conversion
       {
          var requestUri = "convert/toWkt/" + fileName;
 
-         var result = await HttpPost<List<WKT>>(HttpClient, requestUri, stream, "application/json", null, cancellationToken);         
+         var result = await HttpPost<List<WKT>>(HttpClient, requestUri, stream, "application/json", null, cancellationToken);
          PropertyValueNormalizer.NormalizeWktList(result);
          return result;
-      }     
+      }
    }
 }
