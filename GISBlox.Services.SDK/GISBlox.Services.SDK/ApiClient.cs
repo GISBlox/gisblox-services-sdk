@@ -116,7 +116,11 @@ namespace GISBlox.Services.SDK
          if (epsg != null) request.Headers.Add("X-EPSG", epsg);
          SetRequestHeaderValues(request, customHeaders);
 
-         request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
+         if (body != null)
+         {
+            request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
+         }
+         
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -142,7 +146,11 @@ namespace GISBlox.Services.SDK
          if (epsg != null) request.Headers.Add("X-EPSG", epsg);
          SetRequestHeaderValues(request, customHeaders);
 
-         request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
+         if (body != null)
+         {
+            request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
+         }
+
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
