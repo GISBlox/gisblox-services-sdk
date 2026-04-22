@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
+using System.Collections.Concurrent;
 
 namespace GISBlox.Services.SDK
 {
@@ -38,6 +39,16 @@ namespace GISBlox.Services.SDK
       {
          DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
       };
+
+      /// <summary>
+      /// Default cache duration for API responses.
+      /// </summary>
+      private static readonly TimeSpan DefaultCacheDuration = TimeSpan.FromMinutes(5);
+
+      /// <summary>
+      /// Per-cache-key async locks to avoid duplicate concurrent fetches.
+      /// </summary>
+      private static readonly ConcurrentDictionary<string, SemaphoreSlim> CacheKeyLocks = new();
 
       /// <summary>
       /// Initializes a new instance of the <see cref="ApiClient"/> class.
@@ -78,23 +89,41 @@ namespace GISBlox.Services.SDK
       {
          string cacheKey = epsg != null ? $"{requestUri}::epsg={epsg}" : requestUri;
 
-         if (!cache.TryGetValue(cacheKey, out T cachedResult))
+         if (cache.TryGetValue(cacheKey, out T cachedResult))
          {
-            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            return cachedResult;
+         }
 
-            if (epsg != null) request.Headers.Add("X-EPSG", epsg);
-            SetRequestHeaderValues(request, customHeaders);
+         var cacheLock = CacheKeyLocks.GetOrAdd(cacheKey, _ => new SemaphoreSlim(1, 1));
+         await cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+         try
+         {
+            if (cache.TryGetValue(cacheKey, out cachedResult))
+            {
+               return cachedResult;
+            }
 
+            using var request = CreateRequest(HttpMethod.Get, requestUri, epsg, customHeaders);
             using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            
             await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
             cachedResult = await response.Content.ReadFromJsonAsync<T>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
             if (cachedResult is not null)
             {
-               cache.Set(cacheKey, cachedResult);
+               cache.Set(cacheKey, cachedResult, DefaultCacheDuration);
+            }
+
+            return cachedResult;
+         }
+         finally
+         {
+            cacheLock.Release();
+            if (cacheLock.CurrentCount == 1)
+            {
+               CacheKeyLocks.TryRemove(new KeyValuePair<string, SemaphoreSlim>(cacheKey, cacheLock));
             }
          }
-         return cachedResult;
       }
 
       /// <summary>
@@ -111,16 +140,9 @@ namespace GISBlox.Services.SDK
       /// <exception cref="ClientApiException"></exception>
       protected static async Task HttpPost<TBody>(HttpClient httpClient, string requestUri, TBody body, string epsg = null, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+         HttpContent content = body != null ? JsonContent.Create(body, options: JsonSerializerOptions) : null;
 
-         if (epsg != null) request.Headers.Add("X-EPSG", epsg);
-         SetRequestHeaderValues(request, customHeaders);
-
-         if (body != null)
-         {
-            request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
-         }
-         
+         using var request = CreateRequest(HttpMethod.Post, requestUri, epsg, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -141,16 +163,9 @@ namespace GISBlox.Services.SDK
       /// <exception cref="ClientApiException"></exception>
       protected static async Task<TResult> HttpPost<TBody, TResult>(HttpClient httpClient, string requestUri, TBody body, string epsg = null, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+         HttpContent content = body != null ? JsonContent.Create(body, options: JsonSerializerOptions) : null;
 
-         if (epsg != null) request.Headers.Add("X-EPSG", epsg);
-         SetRequestHeaderValues(request, customHeaders);
-
-         if (body != null)
-         {
-            request.Content = JsonContent.Create(body, options: JsonSerializerOptions);
-         }
-
+         using var request = CreateRequest(HttpMethod.Post, requestUri, epsg, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -162,50 +177,7 @@ namespace GISBlox.Services.SDK
 
          return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
-
-      /// <summary>
-      /// Sends a DELETE request to the specified URI.
-      /// </summary>
-      /// <param name="httpClient">The HTTP client to use for the request.</param>
-      /// <param name="requestUri">The URI of the resource to delete.</param> 
-      /// <param name="customHeaders">Any custom headers to include in the request.</param>
-      /// <param name="cancellationToken">The cancellation token to use for the request.</param>
-      /// <returns>A task representing the asynchronous delete operation.</returns>
-      /// <exception cref="ClientApiException">Thrown when the server returns an error response.</exception>
-      protected static async Task HttpDelete(HttpClient httpClient, string requestUri, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
-      {
-         using var request = new HttpRequestMessage(HttpMethod.Delete, requestUri);
-
-         SetRequestHeaderValues(request, customHeaders);
-
-         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-         await EnsureSuccessStatusCodeAsync(response, cancellationToken);
-      }
-
-      /// <summary>
-      /// Sends a DELETE request to the specified URI and returns a deserialized response.
-      /// </summary>
-      /// <typeparam name="TResult">The type of the response content.</typeparam>
-      /// <param name="httpClient">The HTTP client to use for the request.</param>
-      /// <param name="requestUri">The URI of the resource to delete.</param> 
-      /// <param name="customHeaders">Any custom headers to include in the request.</param>
-      /// <param name="cancellationToken">The cancellation token to use for the request.</param>
-      /// <returns>The deserialized response content.</returns>
-      /// <exception cref="ClientApiException">Thrown when the server returns an error response.</exception>
-      protected static async Task<TResult> HttpDelete<TResult>(HttpClient httpClient, string requestUri, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
-      {
-         using var request = new HttpRequestMessage(HttpMethod.Delete, requestUri);
-
-         SetRequestHeaderValues(request, customHeaders);
-
-         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-         await EnsureSuccessStatusCodeAsync(response, cancellationToken);
-
-         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
-      }
-
+      
       /// <summary>
       /// Sends a POST request with a JSON string body.
       /// </summary>
@@ -218,14 +190,9 @@ namespace GISBlox.Services.SDK
       /// <exception cref="ClientApiException"></exception>
       protected static async Task HttpPost(HttpClient httpClient, string requestUri, string jsonContent, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-
-         SetRequestHeaderValues(request, customHeaders);
-
-         // Directly use the string as JSON content without re-serializing
          var content = new StringContent(jsonContent ?? string.Empty, Encoding.UTF8, "application/json");
-         request.Content = content;
 
+         using var request = CreateRequest(HttpMethod.Post, requestUri, null, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -244,14 +211,9 @@ namespace GISBlox.Services.SDK
       /// <exception cref="ClientApiException"></exception>
       protected static async Task<TResult> HttpPost<TResult>(HttpClient httpClient, string requestUri, string jsonContent, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-
-         SetRequestHeaderValues(request, customHeaders);
-
-         // Directly use the string as JSON content without re-serializing
          var content = new StringContent(jsonContent ?? string.Empty, Encoding.UTF8, "application/json");
-         request.Content = content;
 
+         using var request = CreateRequest(HttpMethod.Post, requestUri, null, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -280,26 +242,10 @@ namespace GISBlox.Services.SDK
       {
          ArgumentNullException.ThrowIfNull(streamContent);
 
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-         SetRequestHeaderValues(request, customHeaders);
-
-         HttpContent content;
-         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
-         {
-            // Respect current position; send remaining bytes only
-            int remaining = (int)(ms.Length - ms.Position);
-            int start = buffer.Offset + (int)ms.Position;
-            content = new ByteArrayContent(buffer.Array, start, remaining);
-         }
-         else
-         {
-            // Fallback: copy the stream content into a byte[]
-            byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
-            content = new ByteArrayContent(contentBytes);
-         }
+         var content = new StreamContent(streamContent);
          content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-         request.Content = content;
 
+         using var request = CreateRequest(HttpMethod.Post, requestUri, null, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -322,26 +268,10 @@ namespace GISBlox.Services.SDK
       {
          ArgumentNullException.ThrowIfNull(streamContent);
 
-         using var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-         SetRequestHeaderValues(request, customHeaders);
-
-         HttpContent content;
-         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
-         {
-            // Respect current position; send remaining bytes only
-            int remaining = (int)(ms.Length - ms.Position);
-            int start = buffer.Offset + (int)ms.Position;
-            content = new ByteArrayContent(buffer.Array, start, remaining);
-         }
-         else
-         {
-            // Fallback: copy the stream content into a byte[]
-            byte[] contentBytes = await ReadStreamBytes(streamContent, cancellationToken);
-            content = new ByteArrayContent(contentBytes);
-         }
+         var content = new StreamContent(streamContent);
          content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-         request.Content = content;
 
+         using var request = CreateRequest(HttpMethod.Post, requestUri, null, customHeaders, content);
          using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
          await EnsureSuccessStatusCodeAsync(response, cancellationToken);
@@ -350,6 +280,43 @@ namespace GISBlox.Services.SDK
          {
             return default;
          }
+
+         return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+      }
+
+      /// <summary>
+      /// Sends a DELETE request to the specified URI.
+      /// </summary>
+      /// <param name="httpClient">The HTTP client to use for the request.</param>
+      /// <param name="requestUri">The URI of the resource to delete.</param> 
+      /// <param name="customHeaders">Any custom headers to include in the request.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the request.</param>
+      /// <returns>A task representing the asynchronous delete operation.</returns>
+      /// <exception cref="ClientApiException">Thrown when the server returns an error response.</exception>
+      protected static async Task HttpDelete(HttpClient httpClient, string requestUri, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
+      {
+         using var request = CreateRequest(HttpMethod.Delete, requestUri, null, customHeaders);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+         await EnsureSuccessStatusCodeAsync(response, cancellationToken);
+      }
+
+      /// <summary>
+      /// Sends a DELETE request to the specified URI and returns a deserialized response.
+      /// </summary>
+      /// <typeparam name="TResult">The type of the response content.</typeparam>
+      /// <param name="httpClient">The HTTP client to use for the request.</param>
+      /// <param name="requestUri">The URI of the resource to delete.</param> 
+      /// <param name="customHeaders">Any custom headers to include in the request.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the request.</param>
+      /// <returns>The deserialized response content.</returns>
+      /// <exception cref="ClientApiException">Thrown when the server returns an error response.</exception>
+      protected static async Task<TResult> HttpDelete<TResult>(HttpClient httpClient, string requestUri, Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
+      {
+         using var request = CreateRequest(HttpMethod.Delete, requestUri, null, customHeaders);
+         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+         await EnsureSuccessStatusCodeAsync(response, cancellationToken);
 
          return await response.Content.ReadFromJsonAsync<TResult>(JsonSerializerOptions, cancellationToken).ConfigureAwait(false);
       }
@@ -372,32 +339,43 @@ namespace GISBlox.Services.SDK
             return cachedContent;
          }
 
-         using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-
-         // Set Accept header explicitly for JSON files
-         request.Headers.Accept.Clear();
-         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-         SetRequestHeaderValues(request, customHeaders);
-
-         using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-
+         var cacheLock = CacheKeyLocks.GetOrAdd(requestUri, _ => new SemaphoreSlim(1, 1));
+         await cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
          try
          {
-            await EnsureSuccessStatusCodeAsync(response, cancellationToken);
-         }
-         catch (ClientApiException ex)
-         {
-            throw new ClientApiException($"Failed to download JSON file. {ex.Message}", ex.StatusCode);
-         }
+            if (useCache && cache.TryGetValue(requestUri, out cachedContent))
+            {
+               return cachedContent;
+            }
 
-         var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            using var request = CreateRequest(HttpMethod.Get, requestUri, null, customHeaders, acceptContentType: "application/json");
+            using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
-         if (useCache && !string.IsNullOrEmpty(responseContent))
-         {
-            cache.Set(requestUri, responseContent);
+            try
+            {
+               await EnsureSuccessStatusCodeAsync(response, cancellationToken);
+            }
+            catch (ClientApiException ex)
+            {
+               throw new ClientApiException($"Failed to download JSON file. {ex.Message}", ex.StatusCode);
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+            if (useCache && !string.IsNullOrEmpty(responseContent))
+            {
+               cache.Set(requestUri, responseContent, DefaultCacheDuration);
+            }
+            return responseContent;
          }
-         return responseContent;
+         finally
+         {
+            cacheLock.Release();
+            if (cacheLock.CurrentCount == 1)
+            {
+               CacheKeyLocks.TryRemove(new KeyValuePair<string, SemaphoreSlim>(requestUri, cacheLock));
+            }
+         }
       }
 
       /// <summary>
@@ -412,14 +390,7 @@ namespace GISBlox.Services.SDK
       /// <exception cref="ClientApiException"></exception>
       protected static async Task DownloadFileToDisk(HttpClient httpClient, string requestUri, string filePath, string contentType = "application/json", Dictionary<string, string> customHeaders = null, CancellationToken cancellationToken = default)
       {
-         using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-
-         // Set Accept header explicitly for the requested content type
-         request.Headers.Accept.Clear();
-         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
-
-         SetRequestHeaderValues(request, customHeaders);
-
+         using var request = CreateRequest(HttpMethod.Get, requestUri, null, customHeaders, acceptContentType: contentType);
          using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
          try
@@ -439,43 +410,42 @@ namespace GISBlox.Services.SDK
          }
 
          // Write the file
-         using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-         {
-            await response.Content.CopyToAsync(fileStream, cancellationToken);
-         }
+         using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+         await response.Content.CopyToAsync(fileStream, cancellationToken);
       }
 
+      #region Helper methods
+
       /// <summary>
-      /// Reads the entire content of a stream into a byte array.
+      /// Creates a configured HTTP request message.
       /// </summary>
-      /// <param name="streamContent">The stream to read from.</param>
-      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
-      /// <returns>A byte array containing the entire content of the stream.</returns>
-      protected static async Task<byte[]> ReadStreamBytes(Stream streamContent, CancellationToken cancellationToken)
+      /// <param name="method">The HTTP method.</param>
+      /// <param name="requestUri">The request URI.</param>
+      /// <param name="epsg">The EPSG header value, if any.</param>
+      /// <param name="customHeaders">Additional headers to apply.</param>
+      /// <param name="content">Optional request content.</param>
+      /// <param name="acceptContentType">Optional single Accept content type.</param>
+      /// <returns>A configured <see cref="HttpRequestMessage"/>.</returns>
+      private static HttpRequestMessage CreateRequest(HttpMethod method, string requestUri, string epsg = null, Dictionary<string, string> customHeaders = null, HttpContent content = null, string acceptContentType = null)
       {
-         // Read the entire stream into a byte array to ensure we have the full content
-         // regardless of what happens to the original stream after this method returns
-         if (streamContent is MemoryStream ms && ms.TryGetBuffer(out ArraySegment<byte> buffer) && buffer.Array != null)
+         var request = new HttpRequestMessage(method, requestUri)
          {
-            // Respect current position; copy only the remaining bytes
-            int remaining = (int)(ms.Length - ms.Position);
+            Content = content
+         };
 
-            if (remaining == buffer.Count && ms.Position ==0 && buffer.Offset ==0)
-            {
-               // Common case: entire buffer contains the content - return a copy to avoid exposing internal buffer
-               var copy = new byte[buffer.Count];
-               Buffer.BlockCopy(buffer.Array, buffer.Offset, copy,0, buffer.Count);
-               return copy;
-            }
-
-            var result = new byte[remaining];
-            Buffer.BlockCopy(buffer.Array, buffer.Offset + (int)ms.Position, result,0, remaining);
-            return result;
+         if (epsg != null)
+         {
+            request.Headers.Add("X-EPSG", epsg);
          }
 
-         using var memoryStream = new MemoryStream();
-         await streamContent.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
-         return memoryStream.ToArray();
+         if (!string.IsNullOrWhiteSpace(acceptContentType))
+         {
+            request.Headers.Accept.Clear();
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptContentType));
+         }
+
+         SetRequestHeaderValues(request, customHeaders);
+         return request;
       }
 
       /// <summary>
@@ -531,10 +501,7 @@ namespace GISBlox.Services.SDK
       /// <param name="disposing">Indicates whether the method is being called from Dispose (true) or from a finalizer (false).</param>
       protected virtual void Dispose(bool disposing)
       {
-         if (disposing)
-         {
-            HttpClient?.Dispose();
-         }
+         // Don't dispose the HttpClient here since it is shared and should be disposed by the caller that created it.
       }
 
       /// <summary>
@@ -545,5 +512,7 @@ namespace GISBlox.Services.SDK
          Dispose(true);
          GC.SuppressFinalize(this);
       }
+
+      #endregion
    }
 }

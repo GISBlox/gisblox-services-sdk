@@ -325,7 +325,7 @@
 
          List<string> expectedIDs = ["1011MA", "1011JV", "1011JT", "1011JS", "1011JR", "1011JP", "1011HB", "1011ME", "1011GD", "1012CR", "1012CS", "1012CW"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.AreEqual("POINT (4.899542319809449 52.37146607902682)", record.PostalCode[1].Location.Geometry.Centroid);
+         Assert.AreEqual("POINT (4.900588613654761 52.3709636802628)", record.PostalCode[1].Location.Geometry.Centroid);   // 1101HB
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }

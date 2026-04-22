@@ -166,18 +166,9 @@ namespace GISBlox.Services.SDK.PostalCodes
       internal static string BuildBaseAnalysisUri(string postalCodes)
       {
          int digitLength = GetPostalCodeDigitLength(postalCodes);
-         if (digitLength == 4)
-         {
-            return "postalcodes4/keyfigures/analysis";
-         }
-         else if (digitLength == 6)
-         {
-            return "postalcodes6/keyfigures/analysis";
-         }
-         else
-         {
-            throw new ArgumentException("Invalid postal code format. Postal codes must be either 4 or 6 digits long.");
-         }
+         return digitLength != -1
+            ? $"postalcodes{digitLength}/keyfigures/analysis"
+            : throw new ArgumentException("Invalid postal code format. Postal codes must be either 4 or 6 digits long.");
       }
 
       /// <summary>

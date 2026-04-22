@@ -24,6 +24,16 @@
             Provides the default options used for JSON serialization and deserialization with web defaults.
             </summary>
         </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.DefaultCacheDuration">
+            <summary>
+            Default cache duration for API responses.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.CacheKeyLocks">
+            <summary>
+            Per-cache-key async locks to avoid duplicate concurrent fetches.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.ApiClient"/> class.
@@ -73,29 +83,6 @@
             <param name="cancellationToken">The cancellation token to use for the request.</param>
             <returns>The deserialized response content.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
-        </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <summary>
-            Sends a DELETE request to the specified URI.
-            </summary>
-            <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param> 
-            <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>A task representing the asynchronous delete operation.</returns>
-            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
-        </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete``1(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <summary>
-            Sends a DELETE request to the specified URI and returns a deserialized response.
-            </summary>
-            <typeparam name="TResult">The type of the response content.</typeparam>
-            <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param> 
-            <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>The deserialized response content.</returns>
-            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
@@ -151,6 +138,29 @@
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
             <exception cref="T:System.ArgumentNullException">Thrown when streamContent is null.</exception>
         </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param> 
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>A task representing the asynchronous delete operation.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete``1(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI and returns a deserialized response.
+            </summary>
+            <typeparam name="TResult">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param> 
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFileData(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
             Downloads the content of a JSON file from the specified URI.
@@ -176,13 +186,17 @@
             <param name="cancellationToken">The cancellation token to use for the request.</param> 
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.ReadStreamBytes(System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.ApiClient.CreateRequest(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Net.Http.HttpContent,System.String)">
             <summary>
-            Reads the entire content of a stream into a byte array.
+            Creates a configured HTTP request message.
             </summary>
-            <param name="streamContent">The stream to read from.</param>
-            <param name="cancellationToken">The cancellation token to use for the operation.</param>
-            <returns>A byte array containing the entire content of the stream.</returns>
+            <param name="method">The HTTP method.</param>
+            <param name="requestUri">The request URI.</param>
+            <param name="epsg">The EPSG header value, if any.</param>
+            <param name="customHeaders">Additional headers to apply.</param>
+            <param name="content">Optional request content.</param>
+            <param name="acceptContentType">Optional single Accept content type.</param>
+            <returns>A configured <see cref="T:System.Net.Http.HttpRequestMessage"/>.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.SetRequestHeaderValues(System.Net.Http.HttpRequestMessage,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
