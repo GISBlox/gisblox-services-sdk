@@ -177,6 +177,61 @@
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
+      [TestMethod]
+      public async Task RunAudienceAnalysisPC4NoWeights()
+      {
+         string postalCodes = "3068,3069";
+         string preset = "Senioren";
+
+         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
+         
+         Assert.IsNotNull(analysisResult, "Response is empty.");
+         Assert.HasCount(2, analysisResult.Items, "Unexpected number of items in the analysis result.");
+         
+         double seniorenScore = analysisResult.Insights.TryGetValue("SeniorenScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
+         Assert.IsGreaterThan(0, seniorenScore, "SeniorenScore insight is missing or not greater than 0.");
+
+         JsonDocument json = analysisResult.ToJson();
+         Assert.IsNotNull(json, "JSON output is empty.");
+
+         string jsonData = analysisResult.ToJsonString();
+         Assert.IsNotNull(jsonData, "JSON string output is empty.");
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task RunAudienceAnalysisPC4Weights()
+      {
+         string postalCodes = "3068,3069";
+         string preset = "Senioren";
+
+         // Tweak the presets for seniors by assigning a higher weight to the 65Plus attribute and a lower weight to the Alleen attribute.         
+         string weights = """{"Senior": { "65Plus": 0.4, "Alleen": 0.1 }}""";
+
+         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
+
+         Assert.IsNotNull(analysisResult, "Response is empty.");
+         Assert.HasCount(2, analysisResult.Items, "Unexpected number of items in the analysis result.");
+
+         double seniorenScore = analysisResult.Insights.TryGetValue("SeniorenScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
+         Assert.AreEqual(0.462, seniorenScore, 0.001, "SeniorenScore insight is not as expected.");
+         
+         string jsonData = analysisResult.ToJsonString();
+         Assert.IsNotNull(jsonData, "JSON string output is empty.");
+         
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task RunAudienceAnalysisIllegalPostcodeCombination()
+      {
+         string postalCodes = "3068GE,3069";
+         string preset = "Senioren";
+
+         _ = Assert.ThrowsExactlyAsync<ArgumentException>(async () => await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None), "Expected an ArgumentException for illegal postal codes.");
+      }
+
       #endregion
 
       #region PC6
@@ -270,7 +325,7 @@
 
          List<string> expectedIDs = ["1011MA", "1011JV", "1011JT", "1011JS", "1011JR", "1011JP", "1011HB", "1011ME", "1011GD", "1012CR", "1012CS", "1012CW"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.AreEqual("POINT (4.899542319809449 52.37146607902682)", record.PostalCode[1].Location.Geometry.Centroid);
+         Assert.AreEqual("POINT (4.900588613654761 52.3709636802628)", record.PostalCode[1].Location.Geometry.Centroid);   // 1101HB
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
@@ -310,6 +365,52 @@
 
          Assert.IsNotNull(record, "Response is empty.");
          Assert.AreEqual(35, record.MetaData.TotalAttributes);
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task RunAudienceAnalysisPC6NoWeights()
+      {
+         string postalCodes = "3069KN, 3069KS,3069 LG";
+         string preset = "Starters";
+
+         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
+
+         Assert.IsNotNull(analysisResult, "Response is empty.");
+         Assert.HasCount(3, analysisResult.Items, "Unexpected number of items in the analysis result.");
+
+         double starterScore = analysisResult.Insights.TryGetValue("StarterScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
+         Assert.IsGreaterThan(0, starterScore, "StarterScore insight is missing or not greater than 0.");
+
+         JsonDocument json = analysisResult.ToJson();
+         Assert.IsNotNull(json, "JSON output is empty.");
+
+         string jsonData = analysisResult.ToJsonString();
+         Assert.IsNotNull(jsonData, "JSON string output is empty.");
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task RunAudienceAnalysisPC6Weights()
+      {
+         string postalCodes = "3069KN, 3069KS,3069 LG";
+         string preset = "Starters";
+
+         // Tweak the presets for starters by assigning a higher weight to the Young attribute.         
+         string weights = """{"Starter": { "Young": 0.8 }}""";
+
+         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
+
+         Assert.IsNotNull(analysisResult, "Response is empty.");
+         Assert.HasCount(3, analysisResult.Items, "Unexpected number of items in the analysis result.");
+
+         double starterScore = analysisResult.Insights.TryGetValue("StarterScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
+         Assert.AreEqual(0.112, starterScore, 0.001, "StarterScore insight is not as expected.");
+
+         string jsonData = analysisResult.ToJsonString();
+         Assert.IsNotNull(jsonData, "JSON string output is empty.");
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }

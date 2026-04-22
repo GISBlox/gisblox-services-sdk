@@ -136,7 +136,7 @@
       [TestMethod]
       public async Task RoundTrip()
       {
-         string fileName = "test_roundtrip.json";
+         string fileName = "test_roundtrip1.json";
 
          // Upload raw GeoJSON content as a file
          var result = await _client.DataLake.UploadFileData(TEST_GEOJSON_POINT, fileName, CancellationToken.None);

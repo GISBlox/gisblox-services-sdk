@@ -24,6 +24,16 @@
             Provides the default options used for JSON serialization and deserialization with web defaults.
             </summary>
         </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.DefaultCacheDuration">
+            <summary>
+            Default cache duration for API responses.
+            </summary>
+        </member>
+        <member name="F:GISBlox.Services.SDK.ApiClient.CacheKeyLocks">
+            <summary>
+            Per-cache-key async locks to avoid duplicate concurrent fetches.
+            </summary>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the <see cref="T:GISBlox.Services.SDK.ApiClient"/> class.
@@ -73,29 +83,6 @@
             <param name="cancellationToken">The cancellation token to use for the request.</param>
             <returns>The deserialized response content.</returns>
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
-        </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <summary>
-            Sends a DELETE request to the specified URI.
-            </summary>
-            <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param> 
-            <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>A task representing the asynchronous delete operation.</returns>
-            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
-        </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete``1(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <summary>
-            Sends a DELETE request to the specified URI and returns a deserialized response.
-            </summary>
-            <typeparam name="TResult">The type of the response content.</typeparam>
-            <param name="httpClient">The HTTP client to use for the request.</param>
-            <param name="requestUri">The URI of the resource to delete.</param> 
-            <param name="customHeaders">Any custom headers to include in the request.</param>
-            <param name="cancellationToken">The cancellation token to use for the request.</param>
-            <returns>The deserialized response content.</returns>
-            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.HttpPost(System.Net.Http.HttpClient,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
@@ -151,6 +138,29 @@
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
             <exception cref="T:System.ArgumentNullException">Thrown when streamContent is null.</exception>
         </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI.
+            </summary>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param> 
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>A task representing the asynchronous delete operation.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.ApiClient.HttpDelete``1(System.Net.Http.HttpClient,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request to the specified URI and returns a deserialized response.
+            </summary>
+            <typeparam name="TResult">The type of the response content.</typeparam>
+            <param name="httpClient">The HTTP client to use for the request.</param>
+            <param name="requestUri">The URI of the resource to delete.</param> 
+            <param name="customHeaders">Any custom headers to include in the request.</param>
+            <param name="cancellationToken">The cancellation token to use for the request.</param>
+            <returns>The deserialized response content.</returns>
+            <exception cref="T:GISBlox.Services.SDK.ClientApiException">Thrown when the server returns an error response.</exception>
+        </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.DownloadJsonFileData(System.Net.Http.HttpClient,Microsoft.Extensions.Caching.Memory.IMemoryCache,System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
             Downloads the content of a JSON file from the specified URI.
@@ -176,13 +186,17 @@
             <param name="cancellationToken">The cancellation token to use for the request.</param> 
             <exception cref="T:GISBlox.Services.SDK.ClientApiException"></exception>
         </member>
-        <member name="M:GISBlox.Services.SDK.ApiClient.ReadStreamBytes(System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:GISBlox.Services.SDK.ApiClient.CreateRequest(System.Net.Http.HttpMethod,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Net.Http.HttpContent,System.String)">
             <summary>
-            Reads the entire content of a stream into a byte array.
+            Creates a configured HTTP request message.
             </summary>
-            <param name="streamContent">The stream to read from.</param>
-            <param name="cancellationToken">The cancellation token to use for the operation.</param>
-            <returns>A byte array containing the entire content of the stream.</returns>
+            <param name="method">The HTTP method.</param>
+            <param name="requestUri">The request URI.</param>
+            <param name="epsg">The EPSG header value, if any.</param>
+            <param name="customHeaders">Additional headers to apply.</param>
+            <param name="content">Optional request content.</param>
+            <param name="acceptContentType">Optional single Accept content type.</param>
+            <returns>A configured <see cref="T:System.Net.Http.HttpRequestMessage"/>.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.ApiClient.SetRequestHeaderValues(System.Net.Http.HttpRequestMessage,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
@@ -1240,6 +1254,58 @@
             The collection of key performance indicators (KPIs) associated with the specified map.
             </summary>      
         </member>
+        <member name="T:GISBlox.Services.SDK.Models.AudienceAnalysisResult">
+            <summary>
+            Represents the result of an audience analysis based on key figures of postal codes.
+            </summary>
+            <remarks>This class provides structured access to both raw and calculated data from an audience analysis
+            operation. It exposes collections for per-postal code figures, overall summaries, recalculated percentages,
+            weighted averages, derived insights, and a persona description. The data can be accessed in object form or
+            serialized to JSON for interoperability with other systems.</remarks>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Items">
+            <summary>
+            Contains the key figures of each postal code in the result set.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Summary">
+            <summary>
+            Represents the totals of the key figures across all postal codes in the result set. 
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Percentages">
+            <summary>
+            Represents the recalculated percentages of the key figures across all postal codes in the result set, based on the totals in the Summary property.
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Averages">
+            <summary>
+            Represents the weighted averages of the key figures across all postal codes in the result set.       
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Insights">
+            <summary>
+            Represents the derived audience scores based on the key figures across all postal codes in the result set. 
+            These scores are generated by applying predefined rules and thresholds to the key figures. 
+            </summary>
+        </member>
+        <member name="P:GISBlox.Services.SDK.Models.AudienceAnalysisResult.Persona">
+            <summary>
+            Objective, source data-driven description of the audience segment that is identified in the result set. 
+            </summary>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.AudienceAnalysisResult.ToJson">
+            <summary>
+            Converts the current object to a JsonDocument.
+            </summary>
+            <returns>A JsonDocument that represents the current object in JSON format.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.Models.AudienceAnalysisResult.ToJsonString">
+            <summary>
+            Converts the current object to its JSON string representation.
+            </summary>      
+            <returns>A JSON-formatted string that represents the current object.</returns>
+        </member>
         <member name="T:GISBlox.Services.SDK.Models.BoundingBox">
             <summary>
             This class defines a rectangular region of the 2D coordinate plane.
@@ -1765,7 +1831,7 @@
             </summary>
             <param name="id">A Dutch postal code.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1775,7 +1841,7 @@
             <param name="id">A Dutch postal code.</param>
             <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByGeometry``1(System.String,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1786,7 +1852,7 @@
             <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
             <param name="wktEpsg">The coordinate system of the specified geometry.</param>
             <param name="targetEpsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1797,7 +1863,7 @@
             <param name="wijkId">A district ('wijk') code.</param>   
             <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetKeyFigures(System.String,System.Threading.CancellationToken)">
@@ -1805,8 +1871,27 @@
             Gets the key figures record for the specified postal code area.
             </summary>
             <param name="id">A Dutch postal code.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.RunAudienceAnalysis(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Runs an audience analysis using the specified postal codes and preset configuration.
+            </summary>
+            <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
+            <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.AudienceAnalysisResult"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.RunAudienceAnalysis(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Runs an audience analysis using the specified postal codes, preset configuration, and custom weights.
+            </summary>
+            <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
+            <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
+            <param name="weightsJson">A JSON string representing custom weights for the analysis. Overrides the default weights in the preset.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.AudienceAnalysisResult"/></returns>
         </member>
         <member name="T:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient">
             <summary>
@@ -1828,6 +1913,16 @@
             <param name="httpClient">The current instance of the HTTPClient class.</param>
             <param name="cache">The current instance of the MemoryCache class.</param>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.RemoveSpaces">
+            <remarks>
+            Pattern:<br/>
+            <code>\\s+</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match a whitespace character atomically at least once.<br/>
+            </code>
+            </remarks>
+        </member>
         <member name="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper">
             <summary>
             Contains methods to retrieve area records for Gemeente, Wijk and/or Buurt queries. 
@@ -1839,7 +1934,7 @@
             </summary>
             <param name="id">A Dutch postal code.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1849,7 +1944,7 @@
             <param name="id">A Dutch postal code.</param>
             <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByGeometry``1(System.String,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1860,7 +1955,7 @@
             <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
             <param name="wktEpsg">The coordinate system of the specified geometry.</param>
             <param name="targetEpsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
@@ -1871,7 +1966,7 @@
             <param name="wijkId">A district ('wijk') code.</param>   
             <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
             <param name="epsg">The target coordinate system.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetKeyFigures(System.String,System.Threading.CancellationToken)">
@@ -1879,8 +1974,27 @@
             Gets the key figures record for the specified postal code area.
             </summary>
             <param name="id">A Dutch postal code.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.KerncijferRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.RunAudienceAnalysis(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Runs an audience analysis using the specified postal codes and preset configuration.
+            </summary>
+            <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
+            <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.AudienceAnalysisResult"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.RunAudienceAnalysis(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Runs an audience analysis using the specified postal codes, preset configuration, and custom weights.
+            </summary>
+            <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
+            <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
+            <param name="weightsJson">A JSON string representing custom weights for the analysis. Overrides the default weights in the preset.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.AudienceAnalysisResult"/></returns>
         </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.BuildBaseUri``1">
             <summary>
@@ -1888,6 +2002,32 @@
             </summary>
             <typeparam name="IPostalCodeRecord">A class that inherits from <see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/>.</typeparam>
             <returns>The proper postal code service URI.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.BuildBaseAnalysisUri(System.String)">
+            <summary>
+            Returns the postal code analysis service URI based on the digit length of the provided postal codes.
+            </summary>
+            <param name="postalCodes">A comma-separated list of postal code strings to evaluate.</param>
+            <returns>The base URI for the postal code analysis service.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeDigitLength(System.String)">
+            <summary>
+            Determines the digit length of the provided postal codes, returning 4 or 6 if all codes match a consistent length.
+            </summary>
+            <remarks>This method ignores empty entries and trims whitespace from each code before evaluation.
+            If the list contains a mix of 4- and 6-digit codes, or codes of other lengths, the method returns -1.</remarks>
+            <param name="postalCodes">A comma-separated list of postal code strings to evaluate. Each code should contain only digits and may be
+            separated by commas with optional whitespace.</param>
+            <returns>The digit length of the postal codes if all codes are either 4 or 6 digits long; otherwise, -1.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.CheckDigits(System.String[],System.Int32)">
+            <summary>
+            Determines whether all strings in the specified array have the given length.
+            </summary>
+            <param name="codes">An array of strings to check for matching lengths. Cannot be null.</param>
+            <param name="length">The length to compare against each string in the array. Must be non-negative.</param>
+            <returns>true if all strings in the array have the specified length; otherwise, false.</returns>
         </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>
@@ -2057,6 +2197,50 @@
             <param name="complete">True to mark as complete, False to not.</param>
             <param name="addDecimals">True to add the X-Rounding-Decimals header, False to not.</param>
             <param name="decimals">The amount of fractional digits to round to. -1 for no rounding.</param>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.RemoveSpaces_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the RemoveSpaces method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.RemoveSpaces_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.RemoveSpaces_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.RemoveSpaces_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_whitespace">
+            <summary>Supports searching for characters in or not in "\t\n\v\f\r \u0085             \u2028\u2029  　".</summary>
         </member>
     </members>
 </doc>

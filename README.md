@@ -27,19 +27,17 @@ This SDK enables applications to connect to the [GISBlox Services API](https://s
 #### Data Lake
   * Access the GISBlox GeoJson Data Lake: upload and manage your GeoJson datasets in the cloud. Supports exporting to modern data formats, such as GeoParquet.
 
+#### Dutch postal codes
+  * Query and visualize Dutch postal codes (as used by our [MCP Server](https://github.com/GISBlox/mcp-server) and [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot)) to turn raw postal code data into meaningful insights for regional analysis and decision-making.
+
 #### Info
   * Quickly retrieve an overview of your subscriptions and their details.
 
 #### Map Analytics
   * Analyze user behavior on interactive maps (see [Map Analytics](https://www.gisblox.com/map-analytics)) to provide clarity on engagement and map usage.
 
-#### Postal codes
-  * Query and visualize Dutch postal codes (as used by [ZipChat Copilot](https://www.gisblox.com/zipchat-copilot)) to turn raw postal code data into meaningful insights for regional analysis and decision-making.
-
 #### Projection
   * Project [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84) coordinates to [Rijksdriehoeksstelsel](https://nl.wikipedia.org/wiki/Rijksdriehoeksco%C3%B6rdinaten) (RDNew) locations, and vice versa. Includes batch processing capabilities. 
-
-To get no-code access to the GISBlox Services API from the command-line, you can use the [GISBlox Services CLI](https://github.com/GISBlox/gisblox-services-cli).
 
 ## 🗝️ Requirements
 You must have a personal service key to access the GISBlox Services API.
