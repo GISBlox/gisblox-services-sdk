@@ -74,8 +74,8 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
       /// <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
       /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-      /// <returns><see cref="AudienceAnalysisResult"/></returns>
-      Task<AudienceAnalysisResult> RunAudienceAnalysis(string postalCodes, string preset, CancellationToken cancellationToken = default);
+      /// <returns><see cref="AudienceAnalysisRecord"/></returns>
+      Task<AudienceAnalysisRecord> RunAudienceAnalysis(string postalCodes, string preset, CancellationToken cancellationToken = default);
 
       /// <summary>
       /// Runs an audience analysis using the specified postal codes, preset configuration, and custom weights.
@@ -84,7 +84,7 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
       /// <param name="weightsJson">A JSON string representing custom weights for the analysis. Overrides the default weights in the preset.</param>
       /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-      /// <returns><see cref="AudienceAnalysisResult"/></returns>
-      Task<AudienceAnalysisResult> RunAudienceAnalysis(string postalCodes, string preset, string weightsJson, CancellationToken cancellationToken = default);
+      /// <returns><see cref="AudienceAnalysisRecord"/></returns>
+      Task<AudienceAnalysisRecord> RunAudienceAnalysis(string postalCodes, string preset, string weightsJson, CancellationToken cancellationToken = default);
    }
 }
