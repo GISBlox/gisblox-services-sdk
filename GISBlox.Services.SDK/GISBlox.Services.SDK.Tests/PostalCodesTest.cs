@@ -137,7 +137,9 @@
 
          List<string> expectedIDs = ["1011", "1012"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.AreEqual("POINT (4.905333126288753 52.37154228233867)", record.PostalCode[1].Location.Geometry.Centroid);
+
+         PostalCode4 pc4 = record.PostalCode.Find(pc => pc.Id == "1011");
+         Assert.AreEqual("POINT (4.905333126288753 52.37154228233867)", pc4.Location.Geometry.Centroid);
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
@@ -183,19 +185,18 @@
          string postalCodes = "3068,3069";
          string preset = "Senioren";
 
-         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
+         AudienceAnalysisRecord analysisRecord = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
          
-         Assert.IsNotNull(analysisResult, "Response is empty.");
-         Assert.HasCount(2, analysisResult.Items, "Unexpected number of items in the analysis result.");
-         
-         double seniorenScore = analysisResult.Insights.TryGetValue("SeniorenScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
-         Assert.IsGreaterThan(0, seniorenScore, "SeniorenScore insight is missing or not greater than 0.");
+         Assert.IsNotNull(analysisRecord, "Response is empty.");
+         Assert.HasCount(2, analysisRecord.Results, "Unexpected number of items in the analysis result.");
 
-         JsonDocument json = analysisResult.ToJson();
-         Assert.IsNotNull(json, "JSON output is empty.");
+         AudienceAnalysisResult result3068 = analysisRecord.Results.Find(result => result.PostalCode == "3068");
+         double seniorenScore = GetDictionaryValue(result3068.TargetingScores, "SeniorenScore");
+         Assert.AreEqual(0.554, seniorenScore, 0.001, "SeniorenScore insight is not as expected.");
 
-         string jsonData = analysisResult.ToJsonString();
-         Assert.IsNotNull(jsonData, "JSON string output is empty.");
+         AudienceAnalysisResult result3069 = analysisRecord.Results.Find(result => result.PostalCode == "3069");
+         double seniorenScore3069 = GetDictionaryValue(result3069.TargetingScores, "SeniorenScore");
+         Assert.AreEqual(0.612, seniorenScore3069, 0.001, "SeniorenScore insight is not as expected.");
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
@@ -209,17 +210,19 @@
          // Tweak the presets for seniors by assigning a higher weight to the 65Plus attribute and a lower weight to the Alleen attribute.         
          string weights = """{"Senior": { "65Plus": 0.4, "Alleen": 0.1 }}""";
 
-         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
+         AudienceAnalysisRecord analysisRecord  = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
 
-         Assert.IsNotNull(analysisResult, "Response is empty.");
-         Assert.HasCount(2, analysisResult.Items, "Unexpected number of items in the analysis result.");
+         Assert.IsNotNull(analysisRecord, "Response is empty.");
+         Assert.HasCount(2, analysisRecord.Results, "Unexpected number of items in the analysis result.");
 
-         double seniorenScore = analysisResult.Insights.TryGetValue("SeniorenScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
-         Assert.AreEqual(0.462, seniorenScore, 0.001, "SeniorenScore insight is not as expected.");
-         
-         string jsonData = analysisResult.ToJsonString();
-         Assert.IsNotNull(jsonData, "JSON string output is empty.");
-         
+         AudienceAnalysisResult result3068 = analysisRecord.Results.Find(result => result.PostalCode == "3068");
+         double seniorenScore = GetDictionaryValue(result3068.TargetingScores, "SeniorenScore");
+         Assert.AreEqual(0.439, seniorenScore, 0.001, "SeniorenScore insight is not as expected.");
+
+         AudienceAnalysisResult result3069 = analysisRecord.Results.Find(result => result.PostalCode == "3069");
+         double seniorenScore3069 = GetDictionaryValue(result3069.TargetingScores, "SeniorenScore");
+         Assert.AreEqual(0.487, seniorenScore3069, 0.001, "SeniorenScore insight is not as expected.");
+
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
@@ -325,7 +328,9 @@
 
          List<string> expectedIDs = ["1011MA", "1011JV", "1011JT", "1011JS", "1011JR", "1011JP", "1011HB", "1011ME", "1011GD", "1012CR", "1012CS", "1012CW"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
-         Assert.AreEqual("POINT (4.900588613654761 52.3709636802628)", record.PostalCode[1].Location.Geometry.Centroid);   // 1101HB
+
+         PostalCode6 pc6 = record.PostalCode.Find(pc => pc.Id == "1011HB");
+         Assert.AreEqual("POINT (4.900588613654761 52.3709636802628)", pc6.Location.Geometry.Centroid);
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
@@ -375,22 +380,21 @@
          string postalCodes = "3069KN, 3069KS,3069 LG";
          string preset = "Starters";
 
-         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
+         AudienceAnalysisRecord analysisRecord = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, CancellationToken.None);
 
-         Assert.IsNotNull(analysisResult, "Response is empty.");
-         Assert.HasCount(3, analysisResult.Items, "Unexpected number of items in the analysis result.");
+         Assert.IsNotNull(analysisRecord, "Response is empty.");
+         Assert.HasCount(3, analysisRecord.Results, "Unexpected number of items in the analysis result.");
 
-         double starterScore = analysisResult.Insights.TryGetValue("StarterScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
-         Assert.IsGreaterThan(0, starterScore, "StarterScore insight is missing or not greater than 0.");
+         AudienceAnalysisResult result3059KS = analysisRecord.Results.Find(result => result.PostalCode == "3069KS");
 
-         JsonDocument json = analysisResult.ToJson();
-         Assert.IsNotNull(json, "JSON output is empty.");
+         double starterScore = GetDictionaryValue(result3059KS.TargetingScores, "StarterScore");
+         Assert.AreEqual(0.048, starterScore, 0.001, "StarterScore insight is not as expected.");         
 
-         string jsonData = analysisResult.ToJsonString();
-         Assert.IsNotNull(jsonData, "JSON string output is empty.");
-
+         double neutralStarterScore = GetDictionaryValue(result3059KS.NeutralScores, "StarterScore");
+         Assert.AreEqual(0.040, neutralStarterScore, 0.001, "Neutral StarterScore insight is not as expected.");
+         
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
-      }
+      }      
 
       [TestMethod]
       public async Task RunAudienceAnalysisPC6Weights()
@@ -401,20 +405,37 @@
          // Tweak the presets for starters by assigning a higher weight to the Young attribute.         
          string weights = """{"Starter": { "Young": 0.8 }}""";
 
-         AudienceAnalysisResult analysisResult = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
+         AudienceAnalysisRecord analysisRecord = await _client.PostalCodes.RunAudienceAnalysis(postalCodes, preset, weights, CancellationToken.None);
 
-         Assert.IsNotNull(analysisResult, "Response is empty.");
-         Assert.HasCount(3, analysisResult.Items, "Unexpected number of items in the analysis result.");
+         Assert.IsNotNull(analysisRecord, "Response is empty.");
+         Assert.HasCount(3, analysisRecord.Results, "Unexpected number of items in the analysis result.");
 
-         double starterScore = analysisResult.Insights.TryGetValue("StarterScore", out object topInsightValue) ? Convert.ToDouble(topInsightValue) : 0;
+         AudienceAnalysisResult result3069LG = analysisRecord.Results.Find(result => result.PostalCode == "3069LG");
+
+         double starterScore = GetDictionaryValue(result3069LG.TargetingScores, "StarterScore");
          Assert.AreEqual(0.112, starterScore, 0.001, "StarterScore insight is not as expected.");
 
-         string jsonData = analysisResult.ToJsonString();
-         Assert.IsNotNull(jsonData, "JSON string output is empty.");
+         double neutralStarterScore = GetDictionaryValue(result3069LG.NeutralScores, "StarterScore");
+         Assert.AreEqual(0.034, neutralStarterScore, 0.001, "Neutral StarterScore insight is not as expected.");
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 
-      #endregion     
+      #endregion
+
+      #region Helpers
+
+      private static double GetDictionaryValue(Dictionary<string, object> dict, string key)
+      {
+         return dict.TryGetValue(key, out object value) == true
+            ? value switch
+            {
+               JsonElement { ValueKind: JsonValueKind.Number } jsonNumber => jsonNumber.GetDouble(),
+               JsonElement { ValueKind: JsonValueKind.String } jsonString when double.TryParse(jsonString.GetString(), out double parsed) => parsed,
+               _ => Convert.ToDouble(value)
+            } : 0;
+      }
+
+      #endregion
    }
 }

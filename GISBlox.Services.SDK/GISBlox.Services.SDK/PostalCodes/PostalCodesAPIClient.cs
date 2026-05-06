@@ -123,8 +123,8 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="postalCodes">A comma-separated list of postal codes to include in the analysis. Cannot be null or empty.</param>
       /// <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
       /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-      /// <returns><see cref="AudienceAnalysisResult"/></returns>
-      public async Task<AudienceAnalysisResult> RunAudienceAnalysis(string postalCodes, string preset, CancellationToken cancellationToken = default)
+      /// <returns><see cref="AudienceAnalysisRecord"/></returns>
+      public async Task<AudienceAnalysisRecord> RunAudienceAnalysis(string postalCodes, string preset, CancellationToken cancellationToken = default)
       {
          return await RunAudienceAnalysis(postalCodes, preset, null, cancellationToken);
       }
@@ -136,13 +136,13 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <param name="preset">The name of the preset configuration to use for the analysis. Determines the analysis parameters and metrics.</param>
       /// <param name="weightsJson">A JSON string representing custom weights for the analysis. Overrides the default weights in the preset.</param>
       /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-      /// <returns><see cref="AudienceAnalysisResult"/></returns>
-      public async Task<AudienceAnalysisResult> RunAudienceAnalysis(string postalCodes, string preset, string weightsJson, CancellationToken cancellationToken = default)
+      /// <returns><see cref="AudienceAnalysisRecord"/></returns>
+      public async Task<AudienceAnalysisRecord> RunAudienceAnalysis(string postalCodes, string preset, string weightsJson, CancellationToken cancellationToken = default)
       {
          string cleanPostalCodes = RemoveSpaces().Replace(postalCodes, "");
          string requestUri = $"{BuildBaseAnalysisUri(cleanPostalCodes)}?postalCodes={cleanPostalCodes}&preset={preset}";
          
-         return await HttpPost<AudienceAnalysisResult>(HttpClient, requestUri, weightsJson, null, cancellationToken);
+         return await HttpPost<AudienceAnalysisRecord>(HttpClient, requestUri, weightsJson, null, cancellationToken);
       }
 
       #region Internal helper methods
