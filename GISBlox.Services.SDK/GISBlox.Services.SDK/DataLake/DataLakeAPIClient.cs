@@ -74,6 +74,18 @@ namespace GISBlox.Services.SDK.DataLake
          return true;
       }
 
+      /// <summary>
+      /// Determines whether a file exists in the data lake.
+      /// </summary>
+      /// <param name="fileName">The name of the file to check. Note this is a case-sensitive string!</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if the file exists, False if not.</returns>
+      public async Task<bool> FileExists(string fileName, CancellationToken cancellationToken = default)
+      {
+         var requestUri = $"datalake/exists/{fileName}";
+         return await HttpGet<bool>(HttpClient, Cache, requestUri, null, null, cancellationToken);
+      }
+
       /// <summary>        
       /// Returns a list of files in the customer's data lake.
       /// </summary>
