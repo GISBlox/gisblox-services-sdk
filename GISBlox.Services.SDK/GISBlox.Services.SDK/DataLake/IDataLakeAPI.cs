@@ -49,6 +49,14 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       Task<bool> ExportFileAsGeoParquet(string fileName, string localPath, CancellationToken cancellationToken = default);
 
+      /// <summary>
+      /// Determines whether a file exists in the data lake.
+      /// </summary>
+      /// <param name="fileName">The name of the file to check. Note this is a case-sensitive string!</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if the file exists, False if not.</returns>
+      Task<bool> FileExists(string fileName, CancellationToken cancellationToken = default);
+
       /// <summary>        
       /// Returns a list of files in the customer's data lake.
       /// </summary>

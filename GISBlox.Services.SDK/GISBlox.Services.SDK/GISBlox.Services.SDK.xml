@@ -493,6 +493,14 @@
             <param name="cancellationToken">The cancellation token to use for the operation.</param>
             <returns>True if successful, False if not.</returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.FileExists(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether a file exists in the data lake.
+            </summary>
+            <param name="fileName">The name of the file to check. Note this is a case-sensitive string!</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if the file exists, False if not.</returns>
+        </member>
         <member name="M:GISBlox.Services.SDK.DataLake.DataLakeAPIClient.GetCustomerFiles(System.Threading.CancellationToken)">
             <summary>        
             Returns a list of files in the customer's data lake.
@@ -569,6 +577,14 @@
             <param name="localPath">The local target location for the exported file.</param>
             <param name="cancellationToken">The cancellation token to use for the operation.</param>
             <returns>True if successful, False if not.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.FileExists(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether a file exists in the data lake.
+            </summary>
+            <param name="fileName">The name of the file to check. Note this is a case-sensitive string!</param>
+            <param name="cancellationToken">The cancellation token to use for the operation.</param>
+            <returns>True if the file exists, False if not.</returns>
         </member>
         <member name="M:GISBlox.Services.SDK.DataLake.IDataLakeAPI.GetCustomerFiles(System.Threading.CancellationToken)">
             <summary>        

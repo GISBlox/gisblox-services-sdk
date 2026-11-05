@@ -5,7 +5,7 @@
    {
       GISBloxClient _client;
       const string BASE_URL = "https://services.gisblox.com";
-      
+
       const string TEST_GEOJSON_POINT = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[30,10,5]},\"properties\":{\"zValue\":23,\"name\":\"Single Point\"}}";
 
       #region Initialization and cleanup
@@ -49,6 +49,15 @@
 
          Console.WriteLine($"Displaying the first 25 files in folder '{files.FolderId}':");
          files.Files.Take(25).ToList().ForEach(f => Console.WriteLine($"- {f.Name} - {f.Size} bytes - last modified: {f.ModifiedDate}"));
+      }
+
+      [TestMethod]
+      public async Task FileExists()
+      {
+         string fileName = "test_upload.json";
+         bool exists = await _client.DataLake.FileExists(fileName, CancellationToken.None);
+         
+         Console.WriteLine($"File '{fileName}' exists: {exists}");
       }
 
       [TestMethod]
