@@ -152,7 +152,7 @@ namespace GISBlox.Services.SDK.Projection
 
             if (addDecimals)
             {
-                headers.Add("X-Rounding-Decimals", decimals == -1 ? "-1" : decimals.ToString());
+                headers.Add("X-Rounding-Decimals", decimals < -1 ? "-1" : decimals.ToString());
             }
             return headers;
         }

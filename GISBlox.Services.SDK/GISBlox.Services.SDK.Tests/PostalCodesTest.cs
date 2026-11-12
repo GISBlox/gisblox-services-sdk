@@ -44,6 +44,21 @@
       }
 
       [TestMethod]
+      public async Task GetPostalCode4RecordRounded()
+      {
+         string id = "3811";
+         int roundingDecimals = 2;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode4Record>(id, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");
+         
+         PostalCode4 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (5.39 52.16)");
+         
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
       public async Task GetPostalCode4RecordCached()
       {
          string id = "3811";
@@ -74,6 +89,25 @@
 
          List<string> expectedIDs = ["3817", "3814", "3816", "3813", "3812", "3818"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4NeighboursRounded()
+      {
+         string id = "3811";
+         bool includeSource = false;
+         int roundingDecimals = 4;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode4Record>(id, includeSource, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.HasCount(6, record.PostalCode);
+
+         List<string> expectedIDs = ["3817", "3814", "3816", "3813", "3812", "3818"];
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+
+         Assert.AreEqual("POINT (5.3852 52.17)", record.PostalCode[1].Location.Geometry.Centroid);
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
@@ -126,6 +160,25 @@
       }
 
       [TestMethod]
+      public async Task GetPostalCode4ByGeometryWithBufferRounded()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         int buffer = 5000;    // meters, since CS of WKT is 28992.
+         int roundingDecimals = 3;
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode4Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.HasCount(5, record.PostalCode);
+         
+         List<string> expectedIDs = ["1791", "1793", "1795", "1796", "1797"];
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+         
+         Assert.AreEqual("POINT (4.752 53.021)", record.PostalCode[0].Location.Geometry.Centroid);
+         
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
+      }
+
+      [TestMethod]
       public async Task GetPostalCode4ByGeometryWithBufferAndDifferentTargetEpsg()
       {
          string wkt = "POINT(121843 487293)";
@@ -163,6 +216,29 @@
          Assert.AreEqual(expectedPostalCode, pc.Id);
          Assert.AreEqual(expectedGemeente, pc.Location.Gemeente);
          Assert.AreEqual(expectedWijk, pc.Location.Wijken);
+
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode4ByAreaRounded()
+      {
+         int gemeenteId = 513;
+         string expectedGemeente = "Gouda";
+         int wijkId = 51309;
+         string expectedWijk = "Westergouwe";
+
+         string expectedPostalCode = "2809";
+         int roundingDecimals = 4;
+
+         PostalCode4Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode4Record>(gemeenteId, wijkId, -1, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+
+         PostalCode4 pc = record.PostalCode[0];
+         Assert.AreEqual(expectedPostalCode, pc.Id);
+         Assert.AreEqual(expectedGemeente, pc.Location.Gemeente);
+         Assert.AreEqual(expectedWijk, pc.Location.Wijken);
+         
+         Assert.AreEqual("POINT (4.6789 52.0067)", pc.Location.Geometry.Centroid);
 
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
@@ -254,6 +330,22 @@
       }
 
       [TestMethod]
+      public async Task GetPostalCode6RecordRounded()
+      {
+         string id = "3811CJ";
+         int roundingDecimals = 5;
+         
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeRecord<PostalCode6Record>(id, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");
+         
+         PostalCode6 pc = record.PostalCode[0];
+         Assert.IsTrue(pc.Location.Gemeente == "Amersfoort" && pc.Location.Geometry.Centroid == "POINT (5.38947 52.15661)");
+         
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
       public async Task GetPostalCode6Neighbours()
       {
          string id = "3069BS";
@@ -265,6 +357,25 @@
 
          List<string> expectedIDs = ["3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT"];
          Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6NeighboursRounded()
+      {
+         string id = "3069BS";
+         bool includeSource = false;
+         int roundingDecimals = 5;
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeNeighbours<PostalCode6Record>(id, includeSource, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");         
+         Assert.HasCount(7, record.PostalCode);
+         
+         List<string> expectedIDs = ["3069BK", "3069BL", "3069BN", "3069BP", "3069BR", "3069BM", "3069BT"];
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+
+         Assert.AreEqual("POINT (4.54936 51.96372)", record.PostalCode[4].Location.Geometry.Centroid);
 
          await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
       }
@@ -317,6 +428,26 @@
       }
 
       [TestMethod]
+      public async Task GetPostalCode6ByGeometryWithBufferRounded()
+      {
+         string wkt = "LINESTRING(109935 561725, 110341 564040, 111430 565908)";
+         int buffer = 750;    // meters, since CS of WKT is 28992.
+         int roundingDecimals = 5;
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByGeometry<PostalCode6Record>(wkt, buffer, CoordinateSystem.RDNew, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");
+         Assert.HasCount(6, record.PostalCode);
+         
+         List<string> expectedIDs = ["1791PB", "1796AZ", "1797RT", "1791NT", "1796MV", "1791PE"];
+         Assert.IsTrue(record.PostalCode.All(pc => expectedIDs.Contains(pc.Id)));
+         
+         PostalCode6 pc6 = record.PostalCode.Find(pc => pc.Id == "1791NT");
+         Assert.AreEqual("POINT (4.74477 53.06431)", pc6.Location.Geometry.Centroid);
+         
+         await Task.Delay(API_QUOTA_DELAY * 2, CancellationToken.None);
+      }
+
+      [TestMethod]
       public async Task GetPostalCode6ByGeometryWithBufferAndDifferentTargetEpsg()
       {
          string wkt = "POINT(121843 487293)";
@@ -359,6 +490,36 @@
          Assert.AreEqual(expectedWijk, pc.Location.Wijk);
          Assert.AreEqual(expectedBuurt, pc.Location.Buurt);
 
+         await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
+      }
+
+      [TestMethod]
+      public async Task GetPostalCode6ByAreaRounded()
+      {
+         int gemeenteId = 513;
+         string expectedGemeente = "Gouda";
+         
+         int wijkId = 51309;
+         string expectedWijk = "Westergouwe";
+         
+         int buurtId = 5130904;
+         string expectedBuurt = "Tuinenbuurt";
+         
+         string expectedPostalCode = "2809RA";
+         int roundingDecimals = 4;
+         
+         PostalCode6Record record = await _client.PostalCodes.GetPostalCodeByArea<PostalCode6Record>(gemeenteId, wijkId, buurtId, CoordinateSystem.WGS84, roundingDecimals, CancellationToken.None);
+         
+         Assert.IsNotNull(record, "Response is empty.");
+         
+         PostalCode6 pc = record.PostalCode[0];
+         Assert.AreEqual(expectedPostalCode, pc.Id);
+         Assert.AreEqual(expectedGemeente, pc.Location.Gemeente);
+         Assert.AreEqual(expectedWijk, pc.Location.Wijk);
+         Assert.AreEqual(expectedBuurt, pc.Location.Buurt);
+         
+         Assert.AreEqual("POINT (4.6688 52.0062)", pc.Location.Geometry.Centroid);
+         
          await Task.Delay(API_QUOTA_DELAY, CancellationToken.None);
       }
 

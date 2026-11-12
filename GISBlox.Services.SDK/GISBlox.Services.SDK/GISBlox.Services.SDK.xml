@@ -1858,6 +1858,16 @@
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeRecord``1(System.String,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A Dutch postal code.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
             Gets neighbouring postal code records of the specified postal code.
@@ -1865,6 +1875,17 @@
             <param name="id">A Dutch postal code.</param>
             <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
             <param name="epsg">The target coordinate system.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
@@ -1879,6 +1900,18 @@
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByGeometry``1(System.String,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The coordinate system of the specified geometry.</param>
+            <param name="targetEpsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
             Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.AreaHelper" /> class to retrieve the IDs.
@@ -1887,6 +1920,18 @@
             <param name="wijkId">A district ('wijk') code.</param>   
             <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
             <param name="epsg">The target coordinate system.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.IPostalCodesAPI.AreaHelper" /> class to retrieve the IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>   
+            <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
@@ -1961,6 +2006,16 @@
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeRecord``1(System.String,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets the postal code record for the specified postal code.
+            </summary>
+            <param name="id">A Dutch postal code.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
             Gets neighbouring postal code records of the specified postal code.
@@ -1968,6 +2023,17 @@
             <param name="id">A Dutch postal code.</param>
             <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
             <param name="epsg">The target coordinate system.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeNeighbours``1(System.String,System.Boolean,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets neighbouring postal code records of the specified postal code.
+            </summary>
+            <param name="id">A Dutch postal code.</param>
+            <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
@@ -1982,6 +2048,18 @@
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByGeometry``1(System.String,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on a WKT (well-known text) geometry string.
+            </summary>
+            <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+            <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+            <param name="wktEpsg">The coordinate system of the specified geometry.</param>
+            <param name="targetEpsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
         <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Threading.CancellationToken)">
             <summary>
             Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper"/> class to retrieve the IDs.
@@ -1990,6 +2068,18 @@
             <param name="wijkId">A district ('wijk') code.</param>   
             <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
             <param name="epsg">The target coordinate system.</param>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+            <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.GetPostalCodeByArea``1(System.Int32,System.Int32,System.Int32,GISBlox.Services.SDK.Models.CoordinateSystem,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets postal code records based on one or more area IDs. Use the methods in the <see cref="P:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.AreaHelper" /> class to retrieve the IDs.
+            </summary>
+            <param name="gemeenteId">A gemeente code.</param>
+            <param name="wijkId">A district ('wijk') code.</param>   
+            <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="T:GISBlox.Services.SDK.Models.PostalCode6Record"/> is requested.</param>
+            <param name="epsg">The target coordinate system.</param>
+            <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
             <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
             <returns><see cref="T:GISBlox.Services.SDK.Models.IPostalCodeRecord"/></returns>
         </member>
@@ -2052,6 +2142,12 @@
             <param name="codes">An array of strings to check for matching lengths. Cannot be null.</param>
             <param name="length">The length to compare against each string in the array. Must be non-negative.</param>
             <returns>true if all strings in the array have the specified length; otherwise, false.</returns>
+        </member>
+        <member name="M:GISBlox.Services.SDK.PostalCodes.PostalCodesAPIClient.SetRoundingDecimalsHeader(System.Int32)">
+            <summary>
+            Sets the optional X-Rounding-Decimals request headers to the passed value.
+            </summary>      
+            <param name="decimals">The amount of fractional digits to round to. -1 for no rounding.</param>
         </member>
         <member name="T:GISBlox.Services.SDK.Projection.IProjectionAPI">
             <summary>
