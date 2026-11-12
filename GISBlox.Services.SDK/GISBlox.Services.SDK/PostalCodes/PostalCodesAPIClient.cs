@@ -5,6 +5,7 @@
 using GISBlox.Services.SDK.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -41,10 +42,24 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeRecord<IPostalCodeRecord>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
+         return await GetPostalCodeRecord<IPostalCodeRecord>(id, epsg, -1, cancellationToken);
+      }
+
+      /// <summary>
+      /// Gets the postal code record for the specified postal code.
+      /// </summary>
+      /// <param name="id">A Dutch postal code.</param>
+      /// <param name="epsg">The target coordinate system.</param>
+      /// <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeRecord<IPostalCodeRecord>(string id, CoordinateSystem epsg = CoordinateSystem.RDNew, int roundingDecimals = -1, CancellationToken cancellationToken = default)
+      {
+         var headers = SetRoundingDecimalsHeader(roundingDecimals);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/{id}";
          string epsgValue = ((int)epsg).ToString();
 
-         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, null, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, headers, cancellationToken);
       }
 
       /// <summary>
@@ -57,10 +72,25 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeNeighbours<IPostalCodeRecord>(string id, bool includeSourcePostalCode = false, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
+         return await GetPostalCodeNeighbours<IPostalCodeRecord>(id, includeSourcePostalCode, epsg, -1, cancellationToken);
+      }
+
+      /// <summary>
+      /// Gets neighbouring postal code records of the specified postal code.
+      /// </summary>
+      /// <param name="id">A Dutch postal code.</param>
+      /// <param name="includeSourcePostalCode">Determines whether to include the source postal code in the result.</param>
+      /// <param name="epsg">The target coordinate system.</param>
+      /// <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeNeighbours<IPostalCodeRecord>(string id, bool includeSourcePostalCode = false, CoordinateSystem epsg = CoordinateSystem.RDNew, int roundingDecimals = -1, CancellationToken cancellationToken = default)
+      {
+         var headers = SetRoundingDecimalsHeader(roundingDecimals);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/neighbours/{id}?includeSourcePostalCode={includeSourcePostalCode}";
          string epsgValue = ((int)epsg).ToString();
 
-         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, null, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, headers, cancellationToken);
       }
 
       /// <summary>
@@ -74,10 +104,26 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeByGeometry<IPostalCodeRecord>(string wkt, int buffer = 0, CoordinateSystem wktEpsg = CoordinateSystem.RDNew, CoordinateSystem targetEpsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
+         return await GetPostalCodeByGeometry<IPostalCodeRecord>(wkt, buffer, wktEpsg, targetEpsg, -1, cancellationToken);
+      }
+
+      /// <summary>
+      /// Gets postal code records based on a WKT (well-known text) geometry string.
+      /// </summary>
+      /// <param name="wkt">The geometry of the location expressed in WKT (well-known text) format.</param>
+      /// <param name="buffer">Buffer distance expressed in the unit of the WKT coordinate system.</param>
+      /// <param name="wktEpsg">The coordinate system of the specified geometry.</param>
+      /// <param name="targetEpsg">The target coordinate system.</param>
+      /// <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeByGeometry<IPostalCodeRecord>(string wkt, int buffer = 0, CoordinateSystem wktEpsg = CoordinateSystem.RDNew, CoordinateSystem targetEpsg = CoordinateSystem.RDNew, int roundingDecimals = -1, CancellationToken cancellationToken = default)
+      {
+         var headers = SetRoundingDecimalsHeader(roundingDecimals);
          string requestUri = $"{BuildBaseUri<IPostalCodeRecord>()}/geometry?wktEPSG={(int)wktEpsg}" + (buffer > 0 ? "&buffer=" + buffer : "");
          string epsgValue = ((int)targetEpsg).ToString();
-
-         return await HttpPost<dynamic, IPostalCodeRecord>(HttpClient, requestUri, wkt, epsgValue, null, cancellationToken);
+         
+         return await HttpPost<dynamic, IPostalCodeRecord>(HttpClient, requestUri, wkt, epsgValue, headers, cancellationToken);
       }
 
       /// <summary>
@@ -91,9 +137,25 @@ namespace GISBlox.Services.SDK.PostalCodes
       /// <returns><see cref="IPostalCodeRecord"/></returns>
       public async Task<IPostalCodeRecord> GetPostalCodeByArea<IPostalCodeRecord>(int gemeenteId, int wijkId, int buurtId = -1, CoordinateSystem epsg = CoordinateSystem.RDNew, CancellationToken cancellationToken = default)
       {
+         return await GetPostalCodeByArea<IPostalCodeRecord>(gemeenteId, wijkId, buurtId, epsg, -1, cancellationToken);
+      }
+
+      /// <summary>
+      /// Gets postal code records based on one or more area IDs. Use the methods in the <see cref="AreaHelper" /> class to retrieve the IDs.
+      /// </summary>
+      /// <param name="gemeenteId">A gemeente code.</param>
+      /// <param name="wijkId">A district ('wijk') code.</param>   
+      /// <param name="buurtId">A neighbourhood ('buurt') code. Considered only when a <see cref="PostalCode6Record"/> is requested.</param>
+      /// <param name="epsg">The target coordinate system.</param>
+      /// <param name="roundingDecimals">The number of decimal places to retain for coordinate values (WGS84 only). -1 means no rounding.</param>
+      /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+      /// <returns><see cref="IPostalCodeRecord"/></returns>
+      public async Task<IPostalCodeRecord> GetPostalCodeByArea<IPostalCodeRecord>(int gemeenteId, int wijkId, int buurtId = -1, CoordinateSystem epsg = CoordinateSystem.RDNew, int roundingDecimals = -1, CancellationToken cancellationToken = default)
+      {         
          string requestUri;
          string epsgValue = ((int)epsg).ToString();
-
+         var headers = SetRoundingDecimalsHeader(roundingDecimals);
+         
          if (typeof(IPostalCodeRecord) == typeof(PostalCode4Record))
          {
             requestUri = $"postalcodes4/gw?gemeenteId={gemeenteId}&wijkId={wijkId}";
@@ -102,7 +164,7 @@ namespace GISBlox.Services.SDK.PostalCodes
          {
             requestUri = $"postalcodes6/gwb?gemeenteId={gemeenteId}&wijkId={wijkId}&buurtId={buurtId}";
          }
-         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, null, cancellationToken);
+         return await HttpGet<IPostalCodeRecord>(HttpClient, Cache, requestUri, epsgValue, headers, cancellationToken);
       }
 
       /// <summary>
@@ -209,6 +271,32 @@ namespace GISBlox.Services.SDK.PostalCodes
             }
          }
          return true;
+      }
+
+      /// <summary>
+      /// Sets the optional X-Rounding-Decimals request headers to the passed value.
+      /// </summary>      
+      /// <param name="decimals">The amount of fractional digits to round to. -1 for no rounding.</param>
+      internal static Dictionary<string, string> SetRoundingDecimalsHeader(int decimals = -1)
+      {
+         if (decimals < -1)
+         {
+            throw new ArgumentOutOfRangeException(nameof(decimals), "Decimals must be -1 or greater.");
+         }
+
+         if (decimals > 15)
+         {
+            throw new ArgumentOutOfRangeException(nameof(decimals), "Decimals must be 15 or less.");
+         }
+
+         if (decimals > -1)
+         {
+            return new Dictionary<string, string>
+            {
+               { "X-Rounding-Decimals", decimals.ToString() }
+            };
+         }
+         return null;
       }
 
       #endregion
