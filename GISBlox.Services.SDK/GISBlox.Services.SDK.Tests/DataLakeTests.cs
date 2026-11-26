@@ -89,6 +89,93 @@
       }
 
       [TestMethod]
+      public async Task UploadFile_PlainJsonWithoutFlag_Fails()
+      {
+         string fileName = $"plain-json-default-{Guid.NewGuid():N}.json";
+         string localPath = Path.Combine(Path.GetTempPath(), fileName);
+         const string jsonData = "{\"value\":1}";
+         
+         await File.WriteAllTextAsync(localPath, jsonData, CancellationToken.None);
+         bool uploaded = false;
+
+         try
+         {
+            await Assert.ThrowsAsync<ClientApiException>(async () =>
+            {
+               uploaded = await _client.DataLake.UploadFile(localPath, CancellationToken.None);
+            });
+         }
+         finally
+         {
+            if (uploaded)
+            {
+               await _client.DataLake.DeleteFile(fileName, CancellationToken.None);
+            }
+
+            if (File.Exists(localPath))
+            {
+               File.Delete(localPath);
+            }
+         }
+      }
+
+      [TestMethod]
+      public async Task UploadFile_AsPlainJsonInsteadOfGeoJson()
+      {
+         string fileName = $"plain-json-{Guid.NewGuid():N}.json";
+         string localPath = Path.Combine(Path.GetTempPath(), fileName);
+         const string jsonData = "{\"value\":1}";
+
+         await File.WriteAllTextAsync(localPath, jsonData, CancellationToken.None);
+         bool uploaded = false;
+
+         try
+         {
+            uploaded = await _client.DataLake.UploadFile(localPath, asPlainJson: true, cancellationToken: CancellationToken.None);
+            Assert.IsTrue(uploaded);
+
+            var downloadedContent = await _client.DataLake.DownloadFileData(fileName, CancellationToken.None);
+            Assert.AreEqual(jsonData, downloadedContent);
+         }
+         finally
+         {
+            if (uploaded)
+            {
+               await _client.DataLake.DeleteFile(fileName, CancellationToken.None);
+            }
+
+            if (File.Exists(localPath))
+            {
+               File.Delete(localPath);
+            }
+         }
+      }
+
+      [TestMethod]
+      public async Task UploadFileData_AsPlainJsonInsteadOfGeoJson()
+      {
+         string fileName = $"plain-json-{Guid.NewGuid():N}.json";
+         const string jsonData = "{\"value\":1}";
+         bool uploaded = false;
+
+         try
+         {
+            uploaded = await _client.DataLake.UploadFileData(jsonData, fileName, asPlainJson: true, cancellationToken: CancellationToken.None);
+            Assert.IsTrue(uploaded);
+
+            var downloadedContent = await _client.DataLake.DownloadFileData(fileName, CancellationToken.None);
+            Assert.AreEqual(jsonData, downloadedContent);
+         }
+         finally
+         {
+            if (uploaded)
+            {
+               await _client.DataLake.DeleteFile(fileName, CancellationToken.None);
+            }
+         }
+      }
+
+      [TestMethod]
       public async Task UploadFileAsStream()
       {
          string fileName = "test_upload.json";
