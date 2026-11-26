@@ -78,6 +78,15 @@ namespace GISBlox.Services.SDK.DataLake
       Task<bool> UploadFile(string localPath, CancellationToken cancellationToken = default);
 
       /// <summary>
+      /// Uploads a file to the data lake from the specified local path.
+      /// </summary>
+      /// <param name="localPath">The path to the local file.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      Task<bool> UploadFile(string localPath, bool asPlainJson, CancellationToken cancellationToken = default);
+
+      /// <summary>
       /// Creates a file in the data lake from the specified stream.
       /// </summary>
       /// <param name="stream">The stream from which to create a file.</param>
@@ -87,6 +96,16 @@ namespace GISBlox.Services.SDK.DataLake
       Task<bool> UploadFile(Stream stream, string fileName, CancellationToken cancellationToken = default);
 
       /// <summary>
+      /// Creates a file in the data lake from the specified stream.
+      /// </summary>
+      /// <param name="stream">The stream from which to create a file.</param>
+      /// <param name="fileName">The name for the new file in the data lake.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      Task<bool> UploadFile(Stream stream, string fileName, bool asPlainJson, CancellationToken cancellationToken = default);
+
+      /// <summary>
       /// Creates a file in the data lake from the specified JSON data.
       /// </summary>
       /// <param name="jsonData">The JSON data.</param>
@@ -94,5 +113,15 @@ namespace GISBlox.Services.SDK.DataLake
       /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
       /// <returns>True if successful, False if not.</returns>
       Task<bool> UploadFileData(string jsonData, string fileName, CancellationToken cancellationToken = default);
+
+      /// <summary>
+      /// Creates a file in the data lake from the specified JSON data.
+      /// </summary>
+      /// <param name="jsonData">The JSON data.</param>
+      /// <param name="fileName">The name for the new file in the data lake.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      Task<bool> UploadFileData(string jsonData, string fileName, bool asPlainJson, CancellationToken cancellationToken = default);
    }
 }

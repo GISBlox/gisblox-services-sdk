@@ -29,7 +29,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> DeleteFile(string fileName, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/delete/{fileName}";
+         string requestUri = $"datalake/delete/{fileName}";
          await HttpDelete(HttpClient, requestUri, null, cancellationToken);
          return true;
       }
@@ -43,7 +43,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> DownloadFile(string fileName, string localPath, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/load/{fileName}";
+         string requestUri = $"datalake/load/{fileName}";
          await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/json", null, cancellationToken);
          return true;
       }
@@ -56,7 +56,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>The file data as a string.</returns>
       public async Task<string> DownloadFileData(string fileName, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/load/{fileName}";
+         string requestUri = $"datalake/load/{fileName}";
          return await DownloadJsonFileData(HttpClient, Cache, requestUri, false, null, cancellationToken);
       }
 
@@ -69,7 +69,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> ExportFileAsGeoParquet(string fileName, string localPath, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/export/{fileName}?format=geoparquet";
+         string requestUri = $"datalake/export/{fileName}?format=geoparquet";
          await DownloadFileToDisk(HttpClient, requestUri, localPath, "application/octet-stream", null, cancellationToken);
          return true;
       }
@@ -82,7 +82,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if the file exists, False if not.</returns>
       public async Task<bool> FileExists(string fileName, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/exists/{fileName}";
+         string requestUri = $"datalake/exists/{fileName}";
          return await HttpGet<bool>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
 
@@ -92,7 +92,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
       public async Task<CustomerFiles> GetCustomerFiles(CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/list";
+         string requestUri = $"datalake/list";
          return await HttpGet<CustomerFiles>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
 
@@ -102,7 +102,7 @@ namespace GISBlox.Services.SDK.DataLake
       /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
       public async Task<CustomerFolder> GetCustomerFolder(CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/folder";
+         string requestUri = $"datalake/folder";
          return await HttpGet<CustomerFolder>(HttpClient, Cache, requestUri, null, null, cancellationToken);
       }
 
@@ -114,9 +114,21 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> UploadFile(string localPath, CancellationToken cancellationToken = default)
       {
+         return await UploadFile(localPath, false, cancellationToken);
+      }
+
+      /// <summary>
+      /// Uploads a file to the data lake from the specified local path.
+      /// </summary>
+      /// <param name="localPath">The path to the local file.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      public async Task<bool> UploadFile(string localPath, bool asPlainJson, CancellationToken cancellationToken = default)
+      {
          using var stream = new FileStream(localPath, FileMode.Open, FileAccess.Read);
-         var fileName = Path.GetFileName(localPath);
-         return await UploadFile(stream, fileName, cancellationToken);
+         string fileName = Path.GetFileName(localPath);
+         return await UploadFile(stream, fileName, asPlainJson, cancellationToken);
       }
 
       /// <summary>
@@ -128,7 +140,20 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> UploadFile(Stream stream, string fileName, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/save/{fileName}";
+         return await UploadFile(stream, fileName, false, cancellationToken);
+      }
+
+      /// <summary>
+      /// Creates a file in the data lake from the specified stream.
+      /// </summary>
+      /// <param name="stream">The stream from which to create a file.</param>
+      /// <param name="fileName">The name for the new file in the data lake.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      public async Task<bool> UploadFile(Stream stream, string fileName, bool asPlainJson, CancellationToken cancellationToken = default)
+      {
+         string requestUri = $"datalake/save{(asPlainJson ? "json" : "")}/{fileName}";
          await HttpPost(HttpClient, requestUri, stream, "application/json", null, cancellationToken);
          return true;
       }
@@ -142,7 +167,20 @@ namespace GISBlox.Services.SDK.DataLake
       /// <returns>True if successful, False if not.</returns>
       public async Task<bool> UploadFileData(string jsonData, string fileName, CancellationToken cancellationToken = default)
       {
-         var requestUri = $"datalake/save/{fileName}";
+         return await UploadFileData(jsonData, fileName, false, cancellationToken);
+      }
+
+      /// <summary>
+      /// Creates a file in the data lake from the specified JSON data.
+      /// </summary>
+      /// <param name="jsonData">The JSON data.</param>
+      /// <param name="fileName">The name for the new file in the data lake.</param>
+      /// <param name="asPlainJson">Set to true when the supplied data is plain JSON rather than GeoJSON.</param>
+      /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
+      /// <returns>True if successful, False if not.</returns>
+      public async Task<bool> UploadFileData(string jsonData, string fileName, bool asPlainJson, CancellationToken cancellationToken = default)
+      {
+         string requestUri = $"datalake/save{(asPlainJson ? "json" : "")}/{fileName}";
          await HttpPost(HttpClient, requestUri, jsonData, null, cancellationToken);
          return true;
       }
